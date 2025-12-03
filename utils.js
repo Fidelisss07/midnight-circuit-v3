@@ -1,11 +1,6 @@
-// utils.js - Ferramentas do Midnight Circuit
-
-// ⚠️ NOTA: Se estiveres a rodar no teu PC, usa 'http://localhost:3000'.
-// Se colocares na internet (Render/Railway), muda para o link do teu site ou deixa vazio '' se o servidor servir o site.
 // utils.js
-// Deixa vazio! Assim ele usa o próprio endereço do site automaticamente.
+// Deixe vazio! Assim ele usa o endereço automático do Railway.
 const URL_SERVIDOR = '';
-
 // 1. Sistema de Notificações (Toasts)
 function showToast(msg, tipo = 'success') {
     let c = document.getElementById('toast-container');
