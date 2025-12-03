@@ -1,0 +1,133 @@
+/* style.css - Midnight Circuit Visual System */
+
+:root {
+    /* Variáveis Padrão (Red) */
+    --primary: 239 68 68;
+    --bg-dark: #050505;
+    --surface: #121212;
+    --text-main: #fff;
+    --success: #22c55e;
+    --error: #ef4444;
+}
+
+/* --- 1. UTILITÁRIOS GERAIS --- */
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--primary)); }
+
+/* Esconder scrollbar mas permitir scroll (para Sprints/Stories) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* --- 2. ANIMAÇÕES --- */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.animate-fade-in { animation: fadeIn 0.5s ease-out; }
+.animate-spin { animation: spin 1s linear infinite; }
+
+/* --- 3. COMPONENTES --- */
+
+/* Toast (Notificações Flutuantes) */
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+    background: var(--surface); 
+    border-left: 4px solid; 
+    padding: 15px 20px; 
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    display: flex; align-items: center; gap: 10px;
+    min-width: 300px; 
+    color: white; 
+    border: 1px solid rgba(255,255,255,0.05);
+    animation: slideInRight 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+}
+.toast-success { border-left-color: var(--success); }
+.toast-error { border-left-color: var(--error); }
+
+/* Botões Loading */
+.btn-loading { position: relative; color: transparent !important; pointer-events: none; }
+.btn-loading::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px;
+    border: 2px solid #fff; border-top-color: transparent; border-radius: 50%;
+    animation: spin 0.8s linear infinite; transform: translate(-50%, -50%);
+}
+
+/* Cards com Brilho */
+.glow-hover { transition: all 0.3s ease; }
+.glow-hover:hover { 
+    box-shadow: 0 0 25px rgba(var(--primary), 0.15); 
+    transform: translateY(-2px); 
+    border-color: rgba(var(--primary), 0.3);
+}
+
+/* Stories (Anel Colorido) */
+.story-ring { 
+    padding: 2px; 
+    background: linear-gradient(45deg, #ef4444, #a855f7, #3b82f6); 
+    border-radius: 50%; 
+    background-size: 200% 200%;
+    animation: gradientMove 3s ease infinite;
+}
+@keyframes gradientMove { 0% {background-position: 0% 50%} 50% {background-position: 100% 50%} 100% {background-position: 0% 50%} }
+.story-ring.midnight { background: linear-gradient(45deg, #ef4444, #a855f7); }
+
+/* Feed Overlay (Legenda) */
+.legenda-overlay { 
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.6) 50%, transparent 100%); 
+}
+
+/* Sprints (TikTok Scroll) */
+.snap-container { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100vh; }
+.snap-child { scroll-snap-align: start; height: 100vh; position: relative; }
+
+/* Chat Bubbles */
+.msg-me { 
+    background-color: rgb(var(--primary)); 
+    color: white; 
+    align-self: flex-end; 
+    border-radius: 12px 12px 0 12px; 
+}
+.msg-him { 
+    background-color: var(--surface); 
+    border: 1px solid #333; 
+    color: inherit; 
+    align-self: flex-start; 
+    border-radius: 12px 12px 12px 0; 
+}
+
+/* Skeleton Loading */
+.skeleton { 
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); 
+    background-size: 200% 100%; 
+    animation: shimmer 1.5s infinite; 
+    border-radius: 8px; 
+}
+
+/* --- 4. TEMAS --- */
+body.theme-red { --primary: 239 68 68; }
+body.theme-purple { --primary: 168 85 247; }
+body.theme-blue { --primary: 59 130 246; }
+body.theme-light { 
+    --primary: 239 68 68; 
+    --bg-dark: #f3f4f6; 
+    --surface: #ffffff; 
+    --text-main: #111; 
+}
