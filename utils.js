@@ -1,6 +1,6 @@
 // utils.js
 // Deixe vazio! Assim ele usa o endereço automático do Railway.
-const URL_SERVIDOR = '';
+const URL_SERVIDOR = 'midnight-circuit-v3-production.up.railway.app';
 // 1. Sistema de Notificações (Toasts)
 function showToast(msg, tipo = 'success') {
     let c = document.getElementById('toast-container');
