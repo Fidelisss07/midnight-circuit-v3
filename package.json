@@ -1,7 +1,6 @@
 {
   "name": "midnight-circuit",
   "version": "1.0.0",
-  "description": "A Rede Social para Entusiastas Automóveis",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
