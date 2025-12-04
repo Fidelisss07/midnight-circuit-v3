@@ -202,7 +202,7 @@
 </div>
 
 <script>
-    const USUARIO_ATUAL = verificarLogin(); // Usa utils.js
+    const USUARIO_ATUAL = verificarLogin();
 
     async function carregarPerfil() {
         try {
@@ -211,135 +211,56 @@
                 const dadosFrescos = await res.json();
                 localStorage.setItem('usuario_logado', JSON.stringify(dadosFrescos));
                 
-                // UI
                 document.getElementById('user-nome').innerText = dadosFrescos.nome || "Piloto";
                 document.getElementById('user-bio').innerText = dadosFrescos.bio || "Sem bio.";
                 document.getElementById('user-avatar').src = dadosFrescos.avatar || "https://i.pravatar.cc/150";
                 document.getElementById('user-capa').style.backgroundImage = `url('${dadosFrescos.capa}')`;
                 document.getElementById('user-nivel').innerText = `Lvl ${dadosFrescos.nivel || 1}`;
                 
-                // XP Bar
                 const progresso = ((dadosFrescos.xp || 0) % 1000) / 10;
                 setTimeout(() => { const b = document.getElementById('user-xp-bar'); if(b) b.style.width = `${progresso}%`; }, 300);
 
-                // Stats
-                const seg = dadosFrescos.seguidores ? dadosFrescos.seguidores.length : 0;
-                const segnd = dadosFrescos.seguindo ? dadosFrescos.seguindo.length : 0;
-                document.getElementById('num-seguidores').innerText = seg;
-                document.getElementById('num-seguindo').innerText = segnd;
+                document.getElementById('num-seguidores').innerText = dadosFrescos.seguidores ? dadosFrescos.seguidores.length : 0;
+                document.getElementById('num-seguindo').innerText = dadosFrescos.seguindo ? dadosFrescos.seguindo.length : 0;
             }
-            carregarCarros();
-            carregarPostsFotos();
+            carregarCarros(); carregarPostsFotos();
         } catch(e) { console.error(e); }
     }
 
-    // --- GARAGEM ---
-    async function carregarCarros() {
-        const res = await fetch(`${URL_SERVIDOR}/carros`);
-        const carros = await res.json();
-        const container = document.getElementById('tab-carros');
-        container.innerHTML = '';
-        const meus = carros.filter(c => c.dono === USUARIO_ATUAL.nome);
-
-        if(meus.length === 0) { 
-            container.innerHTML = '<div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div>'; 
-            return; 
-        }
-
-        meus.reverse().forEach(car => {
-            const modsHtml = car.mods.map(m => `<span class="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] uppercase font-bold">${m.trim()}</span>`).join('');
-            container.innerHTML += `
-                <div class="flex flex-col lg:flex-row bg-card-dark rounded-3xl overflow-hidden border border-white/10 shadow-2xl group hover:border-primary/30 transition-all animate-fade-in">
-                    <div class="lg:w-[45%] min-h-[300px] bg-cover bg-center relative" style="background-image: url('${car.imagemUrl}');">
-                        <div class="absolute inset-0 bg-gradient-to-t from-card-dark lg:bg-gradient-to-r lg:from-transparent lg:to-card-dark"></div>
-                        <button onclick="removerCarro('${car._id || car.id}')" class="absolute top-4 left-4 bg-black/60 hover:bg-red-600 text-white p-2 rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-sm">delete</span></button>
-                    </div>
-                    <div class="lg:w-[55%] p-6 lg:p-8 flex flex-col justify-center relative">
-                        <div class="mb-6">
-                            <div class="flex items-baseline gap-2"><h2 class="text-primary font-bold text-sm uppercase tracking-widest">${car.marca}</h2><span class="text-gray-600 text-xs">• ${car.ano}</span></div>
-                            <h1 class="text-3xl font-bold text-white leading-tight">${car.modelo}</h1>
-                            <h3 class="text-xl text-gray-400 italic mb-2">"${car.apelido || 'Stock'}"</h3>
-                            <p class="text-sm text-gray-500 line-clamp-2 border-l-2 border-primary/50 pl-3">${car.descricao}</p>
-                        </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 border-y border-white/5 py-4">
-                            <div><p class="text-[10px] text-gray-500 uppercase">Motor</p><p class="text-sm font-bold text-white truncate">${car.specs.motor||'N/A'}</p></div>
-                            <div><p class="text-[10px] text-gray-500 uppercase">Potência</p><p class="text-sm font-bold text-white">${car.specs.hp} HP</p></div>
-                            <div><p class="text-[10px] text-gray-500 uppercase">0-100</p><p class="text-sm font-bold text-white">${car.specs.zero_cem}</p></div>
-                            <div><p class="text-[10px] text-gray-500 uppercase">Top Speed</p><p class="text-sm font-bold text-white">${car.specs.top_speed}</p></div>
-                        </div>
-                        <div><p class="text-[10px] text-gray-500 uppercase mb-2">Modificações</p><div class="flex flex-wrap gap-2">${modsHtml || '<span class="text-xs text-gray-600">Stock</span>'}</div></div>
-                    </div>
-                </div>`;
-        });
+    function abrirModalPerfil(){
+        document.getElementById('edit-nome').value=USUARIO_ATUAL.nome;
+        document.getElementById('edit-bio').value=USUARIO_ATUAL.bio;
+        document.getElementById('modal-perfil').classList.remove('hidden');
     }
 
-    async function carregarPostsFotos() {
-        const res = await fetch(`${URL_SERVIDOR}/posts`); const posts = await res.json();
-        const grid = document.getElementById('tab-posts'); grid.innerHTML = '';
-        posts.filter(p => p.nome === USUARIO_ATUAL.nome).forEach(post => { grid.innerHTML += `<div class="aspect-square bg-cover bg-center rounded-xl border border-white/10 hover:scale-105 transition-transform cursor-pointer" style="background-image: url('${post.midiaUrl || post.imagemUrl}')"></div>`; });
-    }
-
-    function abrirModalCarro() { document.getElementById('modal-carro').classList.remove('hidden'); }
-    function abrirModalPerfil() { 
-        document.getElementById('edit-nome').value = USUARIO_ATUAL.nome;
-        document.getElementById('edit-bio').value = USUARIO_ATUAL.bio;
-        document.getElementById('modal-perfil').classList.remove('hidden'); 
-    }
-    function previewCarro(e) {
-        const f = e.target.files[0];
-        if(f) {
-            const r = new FileReader();
-            r.onload = ev => { document.getElementById('image-preview').src = ev.target.result; document.getElementById('preview-container').classList.remove('hidden'); }
-            r.readAsDataURL(f);
-        }
-    }
-
-    async function salvarCarro() {
-        const fd = new FormData();
-        fd.append('dono', USUARIO_ATUAL.nome);
-        ['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(id => 
-            fd.append(id==='desc'?'descricao':(id==='zero'?'zero_cem':(id==='top'?'top_speed':(id==='hp'?'potencia':id))), document.getElementById(`car-${id}`).value)
-        );
-        const img = document.getElementById('car-imagem');
-        if(img.files[0]) fd.append('imagem', img.files[0]);
-
-        await fetch(`${URL_SERVIDOR}/carros`, { method: 'POST', body: fd });
-        document.getElementById('modal-carro').classList.add('hidden');
-        carregarPerfil();
-    }
-
-    async function salvarPerfil() {
-        const fd = new FormData();
-        fd.append('emailOriginal', USUARIO_ATUAL.email);
-        fd.append('nome', document.getElementById('edit-nome').value);
-        fd.append('bio', document.getElementById('edit-bio').value);
-        if(document.getElementById('edit-avatar').files[0]) fd.append('avatar', document.getElementById('edit-avatar').files[0]);
-        if(document.getElementById('edit-capa').files[0]) fd.append('capa', document.getElementById('edit-capa').files[0]);
-        try {
-            const r = await fetch(`${URL_SERVIDOR}/perfil/atualizar`, { method: 'POST', body: fd });
-            if(r.ok) { window.location.reload(); } else { showToast("Erro ao atualizar", 'error'); }
-        } catch(e) { showToast("Erro", 'error'); }
-    }
-
-    async function removerCarro(id) {
-        if(confirm('Apagar?')) { await fetch(`${URL_SERVIDOR}/carros/${id}`, { method: 'DELETE' }); carregarPerfil(); }
-    }
-    
-    function trocarAba(a) {
-        const tabCarros = document.getElementById('tab-carros'); const tabPosts = document.getElementById('tab-posts');
-        const btnCarros = document.getElementById('btn-tab-carros'); const btnPosts = document.getElementById('btn-tab-posts');
+    async function salvarPerfil(){
+        const f=new FormData();
+        f.append('emailOriginal', USUARIO_ATUAL.email); // Chave para o servidor
+        f.append('nome', document.getElementById('edit-nome').value);
+        f.append('bio', document.getElementById('edit-bio').value);
         
-        if(a === 'carros') {
-            tabCarros.classList.remove('hidden'); tabPosts.classList.add('hidden');
-            btnCarros.classList.replace('border-transparent','border-primary'); btnCarros.classList.replace('text-gray-500', 'text-white');
-            btnPosts.classList.replace('border-primary','border-transparent'); btnPosts.classList.replace('text-white', 'text-gray-500');
-        } else {
-            tabCarros.classList.add('hidden'); tabPosts.classList.remove('hidden');
-            btnPosts.classList.replace('border-transparent','border-primary'); btnPosts.classList.replace('text-gray-500', 'text-white');
-            btnCarros.classList.replace('border-primary','border-transparent'); btnCarros.classList.replace('text-white', 'text-gray-500');
-        }
+        if(document.getElementById('edit-avatar').files[0]) f.append('avatar', document.getElementById('edit-avatar').files[0]);
+        if(document.getElementById('edit-capa').files[0]) f.append('capa', document.getElementById('edit-capa').files[0]);
+        
+        try {
+            const r = await fetch(`${URL_SERVIDOR}/perfil/atualizar`, { method: 'POST', body: f });
+            if(r.ok) {
+                const u = await r.json(); // Recebe o user atualizado do servidor
+                localStorage.setItem('usuario_logado', JSON.stringify(u)); // Atualiza navegador
+                window.location.reload();
+            } else showToast('Erro ao atualizar', 'error');
+        } catch(e) { showToast('Erro', 'error'); }
     }
 
+    // (As funções de Carro mantêm-se iguais)
+    function abrirModalCarro(){document.getElementById('modal-carro').classList.remove('hidden');}
+    function previewCarro(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=ev=>{document.getElementById('image-preview').src=ev.target.result;document.getElementById('preview-container').classList.remove('hidden');};r.readAsDataURL(f);}}
+    async function salvarCarro(){const f=new FormData();f.append('dono',USUARIO_ATUAL.nome);f.append('emailDono',USUARIO_ATUAL.email);['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(id=>f.append(id==='desc'?'descricao':(id==='zero'?'zero_cem':(id==='top'?'top_speed':(id==='hp'?'potencia':id))),document.getElementById(`car-${id}`).value));const i=document.getElementById('car-imagem');if(i.files[0])f.append('imagem',i.files[0]);await fetch(`${URL_SERVIDOR}/carros`,{method:'POST',body:f});document.getElementById('modal-carro').classList.add('hidden');carregarPerfil();}
+    async function removerCarro(id){if(confirm('Apagar?')){await fetch(`${URL_SERVIDOR}/carros/${id}`,{method:'DELETE'});carregarPerfil();}}
+    function trocarAba(a){if(a==='carros'){document.getElementById('tab-carros').classList.remove('hidden');document.getElementById('tab-posts').classList.add('hidden');document.getElementById('btn-tab-carros').classList.replace('border-transparent','border-primary');document.getElementById('btn-tab-posts').classList.replace('border-primary','border-transparent');}else{document.getElementById('tab-carros').classList.add('hidden');document.getElementById('tab-posts').classList.remove('hidden');document.getElementById('btn-tab-posts').classList.replace('border-transparent','border-primary');document.getElementById('btn-tab-carros').classList.replace('border-primary','border-transparent');}}
+    async function carregarCarros(){const r=await fetch(`${URL_SERVIDOR}/carros`);const c=await r.json();const ct=document.getElementById('tab-carros');ct.innerHTML='';const m=c.filter(x=>x.dono===USUARIO_ATUAL.nome);if(m.length===0){ct.innerHTML='<div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div>';return;}m.reverse().forEach(car=>{const mods=car.mods.map(x=>`<span class="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] uppercase font-bold">${x.trim()}</span>`).join('');ct.innerHTML+=`<div class="flex flex-col lg:flex-row bg-card-dark rounded-3xl overflow-hidden border border-white/10 shadow-2xl group hover:border-primary/30 transition-all animate-fade-in"><div class="lg:w-[45%] min-h-[300px] bg-cover bg-center relative" style="background-image:url('${car.imagemUrl}');"><div class="absolute inset-0 bg-gradient-to-t from-card-dark lg:bg-gradient-to-r lg:from-transparent lg:to-card-dark"></div><button onclick="removerCarro('${car._id||car.id}')" class="absolute top-4 left-4 bg-black/60 hover:bg-red-600 text-white p-2 rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-sm">delete</span></button></div><div class="lg:w-[55%] p-6 lg:p-8 flex flex-col justify-center relative"><div class="mb-6"><div class="flex items-baseline gap-2"><h2 class="text-primary font-bold text-sm uppercase tracking-widest">${car.marca}</h2><span class="text-gray-600 text-xs">• ${car.ano}</span></div><h1 class="text-3xl font-bold text-white leading-tight">${car.modelo}</h1><h3 class="text-xl text-gray-400 italic mb-2">"${car.apelido||'Stock'}"</h3><p class="text-sm text-gray-500 line-clamp-2 border-l-2 border-primary/50 pl-3">${car.descricao}</p></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 border-y border-white/5 py-4"><div><p class="text-[10px] text-gray-500 uppercase">Motor</p><p class="text-sm font-bold text-white truncate">${car.specs.motor||'N/A'}</p></div><div><p class="text-[10px] text-gray-500 uppercase">Potência</p><p class="text-sm font-bold text-white">${car.specs.hp} HP</p></div><div><p class="text-[10px] text-gray-500 uppercase">0-100</p><p class="text-sm font-bold text-white">${car.specs.zero_cem}</p></div><div><p class="text-[10px] text-gray-500 uppercase">Top Speed</p><p class="text-sm font-bold text-white">${car.specs.top_speed}</p></div></div><div><p class="text-[10px] text-gray-500 uppercase mb-2">Modificações</p><div class="flex flex-wrap gap-2">${mods||'<span class="text-xs text-gray-600">Stock</span>'}</div></div></div></div>`;});}
+    async function carregarPostsFotos(){const r=await fetch(`${URL_SERVIDOR}/posts`);const p=await r.json();const g=document.getElementById('tab-posts');g.innerHTML='';p.filter(x=>x.nome===USUARIO_ATUAL.nome).forEach(x=>{g.innerHTML+=`<div class="aspect-square bg-cover bg-center rounded-xl border border-white/10 hover:scale-105 transition-transform cursor-pointer" style="background-image: url('${x.midiaUrl||x.imagemUrl}')"></div>`;});}
+    
     carregarPerfil();
 </script>
 
