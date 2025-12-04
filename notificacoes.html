@@ -29,52 +29,60 @@
             <a href="sprints.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">bolt</span></a>
             <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
             <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
-            
             <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl bg-primary/20 text-primary"><span class="material-symbols-outlined">notifications</span></a>
-            
             <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
             <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">emoji_events</span></a>
             <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">settings</span></a>
         </nav>
-        <div class="mt-auto flex flex-col gap-3 items-center">
-            <button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button>
-        </div>
+        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button></div>
     </aside>
 
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-16 pb-20 md:pt-0 md:pb-0 p-6 md:p-10">
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-16 pb-24 md:pt-0 md:pb-0 p-6 md:p-10">
         <div class="max-w-3xl mx-auto">
-            
             <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h1 class="text-3xl font-bold text-white mb-1">Notificações</h1>
-                    <p class="text-gray-500 text-sm">Atividade recente na tua garagem.</p>
-                </div>
-                <button onclick="marcarLidas()" class="text-primary text-sm font-bold hover:text-white transition-colors flex items-center gap-1 bg-white/5 px-3 py-1 rounded-lg border border-white/10 hover:bg-primary hover:border-primary">
-                    <span class="material-symbols-outlined text-lg">done_all</span> Lidas
-                </button>
+                <div><h1 class="text-3xl font-bold text-white mb-1">Notificações</h1><p class="text-gray-500 text-sm">Atividade recente.</p></div>
+                <button onclick="marcarLidas()" class="text-primary text-sm font-bold hover:text-white transition-colors flex items-center gap-1 bg-white/5 px-3 py-1 rounded-lg border border-white/10 hover:bg-primary hover:border-primary"><span class="material-symbols-outlined text-lg">done_all</span> Lidas</button>
             </div>
-
-            <div id="lista-notificacoes" class="space-y-3 pb-20">
-                <div class="skeleton h-20 w-full"></div>
-                <div class="skeleton h-20 w-full"></div>
-                <div class="skeleton h-20 w-full"></div>
-            </div>
-
+            <div id="lista-notificacoes" class="space-y-3 pb-20"><div class="skeleton h-20 w-full"></div><div class="skeleton h-20 w-full"></div></div>
         </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-0 w-full h-16 bg-black border-t border-white/10 z-50 flex justify-around items-center px-2">
+    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none"></div>
+    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-surface-dark border-t border-white/10 z-[70] pb-8 pt-2">
+        <div class="w-12 h-1 bg-gray-700 rounded-full mx-auto my-3"></div>
+        <div class="grid grid-cols-3 gap-4 p-4">
+            <div onclick="window.location.href='feed.html'" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-primary/20"><div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white"><span class="material-symbols-outlined">add</span></div><span class="text-xs text-white">Novo Post</span></div>
+            <a href="ranking.html" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-white/10"><span class="material-symbols-outlined text-yellow-400 text-2xl">emoji_events</span><span class="text-xs text-gray-300">Ranking</span></a>
+            <a href="comunidades-hub.html" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-white/10"><span class="material-symbols-outlined text-blue-400 text-2xl">groups</span><span class="text-xs text-gray-300">Clubes</span></a>
+            <a href="configuracoes.html" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-white/10"><span class="material-symbols-outlined text-gray-400 text-2xl">settings</span><span class="text-xs text-gray-300">Definições</span></a>
+            <div onclick="logout()" class="flex flex-col items-center gap-2 p-3 bg-red-500/10 rounded-xl active:bg-red-500/20"><span class="material-symbols-outlined text-red-500 text-2xl">logout</span><span class="text-xs text-red-500">Sair</span></div>
+        </div>
+    </div>
+
+    <nav class="md:hidden fixed bottom-0 w-full h-16 bg-black border-t border-white/10 z-50 flex justify-around items-center px-2 pb-1">
         <a href="feed.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">home</span></a>
         <a href="explorar.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">search</span></a>
+        <button onclick="toggleMenu()" class="btn-menu-central bg-surface-dark text-white w-14 h-14 rounded-full border border-white/20 flex items-center justify-center shadow-lg relative z-50 -mt-6"><span class="material-symbols-outlined text-3xl text-primary" id="menu-icon">apps</span></button>
         <a href="sprints.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">bolt</span></a>
         <a href="notificacoes.html" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl">notifications</span></a>
-        <a href="perfil.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">person</span></a>
     </nav>
 
 </div>
 
 <script>
-    const USUARIO = verificarLogin(); // Usa o utils.js
+    const USUARIO = verificarLogin();
+    let todosUsuarios = [];
+
+    // Carrega utilizadores para saber o email pelo nome (workaround)
+    async function carregarUsuarios() {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/usuarios`);
+            todosUsuarios = await res.json();
+            carregarNotificacoes();
+        } catch(e) { console.error(e); }
+    }
+
+    function toggleMenu(){const d=document.getElementById('mobile-drawer');const o=document.getElementById('mobile-drawer-overlay');const i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';}}
 
     async function carregarNotificacoes() {
         try {
@@ -84,83 +92,49 @@
             container.innerHTML = '';
 
             if (notificacoes.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-20 opacity-50 flex flex-col items-center">
-                        <span class="material-symbols-outlined text-6xl mb-4 text-gray-600">notifications_off</span>
-                        <p class="text-gray-400 text-lg">Tudo calmo por aqui.</p>
-                        <p class="text-gray-600 text-sm">Interage com outros pilotos!</p>
-                    </div>`;
+                container.innerHTML = `<div class="text-center py-20 opacity-50 flex flex-col items-center"><span class="material-symbols-outlined text-6xl mb-4 text-gray-600">notifications_off</span><p class="text-gray-400 text-lg">Tudo calmo por aqui.</p></div>`;
                 return;
             }
 
-            // Renderiza
             notificacoes.reverse().forEach(notif => {
-                let icon = '';
-                let color = '';
-                
+                let icon='', color='';
                 if(notif.tipo === 'like') { icon = 'favorite'; color = 'text-red-500'; }
                 else if(notif.tipo === 'comentario') { icon = 'chat_bubble'; color = 'text-blue-400'; }
                 else if(notif.tipo === 'follow') { icon = 'person_add'; color = 'text-green-400'; }
                 else { icon = 'info'; color = 'text-yellow-400'; }
 
-                // Destaque para não lidas (borda colorida e fundo mais claro)
-                const bgClass = notif.lida 
-                    ? 'bg-surface-dark border-white/5 opacity-70' 
-                    : 'bg-white/5 border-primary/50 border shadow-[0_0_15px_rgba(0,0,0,0.2)]';
-
-                // Preview de imagem (se houver)
-                const preview = notif.imgPreview 
-                    ? `<div class="w-12 h-12 rounded-lg bg-cover bg-center border border-white/10 ml-auto flex-shrink-0" style="background-image: url('${notif.imgPreview}')"></div>` 
-                    : '';
-
-                // Avatar
+                const bgClass = notif.lida ? 'bg-surface-dark border-white/5 opacity-70' : 'bg-white/5 border-primary/50 border shadow-[0_0_15px_rgba(0,0,0,0.2)]';
+                const preview = notif.imgPreview ? `<div class="w-12 h-12 rounded-lg bg-cover bg-center border border-white/10 ml-auto flex-shrink-0" style="background-image: url('${notif.imgPreview}')"></div>` : '';
                 const avatarUrl = notif.avatar || "https://i.pravatar.cc/150";
-
-                // Formatar data (simples)
                 const data = new Date(notif.timestamp);
                 const hora = data.getHours() + ':' + String(data.getMinutes()).padStart(2, '0');
 
+                // Tenta encontrar o email pelo nome
+                const userEncontrado = todosUsuarios.find(u => u.nome === notif.de);
+                const emailLink = userEncontrado ? userEncontrado.email : '';
+
                 container.innerHTML += `
-                    <div class="notif-item flex items-center gap-4 p-4 rounded-xl border ${bgClass} hover:bg-white/10 transition-all group animate-slide-in">
+                    <div onclick="verPerfil('${emailLink}')" class="notif-item flex items-center gap-4 p-4 rounded-xl border ${bgClass} hover:bg-white/10 transition-all group animate-slide-in cursor-pointer">
                         <div class="relative">
                             <div class="w-12 h-12 rounded-full bg-cover border border-white/10" style="background-image: url('${avatarUrl}')"></div>
-                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-surface-dark rounded-full flex items-center justify-center border border-white/10 shadow-md">
-                                <span class="material-symbols-outlined ${color} text-sm">${icon}</span>
-                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-surface-dark rounded-full flex items-center justify-center border border-white/10 shadow-md"><span class="material-symbols-outlined ${color} text-sm">${icon}</span></div>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm text-white truncate">
-                                <span class="font-bold hover:underline cursor-pointer">${notif.de}</span> 
-                                <span class="text-gray-300">${notif.texto}</span>
-                            </p>
-                            <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[10px]">schedule</span> ${hora}
-                            </p>
+                            <p class="text-sm text-white truncate"><span class="font-bold hover:underline">${notif.de}</span> <span class="text-gray-300">${notif.texto}</span></p>
+                            <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">schedule</span> ${hora}</p>
                         </div>
                         ${preview}
-                    </div>
-                `;
+                    </div>`;
             });
         } catch (e) { console.error(e); }
     }
 
     async function marcarLidas() {
-        try {
-            const res = await fetch(`${URL_SERVIDOR}/notificacoes/ler`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user: USUARIO.email })
-            });
-            
-            if(res.ok) {
-                showToast("Tudo marcado como lido!");
-                carregarNotificacoes(); // Recarrega visualmente para tirar o destaque
-            }
-        } catch(e) { showToast("Erro ao atualizar", 'error'); }
+        try { await fetch(`${URL_SERVIDOR}/notificacoes/ler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user: USUARIO.email }) }); showToast("Lidas!"); carregarNotificacoes(); } 
+        catch(e) { showToast("Erro", 'error'); }
     }
 
-    carregarNotificacoes();
+    carregarUsuarios();
 </script>
-
 </body>
 </html>
