@@ -81,5 +81,19 @@ function verPerfil(emailAlvo) {
     }
 }
 
+    // utils.js
+// ... (resto do código) ...
+
+function verPerfil(emailAlvo) {
+    const usuarioLogado = verificarLogin();
+    // Se for eu mesmo, vai para o meu perfil editável
+    if (emailAlvo === usuarioLogado.email) {
+        window.location.href = 'perfil.html';
+    } else {
+        // Se for outro, vai para o perfil de visitante
+        window.location.href = `perfil-visitante.html?email=${emailAlvo}`;
+    }
+}
+
 })();
 
