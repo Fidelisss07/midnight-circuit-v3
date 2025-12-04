@@ -155,36 +155,14 @@
     }
 
     // (RESTO DO CÓDIGO MANTIDO IGUAL)
-    if(document.getElementById('header-nome')) document.getElementById('header-nome').innerText = USUARIO_ATUAL.nome;
-    document.getElementById('sidebar-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
-    if(document.getElementById('input-avatar')) document.getElementById('input-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
-    document.getElementById('story-avatar-me').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
 
-    function mudar(t){localStorage.setItem('midnight_tema',t);location.reload();}
-    function mudarAba(aba) {
-        const areaFeed = document.getElementById('area-feed'); const areaNews = document.getElementById('area-news');
-        const btnFeed = document.getElementById('tab-feed'); const btnNews = document.getElementById('tab-news');
-        if (aba === 'feed') {
-            areaFeed.classList.remove('hidden'); areaNews.classList.add('hidden');
-            btnFeed.className = "text-white font-bold px-4 py-1 bg-white/10 rounded-lg transition-all text-sm";
-            btnNews.className = "text-gray-500 hover:text-white px-4 py-1 rounded-lg transition-all text-sm flex items-center gap-2";
-        } else {
-            areaFeed.classList.add('hidden'); areaNews.classList.remove('hidden');
-            btnNews.className = "text-white font-bold px-4 py-1 bg-white/10 rounded-lg transition-all text-sm flex items-center gap-2";
-            btnFeed.className = "text-gray-500 hover:text-white px-4 py-1 rounded-lg transition-all text-sm";
-            carregarNews();
-        }
-    }
-    async function carregarNews() {
-        const lista = document.getElementById('lista-news'); lista.innerHTML = '<div class="skeleton h-64 col-span-full"></div>';
-        try { const res = await fetch(`${URL_SERVIDOR}/news`); const news = await res.json(); lista.innerHTML = ''; news.forEach(n => { lista.innerHTML += `<div class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden group hover:border-primary/50 transition-all"><div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('${n.imagem}');"><div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded">${n.categoria}</div></div><div class="p-5"><p class="text-gray-500 text-xs mb-2">${n.data}</p><h3 class="text-xl font-bold text-white mb-2 leading-tight group-hover:text-primary transition-colors">${n.titulo}</h3><p class="text-gray-400 text-sm line-clamp-3">${n.texto}</p></div></div>`; }); } catch(e) {}
-    }
-
-    function verImg(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview');c.classList.remove('hidden');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
+    // UPLOAD
+    function verImg(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview');c.classList.remove('hidden');const m=URL.createObjectURL(f);if(f.type.startsWith('video'))c.innerHTML=`<video src="${m}" class="w-full h-full object-cover" autoplay muted loop></video>`;else c.innerHTML=`<img src="${m}" class="w-full h-full object-cover">`;}}
     function limparImagem(){document.getElementById('imgInp').value='';document.getElementById('preview').classList.add('hidden');}
     function abrirModalMobilePost(){document.getElementById('modal-mobile-post').classList.remove('hidden');}
     function verImgMobile(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview-mobile');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
     
+    // POSTAR
     async function postarGenerico(conteudoId, fileId, btnId) {
         const c = document.getElementById(conteudoId).value; const i = document.getElementById(fileId).files[0];
         if(!i && !c) return showToast('Escreve algo!', 'error');
@@ -196,7 +174,8 @@
     async function postar(){ postarGenerico('conteudo', 'imgInp', 'btn-pub'); }
     async function postarMobile(){ postarGenerico('conteudo-mobile', 'imgInp-mobile', 'btn-pub-mobile'); }
 
-    async function load() {
+    // LOAD
+    async function load(){
         try {
             const r = await fetch(`${URL_SERVIDOR}/posts`); const p = await r.json();
             document.getElementById('lista').innerHTML = p.reverse().map((x, i) => {
@@ -211,7 +190,8 @@
         } catch(e) {}
     }
 
-    async function abrir(id) {
+    // MODAL
+    async function abrir(id){
         pid = id; const res = await fetch(`${URL_SERVIDOR}/posts`); const ps = await res.json(); const p = ps.find(x => (x._id || x.id) == id);
         const mCont = document.getElementById('m-content'); mCont.innerHTML = '';
         const isVideo = p.tipo === 'video' || (p.midiaUrl && p.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
@@ -224,9 +204,11 @@
         document.getElementById('modal').classList.remove('hidden');
     }
     function fechar() { document.getElementById('modal').classList.add('hidden'); pid = null; load(); }
+    
     async function likeModal(){ if(!pid)return; const icon=document.getElementById('btn-like-icon'); icon.classList.add('text-primary', 'animate-ping'); icon.style.fontVariationSettings = "'FILL' 1"; setTimeout(() => icon.classList.remove('animate-ping'), 300); document.getElementById('m-likes').innerText = `${parseInt(document.getElementById('m-likes').innerText) + 1} likes`; await fetch(`${URL_SERVIDOR}/posts/like/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ quemDeuLikeNome: USUARIO_ATUAL.nome, quemDeuLikeEmail: USUARIO_ATUAL.email, quemDeuLikeAvatar: USUARIO_ATUAL.avatar }) }); }
     async function comentar(){ const t = document.getElementById('m-inp').value; if (!t) return; const res = await fetch(`${URL_SERVIDOR}/posts/comentar/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ autor: USUARIO_ATUAL.nome, avatar: USUARIO_ATUAL.avatar, texto: t }) }); if (res.ok) { document.getElementById('m-coms').innerHTML += `<div class="flex gap-3 mb-3"><img src="${USUARIO_ATUAL.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO_ATUAL.nome}</span>${t}</p></div></div>`; document.getElementById('m-inp').value = ''; } }
 
+    // STORIES
     let storiesAtuais = []; let storyIndex = 0;
     async function uploadStory(e){ if(e.target.files[0]){const f=new FormData();f.append('emailAutor',USUARIO_ATUAL.email);f.append('nome',USUARIO_ATUAL.nome);f.append('avatar',USUARIO_ATUAL.avatar);f.append('midia',e.target.files[0]);await fetch(`${URL_SERVIDOR}/stories`,{method:'POST',body:f});location.reload();}}
     async function carregarStories(){try{const r=await fetch(`${URL_SERVIDOR}/stories`);const s=await r.json();const c=document.getElementById('outros-stories');c.innerHTML='';const g={};s.forEach(x=>{if(!g[x.emailAutor])g[x.emailAutor]={nome:x.nome,avatar:x.avatar,posts:[]};g[x.emailAutor].posts.push(x)});const meus=g[USUARIO_ATUAL.email];if(meus){const me=document.getElementById('story-avatar-me');me.innerHTML='';me.style.backgroundImage=`url('${meus.posts[0].tipo==='imagem'?meus.posts[0].midiaUrl:meus.posts[0].avatar}')`;me.parentElement.classList.add('border-green-500');me.parentElement.parentElement.onclick=()=>abrirS(encodeURIComponent(JSON.stringify(meus.posts)));}Object.values(g).forEach(gr=>{if(gr.posts[0].emailAutor===USUARIO_ATUAL.email)return;c.innerHTML+=`<div onclick="abrirS('${encodeURIComponent(JSON.stringify(gr.posts))}')" class="cursor-pointer flex flex-col items-center gap-2 group"><div class="story-ring midnight w-16 h-16 p-[2px]"><div class="w-full h-full rounded-full bg-cover border-2 border-background-dark" style="background-image:url('${gr.avatar}')"></div></div><span class="text-xs text-gray-300 truncate w-16 text-center">${gr.nome}</span></div>`;});}catch(e){}}
@@ -239,3 +221,4 @@
 </script>
 </body>
 </html>
+
