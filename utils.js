@@ -67,4 +67,19 @@ function logout() {
     } else {
         window.addEventListener('DOMContentLoaded', () => document.body.classList.add(tema));
     }
+
+    // --- NAVEGAÇÃO PARA PERFIS ---
+function verPerfil(emailAlvo) {
+    const usuarioLogado = verificarLogin();
+    
+    // Se cliquei no meu próprio nome, vai para o meu perfil editável
+    if (emailAlvo === usuarioLogado.email) {
+        window.location.href = 'perfil.html';
+    } else {
+        // Se for outra pessoa, vai para o perfil de visitante
+        window.location.href = `perfil-visitante.html?email=${emailAlvo}`;
+    }
+}
+
 })();
+
