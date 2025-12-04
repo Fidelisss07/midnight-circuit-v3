@@ -82,7 +82,45 @@ function verImgMobile(e){const f=e.target.files[0];if(f){const c=document.getEle
 async function postarGenerico(cId,fId,bId){const c=document.getElementById(cId).value;const i=document.getElementById(fId).files[0];if(!i&&!c)return showToast('Escreve algo!','error');setBtnLoading(bId,true);const f=new FormData();f.append('nome',USUARIO_ATUAL.nome);f.append('avatar',USUARIO_ATUAL.avatar);f.append('emailAutor',USUARIO_ATUAL.email);f.append('conteudo',c);if(i)f.append('midia',i);try{await fetch(`${URL_SERVIDOR}/posts`,{method:'POST',body:f});location.reload();}catch(e){showToast("Erro",'error');}setBtnLoading(bId,false);}
 async function postar(){postarGenerico('conteudo','imgInp','btn-pub');}
 async function postarMobile(){postarGenerico('conteudo-mobile','imgInp-mobile','btn-pub-mobile');}
-async function load(){try{const r=await fetch(`${URL_SERVIDOR}/posts`);const p=await r.json();document.getElementById('lista').innerHTML=p.reverse().map((x,i)=>{let grid="col-span-1 row-span-1";if(window.innerWidth>768&&i%5===0)grid="md:col-span-2 md:row-span-2";const isVideo=x.tipo==='video'||(x.midiaUrl&&x.midiaUrl.match(/\.(mp4|webm|ogg)$/i));const media=isVideo?`<video src="${x.midiaUrl}" class="absolute inset-0 w-full h-full object-cover pointer-events-none" muted loop></video>`:`<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image:url('${x.midiaUrl||x.imagemUrl}')"></div>`;return `<div onclick="abrir('${x._id||x.id}')" class="group relative rounded-xl overflow-hidden bg-surface-dark border border-white/5 cursor-pointer glow-hover h-96 md:h-full ${grid}">${media}<div class="absolute inset-0 bg-black/20 flex flex-col justify-end"><div class="legenda-overlay p-4"><div onclick="verPerfil('${x.emailAutor}'); event.stopPropagation();" class="flex items-center gap-2 mb-1 hover:opacity-80"><img src="${x.avatar}" class="w-6 h-6 rounded-full border border-white/50 object-cover"><p class="text-white text-sm font-bold truncate">${x.nome}</p></div><p class="text-gray-300 text-xs line-clamp-1">${x.conteudo}</p></div></div></div>`;}).join('');}catch(e){console.error(e);}}
+async function load() {
+        try {
+            const r = await fetch(`${URL_SERVIDOR}/posts`); 
+            const p = await r.json();
+            
+            document.getElementById('lista').innerHTML = p.reverse().map((x, i) => {
+                let grid = "col-span-1 row-span-1"; 
+                if (window.innerWidth > 768 && i % 5 === 0) grid = "md:col-span-2 md:row-span-2";
+
+                const isVideo = x.tipo === 'video' || (x.midiaUrl && x.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
+                const mediaHtml = isVideo 
+                    ? `<video src="${x.midiaUrl}" class="absolute inset-0 w-full h-full object-cover pointer-events-none" muted loop></video>`
+                    : `<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${x.midiaUrl || x.imagemUrl}')"></div>`;
+
+                return `
+                <div onclick="abrir('${x._id || x.id}')" class="group relative rounded-xl overflow-hidden bg-surface-dark border border-white/5 cursor-pointer glow-hover h-96 md:h-full ${grid}">
+                    ${mediaHtml}
+                    
+                    <div class="absolute inset-0 bg-black/20 flex flex-col justify-end">
+                        <div class="legenda-overlay p-4">
+                            
+                            <div onclick="verPerfil('${x.emailAutor}'); event.stopPropagation();" class="flex items-center gap-2 mb-1 hover:opacity-80 transition-opacity w-fit">
+                                <img src="${x.avatar}" class="w-6 h-6 rounded-full border border-white/50 object-cover">
+                                <p class="text-white text-sm font-bold truncate shadow-black drop-shadow-md">${x.nome}</p>
+                            </div>
+                            
+                            <p class="text-gray-300 text-xs line-clamp-1">${x.conteudo}</p>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Autoplay
+            document.querySelectorAll('#lista video').forEach(v => {
+                v.parentElement.addEventListener('mouseenter', () => v.play());
+                v.parentElement.addEventListener('mouseleave', () => v.pause());
+            });
+        } catch(e) { console.error(e); }
+    }
 async function abrir(id){pid=id;const res=await fetch(`${URL_SERVIDOR}/posts`);const ps=await res.json();const p=ps.find(x=>(x._id||x.id)==id);const mCont=document.getElementById('m-content');mCont.innerHTML='';const isVideo=p.tipo==='video'||(p.midiaUrl&&p.midiaUrl.match(/\.(mp4|webm|ogg)$/i));if(isVideo)mCont.innerHTML=`<video src="${p.midiaUrl}" class="max-w-full max-h-full" controls autoplay></video>`;else mCont.innerHTML=`<img src="${p.midiaUrl||p.imagemUrl}" class="max-w-full max-h-full object-contain">`;document.getElementById('m-av').src=p.avatar;document.getElementById('m-nome').innerText=p.nome;document.getElementById('m-legenda').innerText=p.conteudo;document.getElementById('m-likes').innerText=`${p.likes} likes`;document.getElementById('btn-like-icon').classList.remove('text-primary');document.getElementById('btn-like-icon').style.fontVariationSettings="'FILL' 0";document.getElementById('modal-user-link').onclick=()=>verPerfil(p.emailAutor);const divC=document.getElementById('m-coms');divC.innerHTML='';if(p.comentarios)p.comentarios.forEach(c=>divC.innerHTML+=`<div class="flex gap-3 mb-3"><img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover" onclick="verPerfil('${c.emailAutor}')" style="cursor:pointer"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary cursor-pointer" onclick="verPerfil('${c.emailAutor}')">${c.autor}</span>${c.texto}</p></div></div>`);document.getElementById('modal').classList.remove('hidden');}
 function fechar(){document.getElementById('modal').classList.add('hidden');pid=null;load();}
 async function likeModal(){if(!pid)return;const icon=document.getElementById('btn-like-icon');icon.classList.add('text-primary','animate-ping');icon.style.fontVariationSettings="'FILL' 1";setTimeout(()=>icon.classList.remove('animate-ping'),300);document.getElementById('m-likes').innerText=`${parseInt(document.getElementById('m-likes').innerText)+1} likes`;await fetch(`${URL_SERVIDOR}/posts/like/${pid}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({quemDeuLikeNome:USUARIO_ATUAL.nome,quemDeuLikeEmail:USUARIO_ATUAL.email,quemDeuLikeAvatar:USUARIO_ATUAL.avatar})});}
@@ -98,3 +136,4 @@ carregarStories(); load();
 </script>
 </body>
 </html>
+
