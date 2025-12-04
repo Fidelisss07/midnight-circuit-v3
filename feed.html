@@ -174,6 +174,25 @@
     async function postar(){ postarGenerico('conteudo', 'imgInp', 'btn-pub'); }
     async function postarMobile(){ postarGenerico('conteudo-mobile', 'imgInp-mobile', 'btn-pub-mobile'); }
 
+    async function postarMobile(){
+        const c = document.getElementById('conteudo-mobile').value;
+        const i = document.getElementById('imgInp-mobile').files[0];
+        
+        if(!i && !c) return showToast('Escreve algo!', 'error');
+        
+        const f = new FormData();
+        f.append('nome', USUARIO_ATUAL.nome);
+        f.append('avatar', USUARIO_ATUAL.avatar);
+        f.append('emailAutor', USUARIO_ATUAL.email);
+        f.append('conteudo', c);
+        if(i) f.append('midia', i);
+
+        try {
+            await fetch(`${URL_SERVIDOR}/posts`, {method:'POST', body:f});
+            location.reload();
+        } catch(e) { showToast("Erro ao enviar", 'error'); }
+    }
+    
     // LOAD
     async function load(){
         try {
@@ -221,4 +240,5 @@
 </script>
 </body>
 </html>
+
 
