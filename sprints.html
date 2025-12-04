@@ -234,6 +234,66 @@
         }
     }
 
+        // ... (Inicialização igual) ...
+
+    async function carregarSprints() {
+        // Atualiza a lista de quem sigo antes de carregar
+        const eu = await carregarSessao();
+        const seguindo = eu.seguindo || [];
+
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/sprints`);
+            todosSprints = await res.json();
+            renderizar(todosSprints, seguindo);
+        } catch(e) { console.error(e); }
+    }
+
+    function renderizar(lista, seguindo) {
+        const container = document.getElementById('sprints-container');
+        container.innerHTML = '';
+
+        let sprintsFiltrados = lista;
+        
+        // CORREÇÃO FILTRO AMIGOS
+        if (abaAtual === 'amigos') {
+            sprintsFiltrados = lista.filter(s => seguindo.includes(s.emailAutor));
+        }
+        
+        if (sprintsFiltrados.length === 0) {
+            container.innerHTML = `<div class="snap-child flex items-center justify-center bg-black"><div class="text-center p-8"><span class="material-symbols-outlined text-6xl text-gray-800 mb-4">no_photography</span><h2 class="text-2xl font-bold mb-2 text-white">Nada aqui</h2><p class="text-gray-500">Segue pilotos para veres os vídeos deles aqui.</p></div></div>`;
+            return;
+        }
+
+        sprintsFiltrados.reverse().forEach(sprint => {
+            // CORREÇÃO ID: Usa _id se existir (MongoDB) ou id (legado)
+            const sID = sprint._id || sprint.id;
+            const qtdComents = sprint.comentarios ? sprint.comentarios.length : 0;
+            
+            container.innerHTML += `
+                <div class="snap-child bg-black relative">
+                    <video src="${sprint.videoUrl}" class="w-full h-full object-cover" loop autoplay muted onclick="toggleSom(this)"></video>
+                    <div class="absolute bottom-20 right-4 flex flex-col gap-6 items-center z-20">
+                        <button onclick="likeSprint('${sID}', this)" class="flex flex-col items-center gap-1 group"> </button>
+                        <button onclick="abrirComentarios('${sID}')" class="flex flex-col items-center gap-1 group"> </button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    // CORREÇÃO LIKE SPRINT
+    async function likeSprint(id, btn) {
+        const res = await fetch(`${URL_SERVIDOR}/sprints/like/${id}`, { method: 'POST' });
+        if(res.ok) {
+            btn.querySelector('.material-symbols-outlined').classList.add('text-primary','font-variation-settings-[FILL:1]');
+            const c = btn.querySelector('.count'); 
+            // Atualiza visualmente (se não for número, põe 1)
+            c.innerText = parseInt(c.innerText || 0) + 1;
+        }
+    }
+    
+    // ... (Resto das funções iguais) ...
+
+
     // --- COMENTÁRIOS ---
     async function abrirComentarios(id) {
         sprintAbertoId = id;
