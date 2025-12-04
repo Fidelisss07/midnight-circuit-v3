@@ -9,253 +9,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
-    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)", "card-dark":"#1E1E1E"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
 </head>
 <body class="bg-background-dark text-gray-200 overflow-hidden">
-
-<div class="relative flex h-screen w-full flex-col md:flex-row">
-    
-    <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
-        <a class="mb-10 text-primary hover:scale-110 transition-transform" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
-        <nav class="flex flex-col gap-8 w-full px-2">
-            <a href="feed.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">home</span></a>
-            <a href="explorar.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">search</span></a>
-            <a href="sprints.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">bolt</span></a>
-            <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
-            <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
-            <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
-            <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
-            <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">emoji_events</span></a>
-            <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">settings</span></a>
-        </nav>
-        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button></div>
-    </aside>
-
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar">
-        
-        <div class="h-48 md:h-64 w-full bg-cover bg-center relative" id="visit-capa">
-            <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
-            <button onclick="history.back()" class="absolute top-4 left-4 bg-black/50 hover:bg-white/20 text-white px-4 py-2 rounded-full backdrop-blur-sm flex items-center gap-2 transition-all z-10">
-                <span class="material-symbols-outlined text-sm">arrow_back</span> Voltar
-            </button>
-        </div>
-
-        <div class="max-w-6xl mx-auto px-4 md:px-10 pb-20">
-            <div class="relative -top-16 flex flex-col md:flex-row items-end md:items-start gap-6">
-                <img id="visit-avatar" class="w-28 h-28 md:w-40 md:h-40 rounded-full border-4 border-background-dark object-cover shadow-2xl bg-surface-dark">
-                
-                <div class="flex-1 mt-2 md:mt-16 text-center md:text-left w-full">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div>
-                            <h1 id="visit-nome" class="text-3xl font-bold text-white mb-1">...</h1>
-                            <p id="visit-bio" class="text-gray-400 text-sm max-w-md mx-auto md:mx-0">...</p>
-                        </div>
-                        
-                        <div class="flex gap-3">
-                            <button onclick="iniciarChat()" class="px-4 py-2 bg-surface-dark border border-white/10 rounded-lg text-sm font-bold hover:bg-white/5 transition-colors flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">chat</span> Mensagem
-                            </button>
-                            
-                            <button onclick="toggleSeguir()" id="btn-seguir" class="px-6 py-2 bg-primary hover:brightness-110 text-white rounded-lg font-bold flex items-center gap-2 shadow-lg transition-transform active:scale-95">
-                                <span class="material-symbols-outlined text-sm">person_add</span> Seguir
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-6 mt-6 p-4 bg-surface-dark rounded-2xl border border-white/5 shadow-lg">
-                        <div class="text-center min-w-[60px]">
-                            <span id="visit-seguidores" class="block text-lg font-bold text-white">0</span>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-wider">Seguidores</span>
-                        </div>
-                        <div class="text-center min-w-[60px]">
-                            <span id="visit-seguindo" class="block text-lg font-bold text-white">0</span>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-wider">A Seguir</span>
-                        </div>
-                        <div class="flex-1 min-w-[150px] border-l border-white/10 pl-6 hidden sm:block">
-                            <div class="flex justify-between text-xs font-bold mb-1">
-                                <span class="text-primary" id="visit-nivel">Lvl 1</span>
-                                <span class="text-gray-500">XP</span>
-                            </div>
-                            <div class="w-full h-2 bg-black rounded-full overflow-hidden">
-                                <div id="visit-xp-bar" class="h-full bg-primary w-0 transition-all duration-1000"></div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="h-screen w-full flex flex-col overflow-y-auto">
+        <div class="h-64 w-full bg-cover bg-center relative" id="visit-capa"><div class="absolute inset-0 bg-gradient-to-t from-background-dark to-transparent"></div><button onclick="history.back()" class="absolute top-4 left-4 bg-black/50 text-white px-4 py-2 rounded-full flex items-center gap-2"><span class="material-symbols-outlined">arrow_back</span> Voltar</button></div>
+        <div class="max-w-4xl mx-auto px-4 relative -top-16 w-full">
+            <div class="flex flex-col items-center text-center">
+                <img id="visit-avatar" class="w-32 h-32 rounded-full border-4 border-background-dark object-cover shadow-2xl bg-surface-dark">
+                <h1 id="visit-nome" class="text-3xl font-bold text-white mt-4">...</h1>
+                <p id="visit-bio" class="text-gray-400 text-sm max-w-md mt-2">...</p>
+                <div class="flex gap-4 mt-6">
+                    <button onclick="window.location.href='chat.html'" class="px-6 py-2 bg-surface-dark border border-white/10 rounded-lg font-bold text-sm">Mensagem</button>
+                    <button onclick="toggleSeguir()" id="btn-seguir" class="px-6 py-2 bg-primary text-white rounded-lg font-bold text-sm shadow-lg">Seguir</button>
                 </div>
             </div>
-
-            <div class="flex gap-8 border-b border-white/10 mb-8 mt-4 justify-center md:justify-start">
-                <button onclick="trocarAba('carros')" id="btn-tab-carros" class="pb-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all">
-                    <span class="material-symbols-outlined">directions_car</span> Garagem
-                </button>
-                <button onclick="trocarAba('posts')" id="btn-tab-posts" class="pb-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all">
-                    <span class="material-symbols-outlined">grid_view</span> Posts
-                </button>
-            </div>
-
-            <div id="tab-carros" class="space-y-8 animate-fade-in"><p class="text-center text-gray-500 py-10">A carregar garagem...</p></div>
-            <div id="tab-posts" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-20"></div>
-
+            <div class="mt-12"><h3 class="text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">Garagem</h3><div id="visit-carros" class="space-y-6"></div></div>
         </div>
-    </main>
-    
-    <nav class="md:hidden fixed bottom-0 w-full h-16 bg-black border-t border-white/10 z-50 flex justify-around items-center px-2"><a href="feed.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">home</span></a><a href="explorar.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">search</span></a><a href="sprints.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">bolt</span></a><a href="notificacoes.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">notifications</span></a><a href="perfil.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">person</span></a></nav>
-</div>
-
-<div id="modal" class="hidden fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4">
-    <div class="relative max-w-4xl w-full h-[80vh] flex justify-center items-center">
-        <button onclick="document.getElementById('modal').classList.add('hidden')" class="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2"><span class="material-symbols-outlined">close</span></button>
-        <img id="m-img" class="max-h-full max-w-full rounded-lg object-contain">
     </div>
-</div>
-
 <script>
     const USUARIO_LOGADO = verificarLogin();
-    
-    // Obter Email da URL (?email=...)
     const params = new URLSearchParams(window.location.search);
     const EMAIL_ALVO = params.get('email');
+    if (!EMAIL_ALVO || EMAIL_ALVO === USUARIO_LOGADO.email) window.location.href = 'perfil.html';
 
-    // Se não tiver email ou for eu mesmo, volta para o meu perfil
-    if (!EMAIL_ALVO || EMAIL_ALVO === USUARIO_LOGADO.email) {
-        window.location.href = 'perfil.html';
-    }
-
-    let usuarioAlvo = {};
-
-    async function carregarVisitante() {
+    async function init() {
         try {
-            // 1. Carregar Dados do Visitante
-            const res = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${EMAIL_ALVO}`);
-            usuarioAlvo = await res.json();
+            const r = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${EMAIL_ALVO}`);
+            const u = await r.json();
+            document.getElementById('visit-nome').innerText = u.nome;
+            document.getElementById('visit-bio').innerText = u.bio || "Sem bio.";
+            document.getElementById('visit-avatar').src = u.avatar || "https://i.pravatar.cc/150";
+            document.getElementById('visit-capa').style.backgroundImage = `url('${u.capa}')`;
             
-            // UI
-            document.getElementById('visit-nome').innerText = usuarioAlvo.nome || "Piloto";
-            document.getElementById('visit-bio').innerText = usuarioAlvo.bio || "Sem bio.";
-            document.getElementById('visit-avatar').src = usuarioAlvo.avatar || "https://i.pravatar.cc/150";
-            document.getElementById('visit-capa').style.backgroundImage = `url('${usuarioAlvo.capa}')`;
-            document.getElementById('visit-nivel').innerText = `Lvl ${usuarioAlvo.nivel || 1}`;
-            
-            // XP Bar
-            const progresso = ((usuarioAlvo.xp || 0) % 1000) / 10;
-            setTimeout(() => { document.getElementById('visit-xp-bar').style.width = `${progresso}%`; }, 300);
-
-            // Stats
-            document.getElementById('visit-seguidores').innerText = usuarioAlvo.seguidores ? usuarioAlvo.seguidores.length : 0;
-            document.getElementById('visit-seguindo').innerText = usuarioAlvo.seguindo ? usuarioAlvo.seguindo.length : 0;
-
-            // Botão Seguir (Estado)
-            atualizarBotaoSeguir();
-
-            carregarCarros();
-            carregarPosts();
-        } catch(e) { console.error(e); }
-    }
-
-    // --- FUNÇÕES DE AÇÃO ---
-
-    function atualizarBotaoSeguir() {
-        const btn = document.getElementById('btn-seguir');
-        // Preciso saber se EU (Usuario Logado) sigo este perfil
-        // Vou buscar os meus dados atualizados
-        fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO_LOGADO.email}`)
-            .then(r => r.json())
-            .then(eu => {
-                const sigo = eu.seguindo && eu.seguindo.includes(EMAIL_ALVO);
-                if (sigo) {
-                    btn.classList.replace('bg-primary', 'bg-white/10');
-                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> A Seguir';
-                } else {
-                    btn.classList.replace('bg-white/10', 'bg-primary');
-                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">person_add</span> Seguir';
-                }
-            });
-    }
-
-    async function toggleSeguir() {
-        const btn = document.getElementById('btn-seguir');
-        setBtnLoading('btn-seguir', true);
-        
-        try {
-            const res = await fetch(`${URL_SERVIDOR}/seguir`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ eu: USUARIO_LOGADO.email, ele: EMAIL_ALVO })
-            });
-            if (res.ok) {
-                const dados = await res.json();
-                atualizarBotaoSeguir(); // Atualiza visual
-                // Atualiza contador visualmente
-                const count = document.getElementById('visit-seguidores');
-                let num = parseInt(count.innerText);
-                count.innerText = dados.aSeguir ? num + 1 : num - 1;
+            // Botão Seguir
+            const r2 = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO_LOGADO.email}`);
+            const eu = await r2.json();
+            if(eu.seguindo && eu.seguindo.includes(EMAIL_ALVO)) {
+                document.getElementById('btn-seguir').innerText = "A Seguir";
+                document.getElementById('btn-seguir').classList.replace('bg-primary', 'bg-white/20');
             }
-        } catch(e) { showToast("Erro ao seguir", 'error'); }
-        
-        setBtnLoading('btn-seguir', false);
+
+            carregarCarros(u.nome);
+        } catch(e){}
     }
 
-    function iniciarChat() {
-        // Redireciona para o chat abrindo esta conversa
-        // Como o chat.html espera clicar na lista, podemos passar parametros ou simplificar
-        // Aqui, vamos apenas para o chat e o utilizador procura.
-        // (Melhoria futura: abrir direto)
-        window.location.href = 'chat.html'; 
+    async function toggleSeguir(){
+        await fetch(`${URL_SERVIDOR}/seguir`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({eu:USUARIO_LOGADO.email, ele:EMAIL_ALVO}) });
+        location.reload();
     }
 
-    // --- CARREGAMENTO DE CONTEÚDO (Igual ao perfil, mas filtrado pelo alvo) ---
-    
-    async function carregarCarros() {
-        const res = await fetch(`${URL_SERVIDOR}/carros`);
-        const carros = await res.json();
-        const container = document.getElementById('tab-carros');
-        container.innerHTML = '';
-        const meus = carros.filter(c => c.dono === usuarioAlvo.nome); // Filtrar pelo nome do visitante
-
-        if(meus.length === 0) { container.innerHTML = '<div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div>'; return; }
-
-        meus.reverse().forEach(car => {
-            const modsHtml = car.mods.map(m => `<span class="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] uppercase font-bold">${m.trim()}</span>`).join('');
-            container.innerHTML += `
-                <div class="flex flex-col lg:flex-row bg-card-dark rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all animate-fade-in">
-                    <div class="lg:w-[45%] min-h-[300px] bg-cover bg-center relative" style="background-image: url('${car.imagemUrl}');">
-                        <div class="absolute inset-0 bg-gradient-to-t from-card-dark lg:bg-gradient-to-r lg:from-transparent lg:to-card-dark"></div>
-                    </div>
-                    <div class="lg:w-[55%] p-6 lg:p-8 flex flex-col justify-center relative">
-                        <div class="mb-6">
-                            <div class="flex items-baseline gap-2"><h2 class="text-primary font-bold text-sm uppercase tracking-widest">${car.marca}</h2><span class="text-gray-600 text-xs">• ${car.ano}</span></div>
-                            <h1 class="text-3xl font-bold text-white leading-tight">${car.modelo}</h1>
-                            <h3 class="text-xl text-gray-400 italic mb-2">"${car.apelido || 'Stock'}"</h3>
-                            <p class="text-sm text-gray-500 line-clamp-2 border-l-2 border-primary/50 pl-3">${car.descricao}</p>
-                        </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 border-y border-white/5 py-4">
-                            <div><p class="text-[10px] text-gray-500 uppercase">HP</p><p class="text-sm font-bold text-white">${car.specs.hp}</p></div>
-                            <div><p class="text-[10px] text-gray-500 uppercase">0-100</p><p class="text-sm font-bold text-white">${car.specs.zero_cem}</p></div>
-                            <div><p class="text-[10px] text-gray-500 uppercase">Top</p><p class="text-sm font-bold text-white">${car.specs.top_speed}</p></div>
-                        </div>
-                        <div><p class="text-[10px] text-gray-500 uppercase mb-2">Mods</p><div class="flex flex-wrap gap-2">${modsHtml || '<span class="text-xs text-gray-600">Stock</span>'}</div></div>
-                    </div>
-                </div>`;
-        });
+    async function carregarCarros(dono) {
+        const r = await fetch(`${URL_SERVIDOR}/carros`); const c = await r.json();
+        const lista = document.getElementById('visit-carros');
+        const meus = c.filter(x=>x.dono === dono);
+        if(meus.length===0) lista.innerHTML='<p class="text-center text-gray-500">Garagem vazia.</p>';
+        meus.forEach(car=>{ lista.innerHTML+=`<div class="bg-surface-dark p-4 rounded-xl border border-white/10 flex gap-4"><div class="w-32 h-24 bg-cover bg-center rounded-lg" style="background-image:url('${car.imagemUrl}')"></div><div><h3 class="font-bold text-white text-lg">${car.modelo}</h3><p class="text-gray-400 text-sm">${car.specs.hp} HP</p></div></div>`; });
     }
-
-    async function carregarPosts() {
-        const res = await fetch(`${URL_SERVIDOR}/posts`); const posts = await res.json();
-        const grid = document.getElementById('tab-posts'); grid.innerHTML = '';
-        posts.filter(p => p.nome === usuarioAlvo.nome).forEach(post => { 
-            grid.innerHTML += `<div onclick="verPost('${post.midiaUrl || post.imagemUrl}')" class="aspect-square bg-cover bg-center rounded-xl border border-white/10 hover:scale-105 transition-transform cursor-pointer" style="background-image: url('${post.midiaUrl || post.imagemUrl}')"></div>`; 
-        });
-    }
-
-    function verPost(url) {
-        document.getElementById('m-img').src = url;
-        document.getElementById('modal').classList.remove('hidden');
-    }
-
-    function trocarAba(a){if(a==='carros'){document.getElementById('tab-carros').classList.remove('hidden');document.getElementById('tab-posts').classList.add('hidden');document.getElementById('btn-tab-carros').classList.replace('border-transparent','border-primary');document.getElementById('btn-tab-posts').classList.replace('border-primary','border-transparent');}else{document.getElementById('tab-carros').classList.add('hidden');document.getElementById('tab-posts').classList.remove('hidden');document.getElementById('btn-tab-posts').classList.replace('border-transparent','border-primary');document.getElementById('btn-tab-carros').classList.replace('border-primary','border-transparent');}}
-
-    carregarVisitante();
-</script>
-
-</body>
-</html>
+    init();
+</script></body></html>
