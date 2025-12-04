@@ -122,109 +122,229 @@
 <div id="modal" class="hidden fixed inset-0 z-[80] bg-black/90 flex items-center justify-center p-0 md:p-4"><div class="bg-surface-dark w-full h-full md:max-w-6xl md:h-[85vh] rounded-none md:rounded-xl flex flex-col md:flex-row shadow-2xl relative overflow-hidden"><button onclick="fechar()" class="absolute top-4 right-4 text-white z-50 bg-black/50 rounded-full p-1"><span class="material-symbols-outlined">close</span></button><div class="w-full md:w-[60%] bg-black flex items-center justify-center h-[50%] md:h-full" id="m-content"></div><div class="w-full md:w-[40%] h-[50%] md:h-full flex flex-col bg-surface-dark border-l border-white/10"><div class="p-4 border-b border-white/10 flex gap-3 items-center"><img id="m-av" class="w-10 h-10 rounded-full border border-primary object-cover"><div><h3 id="m-nome" class="text-white font-bold text-sm"></h3><p class="text-xs text-gray-500">Autor</p></div></div><div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"><div class="flex gap-3 mb-6 bg-white/5 p-3 rounded-lg"><p class="text-white text-sm leading-relaxed"><span id="m-legenda" class="text-gray-300"></span></p></div><div id="m-coms" class="space-y-4"></div></div><div class="p-4 border-t border-white/10 bg-surface-dark"><div class="flex gap-4 text-white mb-2"><button onclick="likeModal()" class="hover:text-primary transition-colors group"><span id="btn-like-icon" class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span></button></div><p id="m-likes" class="text-white font-bold text-sm">0 likes</p><div class="flex gap-2 mt-3"><input id="m-inp" type="text" class="bg-black/30 border border-white/10 rounded-full px-4 py-2 text-white w-full text-sm" placeholder="Comentar..."><button onclick="comentar()" class="text-primary font-bold text-sm">Enviar</button></div></div></div></div></div>
 
 <script>
-    const USUARIO_ATUAL=verificarLogin(); let pid=null;
+<script>
+    const URL_SERVIDOR = 'https://midnight-circuit-v3-production.up.railway.app/feed.html'; // ⚠️ Se estiver no Railway, usa o link do Railway aqui!
+    let pid = null;
+
+    // 1. SEGURANÇA E LOGIN
+    const dadosSalvos = localStorage.getItem('usuario_logado');
+    if (!dadosSalvos) window.location.href = 'login.html';
+    const USUARIO_ATUAL = JSON.parse(dadosSalvos);
     
-    // LÓGICA DO MENU GAVETA
-    function toggleMenu() {
-        const drawer = document.getElementById('mobile-drawer');
-        const overlay = document.getElementById('mobile-drawer-overlay');
-        const icon = document.getElementById('menu-icon');
-        
-        // Toggle Classes
-        if (drawer.classList.contains('open')) {
-            drawer.classList.remove('open');
-            overlay.classList.remove('open');
-            icon.innerText = 'apps'; // Ícone normal
-        } else {
-            drawer.classList.add('open');
-            overlay.classList.add('open');
-            icon.innerText = 'close'; // Ícone fechar
-        }
+    // Carregar Tema
+    const temaSalvo = localStorage.getItem('midnight_tema') || 'theme-red';
+    document.body.className = `${temaSalvo} bg-background-dark text-gray-200 overflow-hidden`;
+
+    function logout() {
+        localStorage.removeItem('usuario_logado');
+        window.location.href = 'login.html';
     }
 
-    // (RESTO DO CÓDIGO DO FEED - MANTIDO IGUAL)
+    // Preencher visuais
     if(document.getElementById('header-nome')) document.getElementById('header-nome').innerText = USUARIO_ATUAL.nome;
     document.getElementById('sidebar-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
     if(document.getElementById('input-avatar')) document.getElementById('input-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
     document.getElementById('story-avatar-me').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
 
-    function mudar(t){localStorage.setItem('midnight_tema',t);location.reload();}
-    function mudarAba(aba) {
-        const areaFeed = document.getElementById('area-feed'); const areaNews = document.getElementById('area-news');
-        const btnFeed = document.getElementById('tab-feed'); const btnNews = document.getElementById('tab-news');
-        if (aba === 'feed') {
-            areaFeed.classList.remove('hidden'); areaNews.classList.add('hidden');
-            btnFeed.className = "text-white font-bold px-4 py-1 bg-white/10 rounded-lg transition-all text-sm";
-            btnNews.className = "text-gray-500 hover:text-white px-4 py-1 rounded-lg transition-all text-sm flex items-center gap-2";
-        } else {
-            areaFeed.classList.add('hidden'); areaNews.classList.remove('hidden');
-            btnNews.className = "text-white font-bold px-4 py-1 bg-white/10 rounded-lg transition-all text-sm flex items-center gap-2";
-            btnFeed.className = "text-gray-500 hover:text-white px-4 py-1 rounded-lg transition-all text-sm";
-            carregarNews();
+    // --- FUNÇÕES DE POSTAGEM (AQUI ESTAVA O ERRO) ---
+
+    // 1. POSTAR NO COMPUTADOR
+    async function postar() {
+        console.log("Tentando postar (PC)...");
+        
+        const c = document.getElementById('conteudo').value;
+        const i = document.getElementById('imgInp').files[0];
+        const btn = document.getElementById('btn-pub');
+
+        // Validação
+        if (!i && !c.trim()) return alert('Escreve algo ou escolhe uma foto!');
+        
+        // Feedback Visual
+        btn.innerText = "A enviar..."; 
+        btn.disabled = true;
+        btn.style.opacity = "0.5";
+
+        const f = new FormData();
+        f.append('nome', USUARIO_ATUAL.nome);
+        f.append('avatar', USUARIO_ATUAL.avatar);
+        f.append('emailAutor', USUARIO_ATUAL.email);
+        f.append('conteudo', c);
+        if (i) f.append('midia', i);
+
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/posts`, { method: 'POST', body: f });
+            if (res.ok) {
+                document.getElementById('conteudo').value = '';
+                limparImagem();
+                load(); // Recarrega o feed
+                alert('Publicado com sucesso!');
+            } else {
+                alert("Erro no servidor.");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Erro de conexão. O servidor está ligado?");
+        }
+
+        // Restaura botão
+        btn.innerText = "Publicar"; 
+        btn.disabled = false;
+        btn.style.opacity = "1";
+    }
+
+    // 2. POSTAR NO CELULAR (Mobile)
+    async function postarMobile() {
+        console.log("Tentando postar (Mobile)...");
+
+        const c = document.getElementById('conteudo-mobile').value;
+        const i = document.getElementById('imgInp-mobile').files[0];
+        
+        // Apanhar o botão dentro do modal (pode não ter ID, então procuramos pelo texto ou onclick)
+        // Vamos assumir que é o botão que chama esta função
+        
+        if (!i && !c.trim()) return alert('Escreve algo ou escolhe uma foto!');
+
+        const f = new FormData();
+        f.append('nome', USUARIO_ATUAL.nome);
+        f.append('avatar', USUARIO_ATUAL.avatar);
+        f.append('emailAutor', USUARIO_ATUAL.email);
+        f.append('conteudo', c);
+        if (i) f.append('midia', i);
+
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/posts`, { method: 'POST', body: f });
+            if(res.ok) {
+                alert("Publicado!");
+                document.getElementById('modal-mobile-post').classList.add('hidden');
+                location.reload(); // Recarrega a página para ver o post
+            } else {
+                alert("Erro ao enviar.");
+            }
+        } catch(e) {
+            console.error(e);
+            alert("Erro de conexão.");
         }
     }
-    async function carregarNews() {
-        const lista = document.getElementById('lista-news'); lista.innerHTML = '<div class="skeleton h-64 col-span-full"></div>';
-        try { const res = await fetch(`${URL_SERVIDOR}/news`); const news = await res.json(); lista.innerHTML = ''; news.forEach(n => { lista.innerHTML += `<div class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden group hover:border-primary/50 transition-all"><div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('${n.imagem}');"><div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded">${n.categoria}</div></div><div class="p-5"><p class="text-gray-500 text-xs mb-2">${n.data}</p><h3 class="text-xl font-bold text-white mb-2 leading-tight group-hover:text-primary transition-colors">${n.titulo}</h3><p class="text-gray-400 text-sm line-clamp-3">${n.texto}</p></div></div>`; }); } catch(e) {}
-    }
 
-    function verImg(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview');c.classList.remove('hidden');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
-    function limparImagem(){document.getElementById('imgInp').value='';document.getElementById('preview').classList.add('hidden');}
-    function abrirModalMobilePost(){document.getElementById('modal-mobile-post').classList.remove('hidden');}
-    function verImgMobile(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview-mobile');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
+    // --- RESTO DAS FUNÇÕES (PREVIEW, CARREGAMENTO, ETC) ---
     
-    async function postarGenerico(conteudoId, fileId, btnId) {
-        const c = document.getElementById(conteudoId).value; const i = document.getElementById(fileId).files[0];
-        if(!i && !c) return showToast('Escreve algo!', 'error');
-        setBtnLoading(btnId, true);
-        const f = new FormData(); f.append('nome', USUARIO_ATUAL.nome); f.append('avatar', USUARIO_ATUAL.avatar); f.append('emailAutor', USUARIO_ATUAL.email); f.append('conteudo', c); if(i) f.append('midia', i);
-        try { await fetch(`${URL_SERVIDOR}/posts`, { method: 'POST', body: f }); location.reload(); } catch(e) { showToast("Erro ao enviar", 'error'); }
-        setBtnLoading(btnId, false);
-    }
-    async function postar(){ postarGenerico('conteudo', 'imgInp', 'btn-pub'); }
-    async function postarMobile(){ postarGenerico('conteudo-mobile', 'imgInp-mobile', 'btn-pub-mobile'); }
+    function verImg(e){const f=e.target.files[0]; if(f){const c=document.getElementById('preview'); c.classList.remove('hidden'); c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
+    function limparImagem(){document.getElementById('imgInp').value='';document.getElementById('preview').classList.add('hidden');}
+    
+    // Mobile Helpers
+    function abrirModalMobilePost(){ document.getElementById('modal-mobile-post').classList.remove('hidden'); }
+    function verImgMobile(e){ const f=e.target.files[0]; if(f){ const c=document.getElementById('preview-mobile'); c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`; } }
 
-    async function load() {
+    // Carregar Feed
+    async function load(){
         try {
-            const r = await fetch(`${URL_SERVIDOR}/posts`); const p = await r.json();
+            const r = await fetch(`${URL_SERVIDOR}/posts`); 
+            const p = await r.json();
             document.getElementById('lista').innerHTML = p.reverse().map((x, i) => {
-                let grid = "col-span-1 row-span-1"; if (window.innerWidth > 768 && i % 5 === 0) grid = "md:col-span-2 md:row-span-2";
+                let grid = "col-span-1 row-span-1"; 
+                if (window.innerWidth > 768 && i % 5 === 0) grid = "md:col-span-2 md:row-span-2";
+                
                 const isVideo = x.tipo === 'video' || (x.midiaUrl && x.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
                 const mediaHtml = isVideo 
                     ? `<video src="${x.midiaUrl}" class="absolute inset-0 w-full h-full object-cover pointer-events-none" muted loop></video>`
                     : `<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${x.midiaUrl || x.imagemUrl}')"></div>`;
+
                 return `<div onclick="abrir('${x._id || x.id}')" class="group relative rounded-xl overflow-hidden bg-surface-dark border border-white/5 cursor-pointer glow-hover h-96 md:h-full ${grid}">${mediaHtml}<div class="absolute inset-0 bg-black/20 flex flex-col justify-end"><div class="legenda-overlay p-4"><p class="text-white text-sm font-bold truncate">${x.nome}</p><p class="text-gray-300 text-xs line-clamp-1">${x.conteudo}</p></div></div></div>`;
             }).join('');
-            document.querySelectorAll('#lista video').forEach(v => { v.parentElement.addEventListener('mouseenter', () => v.play()); v.parentElement.addEventListener('mouseleave', () => v.pause()); });
-        } catch(e) {}
+            
+            // Autoplay no hover (PC)
+            document.querySelectorAll('#lista video').forEach(v => {
+                v.parentElement.addEventListener('mouseenter', () => v.play());
+                v.parentElement.addEventListener('mouseleave', () => v.pause());
+            });
+        } catch(e) { console.error("Erro ao carregar feed:", e); }
     }
 
-    async function abrir(id) {
-        pid = id; const res = await fetch(`${URL_SERVIDOR}/posts`); const ps = await res.json(); const p = ps.find(x => (x._id || x.id) == id);
+    // Modal de Visualização
+    async function abrir(id){
+        pid = id; 
+        const res = await fetch(`${URL_SERVIDOR}/posts`); 
+        const ps = await res.json(); 
+        const p = ps.find(x => (x._id || x.id) == id);
+        
         const mCont = document.getElementById('m-content'); mCont.innerHTML = '';
         const isVideo = p.tipo === 'video' || (p.midiaUrl && p.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
         if (isVideo) mCont.innerHTML = `<video src="${p.midiaUrl}" class="max-w-full max-h-full" controls autoplay></video>`;
         else mCont.innerHTML = `<img src="${p.midiaUrl || p.imagemUrl}" class="max-w-full max-h-full object-contain">`;
-        document.getElementById('m-av').src = p.avatar; document.getElementById('m-nome').innerText = p.nome; document.getElementById('m-legenda').innerText = p.conteudo; document.getElementById('m-likes').innerText = `${p.likes} likes`;
-        document.getElementById('btn-like-icon').classList.remove('text-primary'); document.getElementById('btn-like-icon').style.fontVariationSettings = "'FILL' 0";
+        
+        document.getElementById('m-av').src = p.avatar; 
+        document.getElementById('m-nome').innerText = p.nome; 
+        document.getElementById('m-legenda').innerText = p.conteudo; 
+        document.getElementById('m-likes').innerText = `${p.likes} likes`;
+        
+        // Reset Like Visual
+        const icon = document.getElementById('btn-like-icon');
+        icon.classList.remove('text-primary');
+        icon.style.fontVariationSettings = "'FILL' 0";
+
         const divC = document.getElementById('m-coms'); divC.innerHTML = '';
         if (p.comentarios) p.comentarios.forEach(c => divC.innerHTML += `<div class="flex gap-3 mb-3"><img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${c.autor}</span>${c.texto}</p></div></div>`);
+        
         document.getElementById('modal').classList.remove('hidden');
     }
-    function fechar() { document.getElementById('modal').classList.add('hidden'); pid = null; load(); }
-    async function likeModal() { if (!pid) return; const icon = document.getElementById('btn-like-icon'); icon.classList.add('text-primary', 'animate-ping'); icon.style.fontVariationSettings = "'FILL' 1"; setTimeout(() => icon.classList.remove('animate-ping'), 300); document.getElementById('m-likes').innerText = `${parseInt(document.getElementById('m-likes').innerText) + 1} likes`; await fetch(`${URL_SERVIDOR}/posts/like/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ quemDeuLikeNome: USUARIO_ATUAL.nome, quemDeuLikeEmail: USUARIO_ATUAL.email, quemDeuLikeAvatar: USUARIO_ATUAL.avatar }) }); }
-    async function comentar() { const t = document.getElementById('m-inp').value; if (!t) return; const res = await fetch(`${URL_SERVIDOR}/posts/comentar/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ autor: USUARIO_ATUAL.nome, avatar: USUARIO_ATUAL.avatar, texto: t }) }); if (res.ok) { document.getElementById('m-coms').innerHTML += `<div class="flex gap-3 mb-3"><img src="${USUARIO_ATUAL.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO_ATUAL.nome}</span>${t}</p></div></div>`; document.getElementById('m-inp').value = ''; } }
     
-    let storiesAtuais=[]; let storyIndex=0;
-    async function uploadStory(e){ if(e.target.files[0]){const f=new FormData();f.append('emailAutor',USUARIO_ATUAL.email);f.append('nome',USUARIO_ATUAL.nome);f.append('avatar',USUARIO_ATUAL.avatar);f.append('midia',e.target.files[0]);await fetch(`${URL_SERVIDOR}/stories`,{method:'POST',body:f});location.reload();}}
-    async function carregarStories(){try{const r=await fetch(`${URL_SERVIDOR}/stories`);const s=await r.json();const c=document.getElementById('outros-stories');c.innerHTML='';const g={};s.forEach(x=>{if(!g[x.emailAutor])g[x.emailAutor]={nome:x.nome,avatar:x.avatar,posts:[]};g[x.emailAutor].posts.push(x)});const meus=g[USUARIO_ATUAL.email];if(meus){const me=document.getElementById('story-avatar-me');me.innerHTML='';me.style.backgroundImage=`url('${meus.posts[0].tipo==='imagem'?meus.posts[0].midiaUrl:meus.posts[0].avatar}')`;me.parentElement.classList.add('border-green-500');me.parentElement.parentElement.onclick=()=>abrirS(encodeURIComponent(JSON.stringify(meus.posts)));}Object.values(g).forEach(gr=>{if(gr.posts[0].emailAutor===USUARIO_ATUAL.email)return;c.innerHTML+=`<div onclick="abrirS('${encodeURIComponent(JSON.stringify(gr.posts))}')" class="cursor-pointer flex flex-col items-center gap-2 group"><div class="story-ring midnight w-16 h-16 p-[2px]"><div class="w-full h-full rounded-full bg-cover border-2 border-background-dark" style="background-image:url('${gr.avatar}')"></div></div><span class="text-xs text-gray-300 truncate w-16 text-center">${gr.nome}</span></div>`;});}catch(e){}}
+    function fechar() { document.getElementById('modal').classList.add('hidden'); pid = null; load(); }
+
+    async function likeModal(){
+        if (!pid) return;
+        const icon = document.getElementById('btn-like-icon');
+        icon.classList.add('text-primary', 'animate-ping');
+        icon.style.fontVariationSettings = "'FILL' 1";
+        setTimeout(() => icon.classList.remove('animate-ping'), 300);
+        
+        document.getElementById('m-likes').innerText = `${parseInt(document.getElementById('m-likes').innerText) + 1} likes`;
+        
+        await fetch(`${URL_SERVIDOR}/posts/like/${pid}`, {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ quemDeuLikeNome: USUARIO_ATUAL.nome, quemDeuLikeEmail: USUARIO_ATUAL.email, quemDeuLikeAvatar: USUARIO_ATUAL.avatar })
+        });
+    }
+
+    async function comentar(){
+        const t = document.getElementById('m-inp').value; 
+        if (!t) return;
+        const res = await fetch(`${URL_SERVIDOR}/posts/comentar/${pid}`, {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ autor: USUARIO_ATUAL.nome, avatar: USUARIO_ATUAL.avatar, texto: t }) 
+        });
+        if (res.ok) {
+            document.getElementById('m-coms').innerHTML += `<div class="flex gap-3 mb-3"><img src="${USUARIO_ATUAL.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO_ATUAL.nome}</span>${t}</p></div></div>`;
+            document.getElementById('m-inp').value = '';
+        }
+    }
+
+    // Stories
+    let storiesAtuais = []; let storyIndex = 0;
+    async function uploadStory(e){ if(e.target.files[0]){ const f=new FormData(); f.append('emailAutor',USUARIO_ATUAL.email); f.append('nome',USUARIO_ATUAL.nome); f.append('avatar',USUARIO_ATUAL.avatar); f.append('midia',e.target.files[0]); await fetch(`${URL_SERVIDOR}/stories`,{method:'POST',body:f}); location.reload(); } }
+    async function carregarStories(){ try{ const r=await fetch(`${URL_SERVIDOR}/stories`); const s=await r.json(); const c=document.getElementById('outros-stories'); c.innerHTML=''; const g={}; s.forEach(x=>{if(!g[x.emailAutor])g[x.emailAutor]={nome:x.nome,avatar:x.avatar,posts:[]};g[x.emailAutor].posts.push(x)}); const meus=g[USUARIO_ATUAL.email]; if(meus){const me=document.getElementById('story-avatar-me');me.innerHTML='';me.style.backgroundImage=`url('${meus.posts[0].tipo==='imagem'?meus.posts[0].midiaUrl:meus.posts[0].avatar}')`;me.parentElement.classList.add('border-green-500');me.parentElement.parentElement.onclick=()=>abrirS(encodeURIComponent(JSON.stringify(meus.posts)));} Object.values(g).forEach(gr=>{if(gr.posts[0].emailAutor===USUARIO_ATUAL.email)return;c.innerHTML+=`<div onclick="abrirS('${encodeURIComponent(JSON.stringify(gr.posts))}')" class="cursor-pointer flex flex-col items-center gap-2 group"><div class="story-ring midnight w-16 h-16 p-[2px]"><div class="w-full h-full rounded-full bg-cover border-2 border-background-dark" style="background-image:url('${gr.avatar}')"></div></div><span class="text-xs text-gray-300 truncate w-16 text-center">${gr.nome}</span></div>`;}); }catch(e){} }
     function abrirS(d){storiesAtuais=JSON.parse(decodeURIComponent(d));storyIndex=0;showS();document.getElementById('story-viewer').classList.remove('hidden');}
     function showS(){if(storyIndex>=storiesAtuais.length){fecharStory();return;}const s=storiesAtuais[storyIndex];const vCont=document.getElementById('viewer-content');vCont.innerHTML='';const isVideo=s.tipo==='video'||s.midiaUrl.match(/\.(mp4|webm|ogg)$/i);if(isVideo)vCont.innerHTML=`<video src="${s.midiaUrl}" class="max-h-full max-w-full" autoplay muted onended="proxStory()"></video>`;else{vCont.innerHTML=`<img src="${s.midiaUrl}" class="max-h-full max-w-full object-contain">`;if(window.storyTimer)clearTimeout(window.storyTimer);window.storyTimer=setTimeout(proxStory,5000);}document.getElementById('viewer-avatar').src=s.avatar;document.getElementById('viewer-nome').innerText=s.nome;const b=document.getElementById('story-bars');b.innerHTML='';storiesAtuais.forEach((_,i)=>{b.innerHTML+=`<div class="flex-1 h-full rounded-full ${i<=storyIndex?'bg-white':'bg-white/30'}"></div>`});}
     function proxStory(){storyIndex++;showS();}
     function fecharStory(){document.getElementById('story-viewer').classList.add('hidden');if(window.storyTimer)clearTimeout(window.storyTimer);}
+
+    // News / Abas
+    function mudar(t){localStorage.setItem('midnight_tema',t);location.reload();}
+    function mudarAba(aba) {
+        const areaFeed = document.getElementById('area-feed'); const areaNews = document.getElementById('area-news');
+        const btnFeed = document.getElementById('tab-feed'); const btnNews = document.getElementById('tab-news');
+        if (aba === 'feed') { areaFeed.classList.remove('hidden'); areaNews.classList.add('hidden'); btnFeed.className="text-white font-bold px-4 py-1 bg-white/10 rounded-lg text-sm"; btnNews.className="text-gray-500 hover:text-white px-4 py-1 rounded-lg text-sm flex items-center gap-2"; } 
+        else { areaFeed.classList.add('hidden'); areaNews.classList.remove('hidden'); btnNews.className="text-white font-bold px-4 py-1 bg-white/10 rounded-lg text-sm flex items-center gap-2"; btnFeed.className="text-gray-500 hover:text-white px-4 py-1 rounded-lg text-sm"; carregarNews(); }
+    }
+    async function carregarNews(){const l=document.getElementById('lista-news');l.innerHTML='<div class="skeleton h-64 col-span-full"></div>';try{const r=await fetch(`${URL_SERVIDOR}/news`);const n=await r.json();l.innerHTML='';n.forEach(x=>{l.innerHTML+=`<div class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden group hover:border-primary/50 transition-all"><div class="h-48 w-full bg-cover bg-center relative" style="background-image:url('${x.imagem}')"><div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded">${x.categoria}</div></div><div class="p-5"><p class="text-gray-500 text-xs mb-2">${x.data}</p><h3 class="text-xl font-bold text-white mb-2 leading-tight group-hover:text-primary transition-colors">${x.titulo}</h3><p class="text-gray-400 text-sm line-clamp-3">${x.texto}</p></div></div>`;});}catch(e){}}
 
     carregarStories();
     load();
 </script>
 </body>
 </html>
+</script>
+</body>
+</html>
+
