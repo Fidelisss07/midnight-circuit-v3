@@ -9,9 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
-    <script>
-        tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}
-    </script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
 </head>
 <body class="bg-background-dark text-gray-200 overflow-hidden">
 
@@ -20,7 +18,16 @@
     <div class="md:hidden fixed top-0 w-full h-14 bg-black/80 backdrop-blur-md border-b border-white/10 z-40 flex items-center justify-between px-4">
         <span class="material-symbols-outlined text-primary text-3xl">directions_car</span>
         <h1 class="font-bold text-lg tracking-widest">MIDNIGHT</h1>
-        <div onclick="logout()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></div>
+        
+        <div class="flex gap-5">
+            <a href="chat.html" class="text-gray-300 hover:text-white relative">
+                <span class="material-symbols-outlined text-2xl">chat_bubble</span>
+            </a>
+            <a href="notificacoes.html" class="text-gray-300 hover:text-white relative">
+                <span class="material-symbols-outlined text-2xl">notifications</span>
+                <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border border-black"></span>
+            </a>
+        </div>
     </div>
 
     <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
@@ -36,155 +43,124 @@
             <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">emoji_events</span></a>
             <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">settings</span></a>
         </nav>
-        <div class="mt-auto flex flex-col gap-3 items-center">
-            <button onclick="document.getElementById('menu-temas').classList.toggle('hidden')" class="p-2 text-gray-400 hover:text-white"><span class="material-symbols-outlined">palette</span></button>
-            <button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button>
-            <div id="sidebar-avatar" class="w-8 h-8 rounded-full bg-cover border-2 border-primary cursor-pointer" onclick="window.location.href='perfil.html'"></div>
-        </div>
+        <div class="mt-auto flex flex-col gap-3 items-center"><button onclick="document.getElementById('menu-temas').classList.toggle('hidden')" class="p-2 text-gray-400 hover:text-white"><span class="material-symbols-outlined">palette</span></button><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button><div id="sidebar-avatar" class="w-8 h-8 rounded-full bg-cover border-2 border-primary cursor-pointer" onclick="window.location.href='perfil.html'"></div></div>
     </aside>
 
-    <div id="menu-temas" class="hidden absolute bottom-20 left-16 bg-surface-dark border border-white/10 p-4 rounded-xl shadow-2xl z-50 flex-col gap-2 w-48">
-        <button onclick="mudar('theme-red')" class="text-white text-sm">🔴 Red</button>
-        <button onclick="mudar('theme-purple')" class="text-white text-sm">🟣 Purple</button>
-        <button onclick="mudar('theme-blue')" class="text-white text-sm">🔵 Blue</button>
-        <button onclick="mudar('theme-light')" class="text-white text-sm">⚪ Light</button>
-    </div>
+    <div id="menu-temas" class="hidden absolute bottom-20 left-16 bg-surface-dark border border-white/10 p-4 rounded-xl shadow-2xl z-50 flex-col gap-2 w-48"><button onclick="mudar('theme-red')" class="text-white text-sm">🔴 Red</button><button onclick="mudar('theme-purple')" class="text-white text-sm">🟣 Purple</button><button onclick="mudar('theme-blue')" class="text-white text-sm">🔵 Blue</button><button onclick="mudar('theme-light')" class="text-white text-sm">⚪ Light</button></div>
 
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-16 pb-20 md:pt-0 md:pb-0">
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-16 pb-24 md:pt-0 md:pb-0">
         <div class="max-w-7xl mx-auto p-4 md:p-8">
             <header class="hidden md:flex justify-between items-end mb-8">
-                <div>
-                    <h1 class="text-4xl font-bold text-white">Feed</h1>
-                    <p class="text-gray-500 text-sm">Bem-vindo, <span class="text-primary font-bold" id="header-nome">...</span></p>
-                </div>
-                <div class="flex gap-6 bg-surface-dark p-2 rounded-xl border border-white/5 self-center md:self-auto">
-                    <button onclick="mudarAba('feed')" id="tab-feed" class="text-white font-bold px-4 py-1 bg-white/10 rounded-lg transition-all text-sm">Feed</button>
-                    <button onclick="mudarAba('news')" id="tab-news" class="text-gray-500 hover:text-white px-4 py-1 rounded-lg transition-all text-sm flex items-center gap-2"><span class="material-symbols-outlined text-sm">newspaper</span> News</button>
-                </div>
+                <div><h1 class="text-4xl font-bold text-white">Feed</h1><p class="text-gray-500 text-sm">Bem-vindo, <span class="text-primary font-bold" id="header-nome">...</span></p></div>
+                <div class="flex gap-6 bg-surface-dark p-2 rounded-xl border border-white/5 self-center md:self-auto"><button onclick="mudarAba('feed')" id="tab-feed" class="text-white font-bold px-4 py-1 bg-white/10 rounded-lg transition-all text-sm">Feed</button><button onclick="mudarAba('news')" id="tab-news" class="text-gray-500 hover:text-white px-4 py-1 rounded-lg transition-all text-sm flex items-center gap-2"><span class="material-symbols-outlined text-sm">newspaper</span> News</button></div>
             </header>
             
             <div id="area-feed">
-                <section class="mb-6 md:mb-10 overflow-x-auto pb-4 no-scrollbar">
-                    <div class="flex gap-4 min-w-max items-center px-2" id="stories-container">
-                        <div onclick="document.getElementById('inputStory').click()" class="cursor-pointer flex flex-col items-center gap-2 group">
-                            <div class="w-16 h-16 rounded-full border-2 border-white/20 p-1 relative">
-                                <div id="story-avatar-me" class="w-full h-full rounded-full bg-surface-dark flex items-center justify-center bg-cover">
-                                    <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center group-hover:bg-primary/40 transition-colors">
-                                        <span class="material-symbols-outlined text-white font-bold">add</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="text-xs text-white font-bold">Tu</span>
-                            <input type="file" id="inputStory" class="hidden" accept="image/*,video/*" onchange="uploadStory(event)">
-                        </div>
-                        <div id="outros-stories" class="flex gap-4"></div>
-                    </div>
-                </section>
+                <section class="mb-6 md:mb-10 overflow-x-auto pb-4 no-scrollbar"><div class="flex gap-4 min-w-max items-center px-2" id="stories-container"><div onclick="document.getElementById('inputStory').click()" class="cursor-pointer flex flex-col items-center gap-2 group"><div class="w-16 h-16 rounded-full border-2 border-white/20 p-1 relative"><div id="story-avatar-me" class="w-full h-full rounded-full bg-surface-dark flex items-center justify-center bg-cover"><div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center group-hover:bg-primary/40 transition-colors"><span class="material-symbols-outlined text-white font-bold">add</span></div></div></div><span class="text-xs text-white font-bold">Tu</span><input type="file" id="inputStory" class="hidden" accept="image/*,video/*" onchange="uploadStory(event)"></div><div id="outros-stories" class="flex gap-4"></div></div></section>
                 
-                <div class="hidden md:block mb-12 bg-surface-dark rounded-2xl p-6 border border-white/5 relative group glow-hover">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
-                    <div class="flex gap-4">
-                        <div id="input-avatar" class="w-12 h-12 rounded-full bg-cover border border-white/10"></div>
-                        <div class="flex-1">
-                            <textarea id="conteudo" placeholder="Partilha a tua máquina..." class="w-full bg-transparent border-none text-white focus:ring-0 resize-none h-12"></textarea>
-                            <div id="preview" class="hidden mt-4 h-64 bg-black rounded-lg flex items-center justify-center overflow-hidden"></div>
-                            <div class="flex justify-between mt-4 border-t border-white/5 pt-4">
-                                <label class="cursor-pointer text-primary text-sm font-bold flex gap-2"><span class="material-symbols-outlined">perm_media</span> Mídia<input type="file" id="imgInp" class="hidden" accept="image/*,video/*" onchange="verImg(event)"></label>
-                                <button onclick="postar()" id="btn-pub" class="bg-primary text-white px-6 py-1 rounded-full font-bold hover:brightness-110 transition-all">Publicar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="hidden md:block mb-12 bg-surface-dark rounded-2xl p-6 border border-white/5 relative group glow-hover"><div class="absolute top-0 left-0 w-1 h-full bg-primary"></div><div class="flex gap-4"><div id="input-avatar" class="w-12 h-12 rounded-full bg-cover border border-white/10"></div><div class="flex-1"><textarea id="conteudo" placeholder="Partilha a tua máquina..." class="w-full bg-transparent border-none text-white focus:ring-0 resize-none h-12"></textarea><div id="preview" class="hidden mt-4 h-64 bg-black rounded-lg flex items-center justify-center overflow-hidden"></div><div class="flex justify-between mt-4 border-t border-white/5 pt-4"><label class="cursor-pointer text-primary text-sm font-bold flex gap-2"><span class="material-symbols-outlined">perm_media</span> Mídia<input type="file" id="imgInp" class="hidden" accept="image/*,video/*" onchange="verImg(event)"></label><button onclick="postar()" id="btn-pub" class="bg-primary text-white px-6 py-1 rounded-full font-bold hover:brightness-110 transition-all">Publicar</button></div></div></div></div>
                 
-                <div id="lista" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 auto-rows-[400px]">
-                    <div class="skeleton h-96 w-full"></div>
-                </div>
+                <div id="lista" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 auto-rows-[400px]"><div class="skeleton h-96 w-full"></div></div>
             </div>
 
-            <div id="area-news" class="hidden pb-20">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary">breaking_news_alt_1</span> Últimas Novidades</h2>
-                <div id="lista-news" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-            </div>
+            <div id="area-news" class="hidden pb-20"><h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary">breaking_news_alt_1</span> Últimas Novidades</h2><div id="lista-news" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
         </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-0 w-full h-16 bg-black border-t border-white/10 z-50 flex justify-around items-center px-2">
-        <a href="feed.html" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl">home</span></a>
-        <a href="explorar.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">search</span></a>
-        <button onclick="abrirModalMobilePost()" class="bg-primary text-white p-3 rounded-full -mt-6 border-4 border-background-dark shadow-lg"><span class="material-symbols-outlined text-2xl font-bold">add</span></button>
-        <a href="sprints.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">bolt</span></a>
-        <a href="perfil.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">person</span></a>
+    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none"></div>
+    
+    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-surface-dark border-t border-white/10 z-[70] pb-8 pt-2">
+        
+        <div class="w-12 h-1 bg-gray-700 rounded-full mx-auto my-3"></div>
+        
+        <div class="grid grid-cols-3 gap-4 p-4">
+            
+            <div onclick="abrirModalMobilePost(); toggleMenu()" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-primary/20">
+                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined">add</span>
+                </div>
+                <span class="text-xs text-white font-bold">Novo Post</span>
+            </div>
+
+            <a href="ranking.html" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-white/10">
+                <span class="material-symbols-outlined text-yellow-400 text-2xl">emoji_events</span>
+                <span class="text-xs text-gray-300">Ranking</span>
+            </a>
+
+            <a href="comunidades-hub.html" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-white/10">
+                <span class="material-symbols-outlined text-blue-400 text-2xl">groups</span>
+                <span class="text-xs text-gray-300">Clubes</span>
+            </a>
+            
+            <a href="configuracoes.html" class="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-xl active:bg-white/10">
+                <span class="material-symbols-outlined text-gray-400 text-2xl">settings</span>
+                <span class="text-xs text-gray-300">Definições</span>
+            </a>
+
+            <div onclick="logout()" class="flex flex-col items-center gap-2 p-3 bg-red-500/10 rounded-xl active:bg-red-500/20">
+                <span class="material-symbols-outlined text-red-500 text-2xl">logout</span>
+                <span class="text-xs text-red-500 font-bold">Sair</span>
+            </div>
+
+        </div>
+    </div>
+
+    <nav class="md:hidden fixed bottom-0 w-full h-16 bg-black border-t border-white/10 z-50 flex justify-around items-center px-2 pb-1">
+        <a href="feed.html" class="flex flex-col items-center text-primary w-14">
+            <span class="material-symbols-outlined text-2xl">home</span>
+        </a>
+        <a href="explorar.html" class="flex flex-col items-center text-gray-500 w-14 active:text-white">
+            <span class="material-symbols-outlined text-2xl">search</span>
+        </a>
+        
+        <button onclick="toggleMenu()" class="btn-menu-central bg-surface-dark text-white w-14 h-14 rounded-full border border-white/20 flex items-center justify-center shadow-lg relative z-50 -mt-6">
+            <span class="material-symbols-outlined text-3xl text-primary transition-transform duration-300" id="menu-icon">apps</span>
+        </button>
+        
+        <a href="sprints.html" class="flex flex-col items-center text-gray-500 w-14 active:text-white">
+            <span class="material-symbols-outlined text-2xl">bolt</span>
+        </a>
+        <a href="perfil.html" class="flex flex-col items-center text-gray-500 w-14 active:text-white">
+            <span class="material-symbols-outlined text-2xl">person</span>
+        </a>
     </nav>
 
 </div>
 
-<div id="modal-mobile-post" class="hidden fixed inset-0 z-[60] bg-black/90 flex flex-col p-4 animate-fade-in">
-    <div class="flex justify-between items-center mb-4">
-        <button onclick="document.getElementById('modal-mobile-post').classList.add('hidden')" class="text-white">Cancelar</button>
-        <h2 class="text-white font-bold">Nova Publicação</h2>
-        <button onclick="postarMobile()" id="btn-pub-mobile" class="text-primary font-bold">Partilhar</button>
-    </div>
-    <div class="flex-1">
-        <textarea id="conteudo-mobile" class="w-full bg-transparent text-white text-lg border-none focus:ring-0 h-32" placeholder="Escreve a tua legenda..."></textarea>
-        <div id="preview-mobile" class="w-full h-64 bg-white/5 rounded-xl flex items-center justify-center overflow-hidden border border-white/10 relative">
-            <span class="material-symbols-outlined text-4xl text-gray-600">image</span>
-            <input type="file" id="imgInp-mobile" class="absolute inset-0 opacity-0 w-full h-full" accept="image/*,video/*" onchange="verImgMobile(event)">
-        </div>
-    </div>
-</div>
-
-<div id="story-viewer" class="hidden fixed inset-0 z-[70] bg-black flex flex-col">
-    <div class="h-1 w-full flex gap-1 p-2" id="story-bars"></div>
-    <div class="flex justify-between items-center p-4 absolute top-4 w-full z-10">
-        <div class="flex items-center gap-3">
-            <img id="viewer-avatar" class="w-10 h-10 rounded-full border border-white">
-            <span id="viewer-nome" class="font-bold text-white shadow-black drop-shadow-md">User</span>
-        </div>
-        <button onclick="fecharStory()" class="text-white"><span class="material-symbols-outlined text-3xl">close</span></button>
-    </div>
-    <div class="flex-1 flex items-center justify-center bg-black" id="viewer-content"></div>
-</div>
-
-<div id="modal" class="hidden fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-0 md:p-4">
-    <div class="bg-surface-dark w-full h-full md:max-w-6xl md:h-[85vh] rounded-none md:rounded-xl flex flex-col md:flex-row shadow-2xl relative overflow-hidden">
-        <button onclick="fechar()" class="absolute top-4 right-4 text-white z-50 bg-black/50 rounded-full p-1"><span class="material-symbols-outlined">close</span></button>
-        <div class="w-full md:w-[60%] bg-black flex items-center justify-center h-[50%] md:h-full" id="m-content"></div>
-        <div class="w-full md:w-[40%] h-[50%] md:h-full flex flex-col bg-surface-dark border-l border-white/10">
-            <div class="p-4 border-b border-white/10 flex gap-3 items-center">
-                <img id="m-av" class="w-10 h-10 rounded-full border border-primary object-cover">
-                <div><h3 id="m-nome" class="text-white font-bold text-sm"></h3><p class="text-xs text-gray-500">Autor</p></div>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-                <div class="flex gap-3 mb-6 bg-white/5 p-3 rounded-lg"><p class="text-white text-sm leading-relaxed"><span id="m-legenda" class="text-gray-300"></span></p></div>
-                <div id="m-coms" class="space-y-4"></div>
-            </div>
-            <div class="p-4 border-t border-white/10 bg-surface-dark">
-                <div class="flex gap-4 text-white mb-2">
-                    <button onclick="likeModal()" class="hover:text-primary transition-colors group"><span id="btn-like-icon" class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span></button>
-                </div>
-                <p id="m-likes" class="text-white font-bold text-sm">0 likes</p>
-                <div class="flex gap-2 mt-3">
-                    <input id="m-inp" type="text" class="bg-black/30 border border-white/10 rounded-full px-4 py-2 text-white w-full text-sm" placeholder="Comentar...">
-                    <button onclick="comentar()" class="text-primary font-bold text-sm">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="modal-mobile-post" class="hidden fixed inset-0 z-[80] bg-black/90 flex flex-col p-4 animate-fade-in"><div class="flex justify-between items-center mb-4"><button onclick="document.getElementById('modal-mobile-post').classList.add('hidden')" class="text-white">Cancelar</button><h2 class="text-white font-bold">Nova Publicação</h2><button onclick="postarMobile()" id="btn-pub-mobile" class="text-primary font-bold">Partilhar</button></div><div class="flex-1"><textarea id="conteudo-mobile" class="w-full bg-transparent text-white text-lg border-none focus:ring-0 h-32" placeholder="Escreve a tua legenda..."></textarea><div id="preview-mobile" class="w-full h-64 bg-white/5 rounded-xl flex items-center justify-center overflow-hidden border border-white/10 relative"><span class="material-symbols-outlined text-4xl text-gray-600">image</span><input type="file" id="imgInp-mobile" class="absolute inset-0 opacity-0 w-full h-full" accept="image/*,video/*" onchange="verImgMobile(event)"></div></div></div>
+<div id="story-viewer" class="hidden fixed inset-0 z-[90] bg-black flex flex-col"><div class="h-1 w-full flex gap-1 p-2" id="story-bars"></div><div class="flex justify-between items-center p-4 absolute top-4 w-full z-10"><div class="flex items-center gap-3"><img id="viewer-avatar" class="w-10 h-10 rounded-full border border-white"><span id="viewer-nome" class="font-bold text-white shadow-black drop-shadow-md">User</span></div><button onclick="fecharStory()" class="text-white"><span class="material-symbols-outlined text-3xl">close</span></button></div><div class="flex-1 flex items-center justify-center bg-black" id="viewer-content"></div></div>
+<div id="modal" class="hidden fixed inset-0 z-[80] bg-black/90 flex items-center justify-center p-0 md:p-4"><div class="bg-surface-dark w-full h-full md:max-w-6xl md:h-[85vh] rounded-none md:rounded-xl flex flex-col md:flex-row shadow-2xl relative overflow-hidden"><button onclick="fechar()" class="absolute top-4 right-4 text-white z-50 bg-black/50 rounded-full p-1"><span class="material-symbols-outlined">close</span></button><div class="w-full md:w-[60%] bg-black flex items-center justify-center h-[50%] md:h-full" id="m-content"></div><div class="w-full md:w-[40%] h-[50%] md:h-full flex flex-col bg-surface-dark border-l border-white/10"><div class="p-4 border-b border-white/10 flex gap-3 items-center"><img id="m-av" class="w-10 h-10 rounded-full border border-primary object-cover"><div><h3 id="m-nome" class="text-white font-bold text-sm"></h3><p class="text-xs text-gray-500">Autor</p></div></div><div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"><div class="flex gap-3 mb-6 bg-white/5 p-3 rounded-lg"><p class="text-white text-sm leading-relaxed"><span id="m-legenda" class="text-gray-300"></span></p></div><div id="m-coms" class="space-y-4"></div></div><div class="p-4 border-t border-white/10 bg-surface-dark"><div class="flex gap-4 text-white mb-2"><button onclick="likeModal()" class="hover:text-primary transition-colors group"><span id="btn-like-icon" class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span></button></div><p id="m-likes" class="text-white font-bold text-sm">0 likes</p><div class="flex gap-2 mt-3"><input id="m-inp" type="text" class="bg-black/30 border border-white/10 rounded-full px-4 py-2 text-white w-full text-sm" placeholder="Comentar..."><button onclick="comentar()" class="text-primary font-bold text-sm">Enviar</button></div></div></div></div></div>
 
 <script>
-    const USUARIO_ATUAL = verificarLogin(); 
-    let pid = null; 
+    const USUARIO_ATUAL=verificarLogin(); let pid=null;
+    
+    // --- LÓGICA DO MENU GAVETA (NOVO) ---
+    function toggleMenu() {
+        const drawer = document.getElementById('mobile-drawer');
+        const overlay = document.getElementById('mobile-drawer-overlay');
+        const icon = document.getElementById('menu-icon');
+        
+        // Alterna classes 'open'
+        if (drawer.classList.contains('open')) {
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
+            icon.innerText = 'apps'; // Volta ao ícone de Apps
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            drawer.classList.add('open');
+            overlay.classList.add('open');
+            icon.innerText = 'close'; // Ícone de Fechar
+            icon.style.transform = 'rotate(90deg)';
+        }
+    }
 
-    // Preencher visuais
+    // (RESTO DO CÓDIGO MANTIDO IGUAL)
     if(document.getElementById('header-nome')) document.getElementById('header-nome').innerText = USUARIO_ATUAL.nome;
     document.getElementById('sidebar-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
     if(document.getElementById('input-avatar')) document.getElementById('input-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
     document.getElementById('story-avatar-me').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
 
     function mudar(t){localStorage.setItem('midnight_tema',t);location.reload();}
-
-    // ABAS
     function mudarAba(aba) {
         const areaFeed = document.getElementById('area-feed'); const areaNews = document.getElementById('area-news');
         const btnFeed = document.getElementById('tab-feed'); const btnNews = document.getElementById('tab-news');
@@ -199,18 +175,16 @@
             carregarNews();
         }
     }
-    async function carregarNews(){
-        const l=document.getElementById('lista-news'); l.innerHTML='<div class="skeleton h-64 col-span-full"></div>';
-        try{const r=await fetch(`${URL_SERVIDOR}/news`);const n=await r.json();l.innerHTML='';n.forEach(x=>{l.innerHTML+=`<div class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden group hover:border-primary/50 transition-all"><div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('${x.imagem}');"><div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded">${x.categoria}</div></div><div class="p-5"><p class="text-gray-500 text-xs mb-2">${x.data}</p><h3 class="text-xl font-bold text-white mb-2 leading-tight group-hover:text-primary transition-colors">${x.titulo}</h3><p class="text-gray-400 text-sm line-clamp-3">${x.texto}</p></div></div>`;});}catch(e){}
+    async function carregarNews() {
+        const lista = document.getElementById('lista-news'); lista.innerHTML = '<div class="skeleton h-64 col-span-full"></div>';
+        try { const res = await fetch(`${URL_SERVIDOR}/news`); const news = await res.json(); lista.innerHTML = ''; news.forEach(n => { lista.innerHTML += `<div class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden group hover:border-primary/50 transition-all"><div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('${n.imagem}');"><div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded">${n.categoria}</div></div><div class="p-5"><p class="text-gray-500 text-xs mb-2">${n.data}</p><h3 class="text-xl font-bold text-white mb-2 leading-tight group-hover:text-primary transition-colors">${n.titulo}</h3><p class="text-gray-400 text-sm line-clamp-3">${n.texto}</p></div></div>`; }); } catch(e) {}
     }
 
-    // UPLOAD
-    function verImg(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview');c.classList.remove('hidden');const m=URL.createObjectURL(f);if(f.type.startsWith('video'))c.innerHTML=`<video src="${m}" class="w-full h-full object-cover" autoplay muted loop></video>`;else c.innerHTML=`<img src="${m}" class="w-full h-full object-cover">`;}}
+    function verImg(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview');c.classList.remove('hidden');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
     function limparImagem(){document.getElementById('imgInp').value='';document.getElementById('preview').classList.add('hidden');}
     function abrirModalMobilePost(){document.getElementById('modal-mobile-post').classList.remove('hidden');}
     function verImgMobile(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview-mobile');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
     
-    // POSTAR
     async function postarGenerico(conteudoId, fileId, btnId) {
         const c = document.getElementById(conteudoId).value; const i = document.getElementById(fileId).files[0];
         if(!i && !c) return showToast('Escreve algo!', 'error');
@@ -222,8 +196,7 @@
     async function postar(){ postarGenerico('conteudo', 'imgInp', 'btn-pub'); }
     async function postarMobile(){ postarGenerico('conteudo-mobile', 'imgInp-mobile', 'btn-pub-mobile'); }
 
-    // LOAD
-    async function load(){
+    async function load() {
         try {
             const r = await fetch(`${URL_SERVIDOR}/posts`); const p = await r.json();
             document.getElementById('lista').innerHTML = p.reverse().map((x, i) => {
@@ -238,8 +211,7 @@
         } catch(e) {}
     }
 
-    // MODAL
-    async function abrir(id){
+    async function abrir(id) {
         pid = id; const res = await fetch(`${URL_SERVIDOR}/posts`); const ps = await res.json(); const p = ps.find(x => (x._id || x.id) == id);
         const mCont = document.getElementById('m-content'); mCont.innerHTML = '';
         const isVideo = p.tipo === 'video' || (p.midiaUrl && p.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
@@ -252,11 +224,9 @@
         document.getElementById('modal').classList.remove('hidden');
     }
     function fechar() { document.getElementById('modal').classList.add('hidden'); pid = null; load(); }
-    
     async function likeModal(){ if(!pid)return; const icon=document.getElementById('btn-like-icon'); icon.classList.add('text-primary', 'animate-ping'); icon.style.fontVariationSettings = "'FILL' 1"; setTimeout(() => icon.classList.remove('animate-ping'), 300); document.getElementById('m-likes').innerText = `${parseInt(document.getElementById('m-likes').innerText) + 1} likes`; await fetch(`${URL_SERVIDOR}/posts/like/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ quemDeuLikeNome: USUARIO_ATUAL.nome, quemDeuLikeEmail: USUARIO_ATUAL.email, quemDeuLikeAvatar: USUARIO_ATUAL.avatar }) }); }
     async function comentar(){ const t = document.getElementById('m-inp').value; if (!t) return; const res = await fetch(`${URL_SERVIDOR}/posts/comentar/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ autor: USUARIO_ATUAL.nome, avatar: USUARIO_ATUAL.avatar, texto: t }) }); if (res.ok) { document.getElementById('m-coms').innerHTML += `<div class="flex gap-3 mb-3"><img src="${USUARIO_ATUAL.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO_ATUAL.nome}</span>${t}</p></div></div>`; document.getElementById('m-inp').value = ''; } }
 
-    // STORIES
     let storiesAtuais = []; let storyIndex = 0;
     async function uploadStory(e){ if(e.target.files[0]){const f=new FormData();f.append('emailAutor',USUARIO_ATUAL.email);f.append('nome',USUARIO_ATUAL.nome);f.append('avatar',USUARIO_ATUAL.avatar);f.append('midia',e.target.files[0]);await fetch(`${URL_SERVIDOR}/stories`,{method:'POST',body:f});location.reload();}}
     async function carregarStories(){try{const r=await fetch(`${URL_SERVIDOR}/stories`);const s=await r.json();const c=document.getElementById('outros-stories');c.innerHTML='';const g={};s.forEach(x=>{if(!g[x.emailAutor])g[x.emailAutor]={nome:x.nome,avatar:x.avatar,posts:[]};g[x.emailAutor].posts.push(x)});const meus=g[USUARIO_ATUAL.email];if(meus){const me=document.getElementById('story-avatar-me');me.innerHTML='';me.style.backgroundImage=`url('${meus.posts[0].tipo==='imagem'?meus.posts[0].midiaUrl:meus.posts[0].avatar}')`;me.parentElement.classList.add('border-green-500');me.parentElement.parentElement.onclick=()=>abrirS(encodeURIComponent(JSON.stringify(meus.posts)));}Object.values(g).forEach(gr=>{if(gr.posts[0].emailAutor===USUARIO_ATUAL.email)return;c.innerHTML+=`<div onclick="abrirS('${encodeURIComponent(JSON.stringify(gr.posts))}')" class="cursor-pointer flex flex-col items-center gap-2 group"><div class="story-ring midnight w-16 h-16 p-[2px]"><div class="w-full h-full rounded-full bg-cover border-2 border-background-dark" style="background-image:url('${gr.avatar}')"></div></div><span class="text-xs text-gray-300 truncate w-16 text-center">${gr.nome}</span></div>`;});}catch(e){}}
