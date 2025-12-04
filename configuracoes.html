@@ -144,19 +144,20 @@
     }
 
     async function apagarConta() {
-        const confirmacao = prompt("Para apagar a tua conta, escreve 'DELETAR' na caixa abaixo:");
+        const confirmacao = prompt("Para apagar a tua conta permanentemente, escreve 'DELETAR':");
         if (confirmacao !== 'DELETAR') return;
 
         setBtnLoading('btn-del', true);
         try {
+            // CORREÇÃO: Adicionado headers JSON
             const res = await fetch(`${URL_SERVIDOR}/perfil/deletar`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify({ email: USUARIO.email })
             });
 
             if (res.ok) {
-                alert("Conta apagada. Foi um prazer ter-te na pista!");
+                alert("Conta apagada com sucesso. Adeus, piloto!");
                 logout();
             } else {
                 showToast("Erro ao apagar.", "error");
@@ -164,6 +165,7 @@
         } catch (e) { showToast("Erro.", "error"); }
         setBtnLoading('btn-del', false);
     }
+    
 </script>
 
 </body>
