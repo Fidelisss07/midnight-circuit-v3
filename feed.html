@@ -236,28 +236,55 @@
     function verImgMobile(e){ const f=e.target.files[0]; if(f){ const c=document.getElementById('preview-mobile'); c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`; } }
 
     // Carregar Feed
-    async function load(){
+// --- CARREGAR FEED (CORRIGIDO) ---
+    async function load() {
         try {
-            const r = await fetch(`${URL_SERVIDOR}/posts`); 
+            const r = await fetch(`${URL_SERVIDOR}/posts`);
             const p = await r.json();
-            document.getElementById('lista').innerHTML = p.reverse().map((x, i) => {
+            const lista = document.getElementById('lista');
+            
+            // Se não houver posts, mostra aviso
+            if (p.length === 0) {
+                lista.innerHTML = `
+                    <div class="col-span-full text-center py-20 opacity-50 flex flex-col items-center">
+                        <span class="material-symbols-outlined text-6xl mb-4 text-gray-600">no_photography</span>
+                        <h2 class="text-2xl font-bold text-white">Pista Vazia</h2>
+                        <p class="text-gray-400">Sê o primeiro a arrancar! Faz um post.</p>
+                    </div>`;
+                return;
+            }
+
+            lista.innerHTML = p.reverse().map((x, i) => {
                 let grid = "col-span-1 row-span-1"; 
                 if (window.innerWidth > 768 && i % 5 === 0) grid = "md:col-span-2 md:row-span-2";
-                
+
                 const isVideo = x.tipo === 'video' || (x.midiaUrl && x.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
                 const mediaHtml = isVideo 
                     ? `<video src="${x.midiaUrl}" class="absolute inset-0 w-full h-full object-cover pointer-events-none" muted loop></video>`
                     : `<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${x.midiaUrl || x.imagemUrl}')"></div>`;
 
-                return `<div onclick="abrir('${x._id || x.id}')" class="group relative rounded-xl overflow-hidden bg-surface-dark border border-white/5 cursor-pointer glow-hover h-96 md:h-full ${grid}">${mediaHtml}<div class="absolute inset-0 bg-black/20 flex flex-col justify-end"><div class="legenda-overlay p-4"><p class="text-white text-sm font-bold truncate">${x.nome}</p><p class="text-gray-300 text-xs line-clamp-1">${x.conteudo}</p></div></div></div>`;
+                return `
+                <div onclick="abrir('${x._id || x.id}')" class="group relative rounded-xl overflow-hidden bg-surface-dark border border-white/5 cursor-pointer glow-hover h-96 md:h-full ${grid}">
+                    ${mediaHtml}
+                    <div class="absolute inset-0 bg-black/20 flex flex-col justify-end">
+                        <div class="legenda-overlay p-4">
+                            <p class="text-white text-sm font-bold truncate">${x.nome}</p>
+                            <p class="text-gray-300 text-xs line-clamp-1">${x.conteudo}</p>
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
-            
-            // Autoplay no hover (PC)
+
+            // Autoplay no hover
             document.querySelectorAll('#lista video').forEach(v => {
                 v.parentElement.addEventListener('mouseenter', () => v.play());
                 v.parentElement.addEventListener('mouseleave', () => v.pause());
             });
-        } catch(e) { console.error("Erro ao carregar feed:", e); }
+        } catch(e) { 
+            console.error("Erro feed:", e);
+            // Mostra erro na tela para saberes
+            document.getElementById('lista').innerHTML = `<p class="text-red-500 text-center col-span-full">Erro de conexão. Verifica se o servidor está ligado.</p>`;
+        }
     }
 
     // Modal de Visualização
@@ -347,5 +374,6 @@
 </script>
 </body>
 </html>
+
 
 
