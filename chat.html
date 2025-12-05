@@ -36,9 +36,18 @@
             <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">settings</span></a>
         </nav>
         <div class="mt-auto flex flex-col gap-3 items-center">
+            <button onclick="document.getElementById('menu-temas').classList.toggle('hidden')" class="p-2 text-gray-400 hover:text-white"><span class="material-symbols-outlined">palette</span></button>
             <button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button>
+            <div id="sidebar-avatar" class="w-8 h-8 rounded-full bg-cover border-2 border-primary cursor-pointer" onclick="window.location.href='perfil.html'"></div>
         </div>
     </aside>
+    
+    <div id="menu-temas" class="hidden absolute bottom-20 left-16 bg-surface-dark border border-white/10 p-4 rounded-xl shadow-2xl z-50 flex-col gap-2 w-48">
+        <button onclick="mudar('theme-red')" class="text-white text-sm">🔴 Red</button>
+        <button onclick="mudar('theme-purple')" class="text-white text-sm">🟣 Purple</button>
+        <button onclick="mudar('theme-blue')" class="text-white text-sm">🔵 Blue</button>
+        <button onclick="mudar('theme-light')" class="text-white text-sm">⚪ Light</button>
+    </div>
 
     <main class="flex-1 flex h-full bg-background-dark pt-14 md:pt-0">
         
@@ -47,12 +56,12 @@
                 <h1 class="text-2xl font-bold text-white mb-4 hidden md:block">Mensagens</h1>
                 <div class="relative">
                     <span class="absolute left-3 top-2.5 text-gray-500 material-symbols-outlined text-sm">search</span>
-                    <input type="text" id="search-contact" onkeyup="filtrarContactos()" placeholder="Procurar piloto..." class="w-full bg-black/30 border border-white/10 rounded-lg py-2 pl-9 text-sm text-white focus:border-primary outline-none">
+                    <input type="text" id="search-contact" onkeyup="filtrarContactos()" placeholder="Procurar amigos..." class="w-full bg-black/30 border border-white/10 rounded-lg py-2 pl-9 text-sm text-white focus:border-primary outline-none">
                 </div>
             </div>
             
             <div id="lista-contactos" class="flex-1 overflow-y-auto p-2 space-y-1">
-                <p class="text-center text-gray-500 text-sm mt-10 animate-pulse">A carregar pilotos...</p>
+                <div class="text-center text-gray-500 text-sm mt-10 animate-pulse">A carregar amigos...</div>
             </div>
         </div>
 
@@ -62,10 +71,13 @@
                 <button onclick="fecharConversaMobile()" class="md:hidden text-gray-400 hover:text-white mr-2">
                     <span class="material-symbols-outlined">arrow_back</span>
                 </button>
-                <img id="chat-avatar" class="w-10 h-10 rounded-full object-cover border border-white/10">
-                <div>
-                    <h3 id="chat-nome" class="font-bold text-white">Nome</h3>
-                    <p class="text-xs text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
+                
+                <div class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="verPerfil(contactoAtual)">
+                    <img id="chat-avatar" class="w-10 h-10 rounded-full object-cover border border-white/10">
+                    <div>
+                        <h3 id="chat-nome" class="font-bold text-white">...</h3>
+                        <p class="text-xs text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
+                    </div>
                 </div>
             </div>
 
@@ -74,8 +86,7 @@
                 <p>Escolhe um piloto para conversar.</p>
             </div>
 
-            <div id="mensagens-container" class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col hidden">
-                </div>
+            <div id="mensagens-container" class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col hidden"></div>
 
             <div id="chat-input-area" class="p-4 bg-surface-dark border-t border-white/10 hidden">
                 <form onsubmit="enviarMensagem(event)" class="flex gap-3">
@@ -103,14 +114,29 @@
     const USUARIO = verificarLogin(); 
     let contactoAtual = null;
     let todosUsuarios = [];
+    let amigos = [];
     let intervalPolling = null;
 
-    // 1. CARREGAR CONTACTOS
+    // Preencher Avatar Sidebar
+    if(document.getElementById('sidebar-avatar')) document.getElementById('sidebar-avatar').style.backgroundImage = `url('${USUARIO.avatar}')`;
+    function mudar(t){localStorage.setItem('midnight_tema',t);location.reload();}
+
+    // 1. CARREGAR CONTACTOS (APENAS AMIGOS)
     async function carregarContactos() {
         try {
-            const res = await fetch(`${URL_SERVIDOR}/usuarios`);
-            todosUsuarios = await res.json();
-            renderizarLista(todosUsuarios);
+            // Primeiro, obter meus dados para saber quem sigo
+            const resMe = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO.email}`);
+            const me = await resMe.json();
+            const seguindo = me.seguindo || [];
+
+            // Segundo, obter todos os usuários
+            const resUsers = await fetch(`${URL_SERVIDOR}/usuarios`);
+            todosUsuarios = await resUsers.json();
+
+            // Filtrar: Apenas quem eu sigo
+            amigos = todosUsuarios.filter(u => seguindo.includes(u.email));
+            
+            renderizarLista(amigos);
         } catch(e) { console.error(e); }
     }
 
@@ -118,15 +144,17 @@
         const container = document.getElementById('lista-contactos');
         container.innerHTML = '';
 
-        // Filtra para não aparecer eu mesmo na lista
-        const outros = lista.filter(u => u.email !== USUARIO.email);
-
-        if (outros.length === 0) {
-            container.innerHTML = '<p class="text-center text-gray-500 text-sm mt-10">Nenhum piloto encontrado.</p>';
+        if (lista.length === 0) {
+            container.innerHTML = `
+                <div class="text-center text-gray-500 text-sm mt-10 flex flex-col items-center">
+                    <span class="material-symbols-outlined text-4xl mb-2">person_off</span>
+                    <p>Ainda não segues ninguém.</p>
+                    <a href="explorar.html" class="text-primary font-bold mt-2 hover:underline">Explorar Pilotos</a>
+                </div>`;
             return;
         }
 
-        outros.forEach(user => {
+        lista.forEach(user => {
             container.innerHTML += `
                 <div onclick="abrirConversa('${user.email}', '${user.nome}', '${user.avatar}')" class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors border-b border-white/5 last:border-0">
                     <div class="relative">
@@ -146,7 +174,7 @@
 
     function filtrarContactos() {
         const termo = document.getElementById('search-contact').value.toLowerCase();
-        const filtrados = todosUsuarios.filter(u => u.nome.toLowerCase().includes(termo));
+        const filtrados = amigos.filter(u => u.nome.toLowerCase().includes(termo));
         renderizarLista(filtrados);
     }
 
@@ -222,9 +250,7 @@
                     </div>
                 `;
             });
-
             container.scrollTop = container.scrollHeight;
-
         } catch(e) { console.error(e); }
     }
 
