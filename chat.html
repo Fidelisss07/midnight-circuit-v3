@@ -71,6 +71,22 @@
                 <button onclick="fecharConversaMobile()" class="md:hidden text-gray-400 hover:text-white mr-2">
                     <span class="material-symbols-outlined">arrow_back</span>
                 </button>
+
+                <div id="chat-header" class="p-4 border-b border-white/10 flex items-center gap-4 bg-surface-dark/90 backdrop-blur-md z-10 shadow-lg">
+    <button onclick="fecharConversaMobile()" class="md:hidden text-gray-400 hover:text-white mr-2">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    
+    <div class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="verPerfil(contactoAtual)">
+        <img id="chat-avatar" class="w-10 h-10 rounded-full object-cover border border-white/10">
+        <div>
+            <h3 id="chat-nome" class="font-bold text-white">Nome</h3>
+            <p class="text-xs text-green-500 flex items-center gap-1">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online
+            </p>
+        </div>
+    </div>
+</div>
                 
                 <div class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="verPerfil(contactoAtual)">
                     <img id="chat-avatar" class="w-10 h-10 rounded-full object-cover border border-white/10">
@@ -295,4 +311,5 @@
 
 </body>
 </html>
+
 
