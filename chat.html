@@ -14,7 +14,7 @@
 <body class="bg-background-dark text-gray-200 overflow-hidden">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
-    
+
     <div class="md:hidden fixed top-0 w-full h-14 bg-black/80 backdrop-blur-md border-b border-white/10 z-40 flex items-center justify-between px-4">
         <span class="material-symbols-outlined text-primary text-3xl">chat_bubble</span>
         <h1 class="font-bold text-lg tracking-widest">MENSAGENS</h1>
@@ -29,7 +29,7 @@
             <a href="sprints.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">bolt</span></a>
             <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
             <a href="chat.html" class="flex justify-center p-3 rounded-xl bg-primary/20 text-primary"><span class="material-symbols-outlined">chat_bubble</span></a>
-            
+
             <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
             <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
             <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">emoji_events</span></a>
@@ -41,7 +41,7 @@
             <div id="sidebar-avatar" class="w-8 h-8 rounded-full bg-cover border-2 border-primary cursor-pointer" onclick="window.location.href='perfil-visitante.html'"></div>
         </div>
     </aside>
-    
+
     <div id="menu-temas" class="hidden absolute bottom-20 left-16 bg-surface-dark border border-white/10 p-4 rounded-xl shadow-2xl z-50 flex-col gap-2 w-48">
         <button onclick="mudar('theme-red')" class="text-white text-sm">🔴 Red</button>
         <button onclick="mudar('theme-purple')" class="text-white text-sm">🟣 Purple</button>
@@ -50,7 +50,7 @@
     </div>
 
     <main class="flex-1 flex h-full bg-background-dark pt-14 md:pt-0">
-        
+
         <div id="painel-lista" class="w-full md:w-80 border-r border-white/10 flex flex-col bg-surface-dark">
             <div class="p-6 border-b border-white/10">
                 <h1 class="text-2xl font-bold text-white mb-4 hidden md:block">Mensagens</h1>
@@ -59,14 +59,14 @@
                     <input type="text" id="search-contact" onkeyup="filtrarContactos()" placeholder="Procurar amigos..." class="w-full bg-black/30 border border-white/10 rounded-lg py-2 pl-9 text-sm text-white focus:border-primary outline-none">
                 </div>
             </div>
-            
+
             <div id="lista-contactos" class="flex-1 overflow-y-auto p-2 space-y-1">
                 <div class="text-center text-gray-500 text-sm mt-10 animate-pulse">A carregar amigos...</div>
             </div>
         </div>
 
         <div id="area-chat" class="hidden md:flex flex-1 flex-col relative w-full absolute md:relative inset-0 z-50 md:z-auto bg-background-dark md:bg-transparent">
-            
+
             <div id="chat-header" class="p-4 border-b border-white/10 flex items-center gap-4 bg-surface-dark/90 backdrop-blur-md z-10 shadow-lg">
                 <button onclick="fecharConversaMobile()" class="md:hidden text-gray-400 hover:text-white mr-2">
                     <span class="material-symbols-outlined">arrow_back</span>
@@ -86,6 +86,16 @@
             </p>
         </div>
     </div>
+</div>
+
+                <div class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="verPerfil(contactoAtual)">
+                    <img id="chat-avatar" class="w-10 h-10 rounded-full object-cover border border-white/10">
+                    <div>
+                        <h3 id="chat-nome" class="font-bold text-white">...</h3>
+                        <p class="text-xs text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
+                    </div>
+                </div>
+            </div>
 
             <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-500 hidden md:flex">
                 <span class="material-symbols-outlined text-6xl mb-4 opacity-50">forum</span>
@@ -141,7 +151,7 @@
 
             // Filtrar: Apenas quem eu sigo
             amigos = todosUsuarios.filter(u => seguindo.includes(u.email));
-            
+
             renderizarLista(amigos);
         } catch(e) { console.error(e); }
     }
@@ -187,11 +197,11 @@
     // 2. ABRIR CONVERSA
     function abrirConversa(email, nome, avatar) {
         contactoAtual = email;
-        
+
         // UI PC
         document.getElementById('empty-state').classList.remove('flex');
         document.getElementById('empty-state').classList.add('hidden');
-        
+
         // UI Geral
         const areaChat = document.getElementById('area-chat');
         areaChat.classList.remove('hidden');
@@ -199,7 +209,7 @@
 
         document.getElementById('mensagens-container').classList.remove('hidden');
         document.getElementById('chat-input-area').classList.remove('hidden');
-        
+
         // Preencher Header
         document.getElementById('chat-nome').innerText = nome;
         document.getElementById('chat-avatar').src = avatar;
@@ -211,7 +221,7 @@
         }
 
         carregarMensagens();
-        
+
         // Polling
         if (intervalPolling) clearInterval(intervalPolling);
         intervalPolling = setInterval(carregarMensagens, 3000);
@@ -234,9 +244,9 @@
             const res = await fetch(`${URL_SERVIDOR}/mensagens?eu=${USUARIO.email}&ele=${contactoAtual}`);
             const msgs = await res.json();
             const container = document.getElementById('mensagens-container');
-            
+
             container.innerHTML = '';
-            
+
             if (msgs.length === 0) {
                 container.innerHTML = '<p class="text-center text-gray-600 text-xs mt-10">Inicia a conversa... 🏎️</p>';
             }
@@ -301,6 +311,3 @@
 
 </body>
 </html>
-
-
-
