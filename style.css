@@ -1,197 +1,128 @@
-/* style.css - Midnight Corsa Edition (Fixed) */
+/* style.css - Midnight Corsa V-Spec */
 
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap');
 
 :root {
-    /* CORES (Valores RGB puros para o Tailwind funcionar com opacidade) */
-    --primary: 239 68 68;   /* Vermelho Padrão */
-    --bg-body: 10 10 10;    /* Preto Fundo */
-    --bg-panel: 17 17 17;   /* Cinza Escuro */
-}
-
-/* Temas (Agora funcionam!) */
-body.theme-purple { --primary: 168 85 247; } /* Roxo */
-body.theme-blue { --primary: 59 130 246; }   /* Azul */
-body.theme-light { 
-    --primary: 239 68 68; 
-    --bg-body: 240 240 240; 
-    --bg-panel: 255 255 255; 
-    color: #111;
+    --primary: 239 68 68;   /* Vermelho Corsa */
+    --accent: 59 130 246;   /* Azul Nitro */
+    --bg-body: #050505;
+    --bg-card: #0f0f10;
+    --border: #27272a;
+    --text-main: #ffffff;
 }
 
 /* Base */
 body {
-    background-color: rgb(var(--bg-body));
-    /* Grid subtil no fundo */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    color: #e5e5e5;
+    background-color: var(--bg-body);
+    /* Textura de Fibra de Carbono subtil */
+    background-image: 
+        linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a),
+        linear-gradient(45deg, #0a0a0a 25%, transparent 25%, transparent 75%, #0a0a0a 75%, #0a0a0a);
+    background-size: 4px 4px;
+    background-position: 0 0, 2px 2px;
+    color: var(--text-main);
     font-family: 'Inter', sans-serif;
     -webkit-tap-highlight-color: transparent;
-    transition: background-color 0.3s ease;
 }
 
-body.theme-light { color: #111; }
-
-/* Fontes Racing */
+/* Tipografia Racing */
 h1, h2, h3, .font-display, .btn-race {
     font-family: 'Chakra Petch', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-/* Scrollbar Invisível */
+/* Scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* --- COMPONENTES --- */
 
-/* Cartões */
+/* Cartão de Post (Chassis) */
 .corsa-card {
-    background: rgb(var(--bg-panel));
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
-.corsa-card:hover { transform: translateY(-2px); border-color: rgb(var(--primary)); }
+.corsa-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--primary), 0.5);
+    box-shadow: 0 12px 30px rgba(239, 68, 68, 0.15);
+}
 
 /* Stories (Tacómetros) */
 .story-ring {
-    width: 70px; height: 70px;
-    border-radius: 50%; padding: 2px;
-    background: conic-gradient(rgb(var(--primary)) 0% 75%, #333 75% 100%);
-    transform: rotate(-135deg);
-    transition: transform 0.3s;
+    width: 74px; height: 74px;
+    border-radius: 50%; padding: 3px;
+    background: conic-gradient(rgb(var(--primary)) 0% 0%, #333 0% 100%);
+    transition: all 0.3s;
     display: flex; align-items: center; justify-content: center;
+    position: relative;
 }
-.story-ring:hover { transform: rotate(0deg) scale(1.1); }
+.story-ring.active {
+    background: conic-gradient(rgb(var(--primary)) 0% 75%, #333 75% 100%);
+}
+.story-ring:hover { transform: scale(1.05); }
 .story-img {
     width: 100%; height: 100%;
     border-radius: 50%;
-    border: 3px solid rgb(var(--bg-body));
-    transform: rotate(135deg);
+    border: 3px solid var(--bg-body);
     object-fit: cover;
 }
 
-/* Botões */
+/* Botão Arrancar */
 .btn-race {
-    background: rgb(var(--primary));
+    background: linear-gradient(90deg, rgb(var(--primary)), #b91c1c);
     color: white; font-weight: 800;
     clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 20%);
     transition: 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 .btn-race:active { transform: scale(0.95); }
 
-/* --- MENU GAVETA (HUB) --- */
-#mobile-drawer-overlay {
-    transition: opacity 0.3s; pointer-events: none; opacity: 0;
-}
+/* Menu Gaveta (HUB) */
+#mobile-drawer-overlay { transition: opacity 0.3s; pointer-events: none; opacity: 0; }
 #mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
 
 #mobile-drawer {
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     transform: translateY(100%);
-    background: rgb(var(--bg-panel));
+    background: #111;
     border-top: 2px solid rgb(var(--primary));
     border-radius: 24px 24px 0 0;
-    box-shadow: 0 -10px 50px rgba(0,0,0,0.5);
 }
 #mobile-drawer.open { transform: translateY(0); }
 
-/* Botão Central (O Gatilho) */
+/* Botão Central */
 .btn-menu-central {
-    background: rgb(var(--bg-panel));
+    background: #111;
     border: 2px solid rgba(255,255,255,0.1);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
     transition: all 0.3s;
 }
-.btn-menu-central:active { transform: translateY(-15px) scale(0.9); border-color: rgb(var(--primary)); }
+.btn-menu-central:active { border-color: rgb(var(--primary)); }
+
+/* Tags de Carro */
+.car-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: 'Chakra Petch', sans-serif;
+    text-transform: uppercase;
+    color: #888;
+}
 
 /* Toast */
 #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
-.toast { background: rgb(var(--bg-panel)); border-left: 4px solid rgb(var(--primary)); color: white; padding: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; }
+.toast { background: #111; border-left: 4px solid rgb(var(--primary)); color: white; padding: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-/* style.css - Midnight Corsa (PC Remaster) */
-
-/* ... (Mantém as variáveis :root e o reset básico que já tinhas) ... */
-
-/* FUNDO MAIS "RICO" PARA O PC */
-body {
-    background-color: #050505;
-    background-image: 
-        radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.05), transparent 40%),
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
-    background-attachment: fixed;
-}
-
-/* --- NOVO: BARRA LATERAL FLUTUANTE (GLASS) --- */
-.glass-sidebar {
-    background: rgba(15, 15, 20, 0.7); /* Escuro e Transparente */
-    backdrop-filter: blur(12px);       /* Desfoque atrás */
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    border-radius: 24px;               /* Cantos redondos */
-    margin: 20px;                      /* Margem para flutuar */
-    height: calc(100vh - 40px);        /* Altura calculada */
-}
-
-/* Botões da Navegação PC */
-.nav-btn {
-    position: relative;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #71717a;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-/* Efeito de "Luz de Travão" ao passar o rato */
-.nav-btn:hover, .nav-btn.active {
-    color: white;
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: inset 3px 0 0 rgb(var(--primary)); /* Linha vermelha à esquerda */
-    transform: translateX(5px);
-}
-
-.nav-btn.active {
-    background: linear-gradient(90deg, rgba(var(--primary), 0.1), transparent);
-    color: rgb(var(--primary));
-}
-
-/* ... (Mantém o resto do CSS dos Stories, Cards, Menu Mobile, etc.) ... */
-
-/* ... (Mantém o teu CSS anterior) ... */
-
-/* ANIMAÇÃO DE LIKE (CORAÇÃO EXPLOSIVO) */
-.like-animation {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    font-size: 80px;
-    color: rgb(var(--primary));
-    pointer-events: none;
-    z-index: 50;
-    text-shadow: 0 0 20px rgba(var(--primary), 0.8);
-    animation: likePop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes likePop {
-    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-}
-
-/* Melhoria nas Imagens (Lazy Load Smooth) */
-img {
-    transition: opacity 0.3s ease-in-out;
-}
-img[loading] {
-    opacity: 0;
-}
-img.loaded {
-    opacity: 1;
-}
+/* Temas */
+body.theme-red { --primary: 239 68 68; }
+body.theme-purple { --primary: 168 85 247; }
+body.theme-blue { --primary: 59 130 246; }
+body.theme-light { --primary: 239 68 68; --bg-body: #eee; --bg-card: #fff; --text-main: #111; --border: #ddd; }
