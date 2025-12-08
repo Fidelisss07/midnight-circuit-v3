@@ -1,131 +1,123 @@
-/* style.css - Midnight Prism Edition */
+/* style.css - Midnight Corsa Edition */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap');
 
 :root {
-    --bg-dark: #050505;
-    --glass: rgba(20, 20, 25, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --text-main: #ffffff;
-    --text-muted: #9ca3af;
-    
-    /* Gradiente Principal (O "Prisma") */
-    --gradient-primary: linear-gradient(135deg, #FF3B3B, #FF0080); /* Vermelho -> Rosa */
-    --gradient-glow: linear-gradient(135deg, #7928CA, #FF0080);   /* Roxo -> Rosa */
+    --primary: 239 68 68;   /* Vermelho Travão */
+    --accent: 255 255 255;  /* Branco Farol */
+    --bg-body: #0a0a0a;     /* Preto Pneu */
+    --bg-panel: #111111;    /* Preto Tablier */
+    --border: #222222;      /* Metal Escuro */
 }
 
-/* --- FUNDO VIVO (AURORA) --- */
+/* --- BASE --- */
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Space Grotesk', sans-serif;
+    background-color: var(--bg-body);
+    background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .03) 25%, rgba(255, 255, 255, .03) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .03) 75%, rgba(255, 255, 255, .03) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .03) 25%, rgba(255, 255, 255, .03) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .03) 75%, rgba(255, 255, 255, .03) 76%, transparent 77%, transparent);
+    background-size: 50px 50px; /* Grelha subtil estilo garagem */
+    color: #e5e5e5;
+    font-family: 'Inter', sans-serif;
     -webkit-tap-highlight-color: transparent;
-    /* Efeito de luzes de fundo */
-    background-image: 
-        radial-gradient(circle at 0% 0%, rgba(121, 40, 202, 0.15), transparent 40%),
-        radial-gradient(circle at 100% 0%, rgba(255, 0, 128, 0.15), transparent 40%),
-        radial-gradient(circle at 50% 100%, rgba(0, 255, 255, 0.1), transparent 40%);
-    background-attachment: fixed;
 }
 
-/* Scrollbar Bonita */
+/* Títulos Racing */
+h1, h2, h3, .brand-font, .btn-race {
+    font-family: 'Chakra Petch', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Scrollbar */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* --- COMPONENTES VISUAIS --- */
+/* --- COMPONENTES AUTOMOTIVOS --- */
 
-/* Painéis de Vidro (Glass) */
-.glass-panel {
-    background: var(--glass);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-}
-
-/* Novo Hub Lateral (Dock Style) */
-.nav-item {
+/* Cartões Aerodinâmicos */
+.corsa-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 4px; /* Cantos mais retos, mais "máquina" */
     position: relative;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--text-muted);
-    border-radius: 16px;
-    overflow: hidden;
-}
-/* Efeito Hover Colorido */
-.nav-item::before {
-    content: ''; position: absolute; inset: 0;
-    background: var(--gradient-primary);
-    opacity: 0; transition: opacity 0.3s ease;
-    z-index: -1;
-}
-.nav-item:hover, .nav-item.active {
-    color: white;
-    transform: translateX(5px);
-    box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
-}
-.nav-item:hover::before, .nav-item.active::before { opacity: 1; }
-
-/* Botões com Gradiente */
-.btn-gradient {
-    background: var(--gradient-primary);
-    color: white; font-weight: bold;
-    border: none; border-radius: 12px;
-    position: relative; overflow: hidden;
-    transition: transform 0.2s;
-}
-.btn-gradient:hover { box-shadow: 0 0 15px rgba(255, 0, 128, 0.5); }
-.btn-gradient:active { transform: scale(0.95); }
-
-/* Stories Quadrados (App Icons) */
-.story-card {
-    width: 70px; height: 70px;
-    border-radius: 18px;
-    padding: 2px;
-    background: var(--gradient-glow);
-    transition: transform 0.2s;
-}
-.story-card:hover { transform: scale(1.05) rotate(-2deg); }
-.story-img {
-    width: 100%; height: 100%;
-    border-radius: 16px;
-    background-color: #000;
-    object-fit: cover;
-    border: 2px solid #000;
-}
-
-/* Feed Cards */
-.feed-card {
-    background: linear-gradient(180deg, rgba(30,30,40,0.6), rgba(20,20,25,0.8));
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
     overflow: hidden;
     transition: transform 0.2s, border-color 0.2s;
 }
-.feed-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+.corsa-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+    background: var(--border); transition: background 0.2s;
+}
+.corsa-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(var(--primary), 0.5);
+}
+.corsa-card:hover::before { background: rgb(var(--primary)); }
+
+/* Stories (Tacómetros) */
+.story-ring {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(rgb(var(--primary)) 0% 70%, #333 70% 100%); /* Parece um conta-rotações */
+    transform: rotate(-135deg); /* Posição inicial do ponteiro */
+    transition: transform 0.3s;
+    display: flex; align-items: center; justify-content: center;
+}
+.story-ring:hover { transform: rotate(0deg) scale(1.1); }
+.story-img {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--bg-body);
+    transform: rotate(135deg); /* Compensa a rotação do pai */
+    object-fit: cover;
 }
 
-/* Menu Gaveta Mobile */
+/* Botões "Interruptor" */
+.btn-race {
+    background: rgb(var(--primary));
+    color: black;
+    font-weight: 800;
+    font-style: italic;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 20%);
+    transition: all 0.2s;
+}
+.btn-race:hover { 
+    filter: brightness(1.1); 
+    box-shadow: 0 0 15px rgba(var(--primary), 0.4);
+}
+.btn-race:active { transform: scale(0.95); }
+
+/* Menu Gaveta (Painel de Controlo) */
 #mobile-drawer-overlay { transition: opacity 0.3s; pointer-events: none; }
 #mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
 #mobile-drawer {
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     transform: translateY(100%);
-    background: rgba(15, 15, 20, 0.95);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px 24px 0 0;
+    background: #0f0f0f;
+    border-top: 2px solid rgb(var(--primary)); /* Linha vermelha no topo */
 }
 #mobile-drawer.open { transform: translateY(0); }
 
-/* Utilitários */
-.material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.skeleton { background: linear-gradient(90deg, #1f1f25 25%, #2a2a35 50%, #1f1f25 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+/* Switch Abas (Caixa de Velocidades) */
+.gear-switch {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+}
+.gear-active {
+    background: #333;
+    color: white;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    border-left: 2px solid rgb(var(--primary));
+}
+.gear-inactive { color: #666; }
 
-/* Temas (Muda o Gradiente Principal) */
-body.theme-red { --gradient-primary: linear-gradient(135deg, #FF3B3B, #FF0080); }
-body.theme-purple { --gradient-primary: linear-gradient(135deg, #7928CA, #FF0080); }
-body.theme-blue { --gradient-primary: linear-gradient(135deg, #007CF0, #00DFD8); }
-body.theme-light { --bg-dark: #f0f0f0; --text-main: #111; --glass: rgba(255,255,255,0.8); }
+/* Utilitários */
+.material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400; }
+.skeleton { background: #1a1a1a; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* Toast */
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+.toast { background: #111; border-left: 4px solid rgb(var(--primary)); color: white; padding: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; }
