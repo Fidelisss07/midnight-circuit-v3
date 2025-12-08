@@ -1,105 +1,131 @@
-/* style.css - Midnight Carbon Edition */
+/* style.css - Midnight Prism Edition */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
 
 :root {
-    --primary: 239 68 68; /* Vermelho Padrão */
-    --bg-body: #09090b;   /* Preto Mate Profundo */
-    --bg-card: #18181b;   /* Cinza Carvão */
-    --border: #27272a;    /* Bordas Subtis */
+    --bg-dark: #050505;
+    --glass: rgba(20, 20, 25, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
     --text-main: #ffffff;
-    --text-muted: #a1a1aa;
+    --text-muted: #9ca3af;
+    
+    /* Gradiente Principal (O "Prisma") */
+    --gradient-primary: linear-gradient(135deg, #FF3B3B, #FF0080); /* Vermelho -> Rosa */
+    --gradient-glow: linear-gradient(135deg, #7928CA, #FF0080);   /* Roxo -> Rosa */
 }
 
-/* Base */
+/* --- FUNDO VIVO (AURORA) --- */
 body {
-    background-color: var(--bg-body);
+    background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: 'Space Grotesk', sans-serif;
     -webkit-tap-highlight-color: transparent;
+    /* Efeito de luzes de fundo */
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(121, 40, 202, 0.15), transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(255, 0, 128, 0.15), transparent 40%),
+        radial-gradient(circle at 50% 100%, rgba(0, 255, 255, 0.1), transparent 40%);
+    background-attachment: fixed;
 }
 
-/* Scrollbar Invisível mas funcional */
+/* Scrollbar Bonita */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* --- COMPONENTES VISUAIS --- */
 
-/* Cartões Premium */
-.pro-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px; /* Cantos Suaves */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    overflow: hidden;
-}
-.pro-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-    border-color: rgba(var(--primary), 0.5);
+/* Painéis de Vidro (Glass) */
+.glass-panel {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Stories "Squircle" (Diferente do normal) */
-.story-squircle {
-    width: 68px; height: 68px;
-    border-radius: 18px; /* Formato App Icon */
-    padding: 2px;
-    background: linear-gradient(135deg, #ef4444, #3b82f6); /* Gradiente subtil */
+/* Novo Hub Lateral (Dock Style) */
+.nav-item {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-muted);
+    border-radius: 16px;
+    overflow: hidden;
+}
+/* Efeito Hover Colorido */
+.nav-item::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0; transition: opacity 0.3s ease;
+    z-index: -1;
+}
+.nav-item:hover, .nav-item.active {
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+}
+.nav-item:hover::before, .nav-item.active::before { opacity: 1; }
+
+/* Botões com Gradiente */
+.btn-gradient {
+    background: var(--gradient-primary);
+    color: white; font-weight: bold;
+    border: none; border-radius: 12px;
+    position: relative; overflow: hidden;
     transition: transform 0.2s;
 }
-.story-squircle:hover { transform: scale(1.05); }
+.btn-gradient:hover { box-shadow: 0 0 15px rgba(255, 0, 128, 0.5); }
+.btn-gradient:active { transform: scale(0.95); }
+
+/* Stories Quadrados (App Icons) */
+.story-card {
+    width: 70px; height: 70px;
+    border-radius: 18px;
+    padding: 2px;
+    background: var(--gradient-glow);
+    transition: transform 0.2s;
+}
+.story-card:hover { transform: scale(1.05) rotate(-2deg); }
 .story-img {
     width: 100%; height: 100%;
     border-radius: 16px;
-    border: 2px solid var(--bg-body);
+    background-color: #000;
     object-fit: cover;
+    border: 2px solid #000;
 }
 
-/* Botões Modernos */
-.btn-pro {
-    background: var(--text-main);
-    color: var(--bg-body);
-    font-weight: 700;
-    border-radius: 12px;
-    transition: all 0.2s;
+/* Feed Cards */
+.feed-card {
+    background: linear-gradient(180deg, rgba(30,30,40,0.6), rgba(20,20,25,0.8));
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
 }
-.btn-pro:active { transform: scale(0.95); opacity: 0.9; }
-.btn-ghost {
-    background: rgba(255,255,255,0.05);
-    color: var(--text-main);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.2s;
+.feed-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
 }
-.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
 
-/* Switch de Abas (Pílula Flutuante) */
-.nav-pill {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    padding: 4px;
-}
-.tab-active { background: var(--text-main); color: var(--bg-body); border-radius: 100px; }
-.tab-inactive { color: var(--text-muted); }
-
-/* Menu Gaveta (Clean) */
+/* Menu Gaveta Mobile */
 #mobile-drawer-overlay { transition: opacity 0.3s; pointer-events: none; }
 #mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
 #mobile-drawer {
-    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     transform: translateY(100%);
+    background: rgba(15, 15, 20, 0.95);
+    border-top: 1px solid rgba(255,255,255,0.1);
     border-radius: 24px 24px 0 0;
-    border-top: 1px solid var(--border);
-    background: var(--bg-card);
 }
 #mobile-drawer.open { transform: translateY(0); }
 
 /* Utilitários */
 .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.skeleton { background: linear-gradient(90deg, #18181b 25%, #27272a 50%, #18181b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+.skeleton { background: linear-gradient(90deg, #1f1f25 25%, #2a2a35 50%, #1f1f25 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-/* Temas (Cores de Destaque) */
-body.theme-red { --primary: 239 68 68; }
-body.theme-purple { --primary: 168 85 247; }
-body.theme-blue { --primary: 59 130 246; }
+/* Temas (Muda o Gradiente Principal) */
+body.theme-red { --gradient-primary: linear-gradient(135deg, #FF3B3B, #FF0080); }
+body.theme-purple { --gradient-primary: linear-gradient(135deg, #7928CA, #FF0080); }
+body.theme-blue { --gradient-primary: linear-gradient(135deg, #007CF0, #00DFD8); }
+body.theme-light { --bg-dark: #f0f0f0; --text-main: #111; --glass: rgba(255,255,255,0.8); }
