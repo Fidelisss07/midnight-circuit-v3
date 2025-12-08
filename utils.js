@@ -1,5 +1,9 @@
-// ⚠️ Se estiveres no Railway, deixa vazio ''. Se for no PC, usa 'http://localhost:3000'
-const URL_SERVIDOR = 'https://midnight-circuit-v3-production.up.railway.app';
+// utils.js - Ferramentas Profissionais Midnight Circuit
+
+// ⚠️ No Railway: Deixa vazio ''. No PC: 'http://localhost:3000'
+const URL_SERVIDOR = window.location.hostname.includes('localhost') 
+    ? 'http://localhost:3000' 
+    : ''; 
 
 // 1. Sistema de Notificações (Toasts)
 function showToast(msg, tipo = 'success') {
@@ -10,16 +14,25 @@ function showToast(msg, tipo = 'success') {
         document.body.appendChild(c);
     }
     const t = document.createElement('div');
-    const cl = tipo === 'success' ? 'text-green-500' : 'text-red-500';
     const ic = tipo === 'success' ? 'check_circle' : 'error';
+    const cl = tipo === 'success' ? 'text-green-500' : 'text-red-500';
     
     t.className = `toast toast-${tipo}`;
-    t.innerHTML = `<span class="material-symbols-outlined ${cl}">${ic}</span><span class="text-sm font-bold">${msg}</span>`;
+    t.innerHTML = `<span class="material-symbols-outlined ${cl}">${ic}</span><span class="text-sm font-bold text-white">${msg}</span>`;
     c.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
 }
 
-// 2. Segurança e Login
+// 2. Feedback Botões
+function setBtnLoading(id, load) {
+    const btn = document.getElementById(id);
+    if (btn) {
+        if (load) btn.classList.add('btn-loading');
+        else btn.classList.remove('btn-loading');
+    }
+}
+
+// 3. Segurança Login
 function verificarLogin() {
     const dados = localStorage.getItem('usuario_logado');
     if (!dados && !window.location.href.includes('login') && !window.location.href.includes('registro')) {
@@ -33,30 +46,42 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-// 3. NAVEGAÇÃO DE PERFIL (ESTA É A FUNÇÃO QUE TE FALTA!)
+// 4. Navegação Inteligente
 function verPerfil(emailAlvo) {
-    if (!emailAlvo) return; // Proteção contra cliques vazios
-    
+    if (!emailAlvo) return;
     const usuarioLogado = verificarLogin();
-    
-    // Se clicar no próprio nome, vai para o perfil pessoal
     if (emailAlvo === usuarioLogado.email) {
         window.location.href = 'perfil.html';
     } else {
-        // Se for outra pessoa, vai para o perfil de visitante
         window.location.href = `perfil-visitante.html?email=${emailAlvo}`;
     }
 }
 
-// 4. Temas e Loading
-function setBtnLoading(id, load) {
-    const btn = document.getElementById(id);
-    if (btn) {
-        if (load) btn.classList.add('btn-loading');
-        else btn.classList.remove('btn-loading');
-    }
+// 5. NOVO: Formatação de Tempo Profissional (Ex: "Há 2 horas")
+function timeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+    
+    let interval = Math.floor(seconds / 31536000);
+    if (interval > 1) return `há ${interval} anos`;
+    
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) return `há ${interval} meses`;
+    
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) return `há ${interval} dias`;
+    
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) return `há ${interval} horas`;
+    
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) return `há ${interval} min`;
+    
+    return "agora mesmo";
 }
 
+// 6. Temas
 (function aplicarTema() {
     const tema = localStorage.getItem('midnight_tema') || 'theme-red';
     if(document.body) document.body.classList.add(tema);
