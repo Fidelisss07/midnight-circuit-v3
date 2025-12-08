@@ -1,112 +1,105 @@
-/* style.css - NEON VELOCITY */
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+/* style.css - Midnight Carbon Edition */
 
 :root {
-    --primary: 0, 255, 255; /* Cyan Padrão */
-    --accent: 255, 0, 128;   /* Rosa Choque */
-    --bg-dark: #030305;
-    --surface: #0a0a0f;
+    --primary: 239 68 68; /* Vermelho Padrão */
+    --bg-body: #09090b;   /* Preto Mate Profundo */
+    --bg-card: #18181b;   /* Cinza Carvão */
+    --border: #27272a;    /* Bordas Subtis */
+    --text-main: #ffffff;
+    --text-muted: #a1a1aa;
 }
 
-/* --- BASE --- */
+/* Base */
 body {
-    background-color: var(--bg-dark);
-    color: #fff;
-    font-family: 'Rajdhani', sans-serif; /* Fonte Técnica */
-    overflow-x: hidden;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Fundo Animado (Grid Retro) */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 200%; height: 200%;
-    background-image: 
-        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: center top;
-    transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
-    animation: gridMove 20s linear infinite;
-    z-index: -1;
-    pointer-events: none;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 40%, black 100%);
-}
-@keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); } 100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); } }
+/* Scrollbar Invisível mas funcional */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* --- COMPONENTES CYBER --- */
+/* --- COMPONENTES VISUAIS --- */
 
-/* Títulos */
-h1, h2, .brand-font { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+/* Cartões Premium */
+.pro-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px; /* Cantos Suaves */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+.pro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    border-color: rgba(var(--primary), 0.5);
+}
 
-/* Stories Hexagonais */
-.hex-outer {
-    width: 74px; height: 84px;
-    background: linear-gradient(180deg, rgb(var(--primary)), rgb(var(--accent)));
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.3s ease;
+/* Stories "Squircle" (Diferente do normal) */
+.story-squircle {
+    width: 68px; height: 68px;
+    border-radius: 18px; /* Formato App Icon */
+    padding: 2px;
+    background: linear-gradient(135deg, #ef4444, #3b82f6); /* Gradiente subtil */
+    transition: transform 0.2s;
 }
-.hex-inner {
-    width: 68px; height: 78px;
-    background: var(--surface);
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    display: flex; align-items: center; justify-content: center;
-}
-.hex-img {
-    width: 64px; height: 74px;
+.story-squircle:hover { transform: scale(1.05); }
+.story-img {
+    width: 100%; height: 100%;
+    border-radius: 16px;
+    border: 2px solid var(--bg-body);
     object-fit: cover;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
-.hex-outer:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px rgb(var(--primary))); }
 
-/* Cyber Card (Cantos Cortados) */
-.cyber-card {
-    background: rgba(10, 10, 15, 0.8);
-    border: 1px solid rgba(var(--primary), 0.3);
-    clip-path: polygon(
-        20px 0, 100% 0, 
-        100% calc(100% - 20px), calc(100% - 20px) 100%, 
-        0 100%, 0 20px
-    );
-    position: relative;
+/* Botões Modernos */
+.btn-pro {
+    background: var(--text-main);
+    color: var(--bg-body);
+    font-weight: 700;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+.btn-pro:active { transform: scale(0.95); opacity: 0.9; }
+.btn-ghost {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
+
+/* Switch de Abas (Pílula Flutuante) */
+.nav-pill {
+    background: rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    padding: 4px;
 }
-.cyber-card::after {
-    content: ""; position: absolute; bottom: 0; right: 0;
-    width: 20px; height: 2px; background: rgb(var(--primary));
-    transform: rotate(-45deg) translate(-7px, -4px);
-}
+.tab-active { background: var(--text-main); color: var(--bg-body); border-radius: 100px; }
+.tab-inactive { color: var(--text-muted); }
 
-/* Botão Nitro (Menu) */
-.btn-nitro {
-    width: 64px; height: 64px;
-    background: radial-gradient(circle, rgb(var(--primary)) 0%, transparent 70%);
-    border: 2px solid rgb(var(--primary));
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgb(var(--primary));
-    animation: pulseNitro 2s infinite;
-    position: relative; z-index: 50;
-    display: flex; align-items: center; justify-content: center;
-    margin-top: -30px;
-    background-color: black;
+/* Menu Gaveta (Clean) */
+#mobile-drawer-overlay { transition: opacity 0.3s; pointer-events: none; }
+#mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
+#mobile-drawer {
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    transform: translateY(100%);
+    border-radius: 24px 24px 0 0;
+    border-top: 1px solid var(--border);
+    background: var(--bg-card);
 }
-@keyframes pulseNitro { 0% { box-shadow: 0 0 10px rgb(var(--primary)); } 50% { box-shadow: 0 0 30px rgb(var(--primary)), 0 0 60px rgb(var(--primary)); } 100% { box-shadow: 0 0 10px rgb(var(--primary)); } }
-
-/* Toast & Outros */
-.material-symbols-outlined { font-variation-settings: 'FILL' 1; }
-#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-.toast { background: rgba(0,0,0,0.9); border: 1px solid rgb(var(--primary)); color: rgb(var(--primary)); padding: 15px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); display: flex; align-items: center; gap: 10px; min-width: 300px; font-family: 'Orbitron', sans-serif; animation: slideIn 0.3s ease; }
-@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+#mobile-drawer.open { transform: translateY(0); }
 
 /* Utilitários */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.btn-loading::after { content: ""; width: 16px; height: 16px; border: 2px solid; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.skeleton { background: linear-gradient(90deg, #18181b 25%, #27272a 50%, #18181b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-/* Temas (Muda a cor do Neon) */
-body.theme-red { --primary: 255, 30, 30; --accent: 255, 100, 0; }
-body.theme-purple { --primary: 180, 0, 255; --accent: 0, 200, 255; }
-body.theme-blue { --primary: 0, 255, 255; --accent: 0, 100, 255; }
-body.theme-light { --bg-dark: #eee; --surface: #fff; --primary: 0, 0, 0; color: #000; } /* Modo "Dia" */
+/* Temas (Cores de Destaque) */
+body.theme-red { --primary: 239 68 68; }
+body.theme-purple { --primary: 168 85 247; }
+body.theme-blue { --primary: 59 130 246; }
