@@ -163,3 +163,35 @@ body {
 }
 
 /* ... (Mantém o resto do CSS dos Stories, Cards, Menu Mobile, etc.) ... */
+
+/* ... (Mantém o teu CSS anterior) ... */
+
+/* ANIMAÇÃO DE LIKE (CORAÇÃO EXPLOSIVO) */
+.like-animation {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 80px;
+    color: rgb(var(--primary));
+    pointer-events: none;
+    z-index: 50;
+    text-shadow: 0 0 20px rgba(var(--primary), 0.8);
+    animation: likePop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes likePop {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+/* Melhoria nas Imagens (Lazy Load Smooth) */
+img {
+    transition: opacity 0.3s ease-in-out;
+}
+img[loading] {
+    opacity: 0;
+}
+img.loaded {
+    opacity: 1;
+}
