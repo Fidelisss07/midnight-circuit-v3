@@ -112,3 +112,54 @@ h1, h2, h3, .font-display, .btn-race {
 /* Toast */
 #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
 .toast { background: rgb(var(--bg-panel)); border-left: 4px solid rgb(var(--primary)); color: white; padding: 15px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; }
+
+/* style.css - Midnight Corsa (PC Remaster) */
+
+/* ... (Mantém as variáveis :root e o reset básico que já tinhas) ... */
+
+/* FUNDO MAIS "RICO" PARA O PC */
+body {
+    background-color: #050505;
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.05), transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    background-attachment: fixed;
+}
+
+/* --- NOVO: BARRA LATERAL FLUTUANTE (GLASS) --- */
+.glass-sidebar {
+    background: rgba(15, 15, 20, 0.7); /* Escuro e Transparente */
+    backdrop-filter: blur(12px);       /* Desfoque atrás */
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    border-radius: 24px;               /* Cantos redondos */
+    margin: 20px;                      /* Margem para flutuar */
+    height: calc(100vh - 40px);        /* Altura calculada */
+}
+
+/* Botões da Navegação PC */
+.nav-btn {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #71717a;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Efeito de "Luz de Travão" ao passar o rato */
+.nav-btn:hover, .nav-btn.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 3px 0 0 rgb(var(--primary)); /* Linha vermelha à esquerda */
+    transform: translateX(5px);
+}
+
+.nav-btn.active {
+    background: linear-gradient(90deg, rgba(var(--primary), 0.1), transparent);
+    color: rgb(var(--primary));
+}
+
+/* ... (Mantém o resto do CSS dos Stories, Cards, Menu Mobile, etc.) ... */
