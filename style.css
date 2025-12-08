@@ -1,248 +1,112 @@
-/* style.css - Midnight Circuit Visual System */
+/* style.css - NEON VELOCITY */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 
 :root {
-    /* Variáveis Padrão (Red) */
-    --primary: 239 68 68;
-    --bg-dark: #050505;
-    --surface: #121212;
-    --text-main: #fff;
-    --success: #22c55e;
-    --error: #ef4444;
+    --primary: 0, 255, 255; /* Cyan Padrão */
+    --accent: 255, 0, 128;   /* Rosa Choque */
+    --bg-dark: #030305;
+    --surface: #0a0a0f;
 }
 
-/* --- 1. UTILITÁRIOS GERAIS --- */
+/* --- BASE --- */
 body {
     background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Space Grotesk', sans-serif;
-    -webkit-tap-highlight-color: transparent;
-    animation: fadeIn 0.4s ease-out;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif; /* Fonte Técnica */
+    overflow-x: hidden;
 }
 
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-
-/* Scrollbar Personalizada */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: rgb(var(--primary)); }
-
-/* Esconder scrollbar mas permitir scroll (para Sprints/Stories) */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* --- 2. ANIMAÇÕES --- */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
-@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-.animate-fade-in { animation: fadeIn 0.5s ease-out; }
-.animate-spin { animation: spin 1s linear infinite; }
-
-/* --- 3. COMPONENTES --- */
-
-/* Toast (Notificações Flutuantes) */
-#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-.toast {
-    background: var(--surface); 
-    border-left: 4px solid; 
-    padding: 15px 20px; 
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-    display: flex; align-items: center; gap: 10px;
-    min-width: 300px; 
-    color: white; 
-    border: 1px solid rgba(255,255,255,0.05);
-    animation: slideInRight 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
-}
-.toast-success { border-left-color: var(--success); }
-.toast-error { border-left-color: var(--error); }
-
-/* Botões Loading */
-.btn-loading { position: relative; color: transparent !important; pointer-events: none; }
-.btn-loading::after {
-    content: ""; position: absolute; left: 50%; top: 50%; width: 20px; height: 20px;
-    border: 2px solid #fff; border-top-color: transparent; border-radius: 50%;
-    animation: spin 0.8s linear infinite; transform: translate(-50%, -50%);
-}
-
-/* Cards com Brilho */
-.glow-hover { transition: all 0.3s ease; }
-.glow-hover:hover { 
-    box-shadow: 0 0 25px rgba(var(--primary), 0.15); 
-    transform: translateY(-2px); 
-    border-color: rgba(var(--primary), 0.3);
-}
-
-/* Stories (Anel Colorido) */
-.story-ring { 
-    padding: 2px; 
-    background: linear-gradient(45deg, #ef4444, #a855f7, #3b82f6); 
-    border-radius: 50%; 
-    background-size: 200% 200%;
-    animation: gradientMove 3s ease infinite;
-}
-@keyframes gradientMove { 0% {background-position: 0% 50%} 50% {background-position: 100% 50%} 100% {background-position: 0% 50%} }
-.story-ring.midnight { background: linear-gradient(45deg, #ef4444, #a855f7); }
-
-/* Feed Overlay (Legenda) */
-.legenda-overlay { 
-    background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.6) 50%, transparent 100%); 
-}
-
-/* Sprints (TikTok Scroll) */
-.snap-container { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100vh; }
-.snap-child { scroll-snap-align: start; height: 100vh; position: relative; }
-
-/* Chat Bubbles */
-.msg-me { 
-    background-color: rgb(var(--primary)); 
-    color: white; 
-    align-self: flex-end; 
-    border-radius: 12px 12px 0 12px; 
-}
-.msg-him { 
-    background-color: var(--surface); 
-    border: 1px solid #333; 
-    color: inherit; 
-    align-self: flex-start; 
-    border-radius: 12px 12px 12px 0; 
-}
-
-/* Skeleton Loading */
-.skeleton { 
-    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); 
-    background-size: 200% 100%; 
-    animation: shimmer 1.5s infinite; 
-    border-radius: 8px; 
-}
-
-/* --- 4. TEMAS --- */
-body.theme-red { --primary: 239 68 68; }
-body.theme-purple { --primary: 168 85 247; }
-body.theme-blue { --primary: 59 130 246; }
-body.theme-light { 
-    --primary: 239 68 68; 
-    --bg-dark: #f3f4f6; 
-    --surface: #ffffff; 
-    --text-main: #111; 
-}
-
-/* --- MENU MOBILE (GAVETA) --- */
-#mobile-drawer-overlay {
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-#mobile-drawer-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-#mobile-drawer {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateY(100%); /* Escondido em baixo */
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
-}
-#mobile-drawer.open {
-    transform: translateY(0); /* Visível */
-}
-
-/* Botão Central Destacado */
-.btn-menu-central {
-    box-shadow: 0 0 15px rgba(var(--primary), 0.5);
-    transform: translateY(-20px);
-    transition: all 0.2s;
-}
-.btn-menu-central:active {
-    transform: translateY(-15px) scale(0.95);
-}
-
-
-/* --- MENU MOBILE GAVETA (DRAWER) --- */
-#mobile-drawer-overlay {
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-#mobile-drawer-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-#mobile-drawer {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateY(100%); /* Começa escondido em baixo */
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
-}
-#mobile-drawer.open {
-    transform: translateY(0); /* Sobe */
-}
-
-/* Botão Central Destacado */
-.btn-menu-central {
-    box-shadow: 0 0 15px rgba(var(--primary), 0.5);
-    transform: translateY(-20px);
-    transition: all 0.2s;
-}
-.btn-menu-central:active {
-    transform: translateY(-15px) scale(0.95);
-}
-
-/* --- NOVO VISUAL MIDNIGHT COCKPIT --- */
-
-/* Fundo Animado */
-body {
-    background-color: #050505;
+/* Fundo Animado (Grid Retro) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 200%; height: 200%;
     background-image: 
-        radial-gradient(circle at 15% 50%, rgba(239, 68, 68, 0.08), transparent 25%), 
-        radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.08), transparent 25%);
-    background-attachment: fixed;
+        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center top;
+    transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+    animation: gridMove 20s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 40%, black 100%);
+}
+@keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); } 100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); } }
+
+/* --- COMPONENTES CYBER --- */
+
+/* Títulos */
+h1, h2, .brand-font { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+
+/* Stories Hexagonais */
+.hex-outer {
+    width: 74px; height: 84px;
+    background: linear-gradient(180deg, rgb(var(--primary)), rgb(var(--accent)));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s ease;
+}
+.hex-inner {
+    width: 68px; height: 78px;
+    background: var(--surface);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+}
+.hex-img {
+    width: 64px; height: 74px;
+    object-fit: cover;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+.hex-outer:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px rgb(var(--primary))); }
+
+/* Cyber Card (Cantos Cortados) */
+.cyber-card {
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(var(--primary), 0.3);
+    clip-path: polygon(
+        20px 0, 100% 0, 
+        100% calc(100% - 20px), calc(100% - 20px) 100%, 
+        0 100%, 0 20px
+    );
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+.cyber-card::after {
+    content: ""; position: absolute; bottom: 0; right: 0;
+    width: 20px; height: 2px; background: rgb(var(--primary));
+    transform: rotate(-45deg) translate(-7px, -4px);
 }
 
-/* Efeito de Vidro (Glassmorphism) */
-.glass-panel {
-    background: rgba(18, 18, 18, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+/* Botão Nitro (Menu) */
+.btn-nitro {
+    width: 64px; height: 64px;
+    background: radial-gradient(circle, rgb(var(--primary)) 0%, transparent 70%);
+    border: 2px solid rgb(var(--primary));
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgb(var(--primary));
+    animation: pulseNitro 2s infinite;
+    position: relative; z-index: 50;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: -30px;
+    background-color: black;
 }
+@keyframes pulseNitro { 0% { box-shadow: 0 0 10px rgb(var(--primary)); } 50% { box-shadow: 0 0 30px rgb(var(--primary)), 0 0 60px rgb(var(--primary)); } 100% { box-shadow: 0 0 10px rgb(var(--primary)); } }
 
-/* Driver Cards (Stories Retangulares) */
-.driver-card {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background-size: cover;
-    background-position: center;
-}
-.driver-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 10px 20px rgba(var(--primary), 0.3);
-    border-color: rgb(var(--primary));
-}
+/* Toast & Outros */
+.material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+.toast { background: rgba(0,0,0,0.9); border: 1px solid rgb(var(--primary)); color: rgb(var(--primary)); padding: 15px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); display: flex; align-items: center; gap: 10px; min-width: 300px; font-family: 'Orbitron', sans-serif; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-/* Botões Neon */
-.btn-neon {
-    background: linear-gradient(135deg, rgba(var(--primary), 0.8), rgba(var(--primary), 0.4));
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 0 15px rgba(var(--primary), 0.3);
-}
-.btn-neon:active { transform: scale(0.95); }
+/* Utilitários */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.btn-loading::after { content: ""; width: 16px; height: 16px; border: 2px solid; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Switch de Abas Moderno */
-.tab-active {
-    background: rgb(var(--primary));
-    color: white;
-    box-shadow: 0 0 15px rgba(var(--primary), 0.4);
-}
-.tab-inactive {
-    background: transparent;
-    color: #9ca3af;
-}
-.tab-inactive:hover { color: white; background: rgba(255,255,255,0.05); }
+/* Temas (Muda a cor do Neon) */
+body.theme-red { --primary: 255, 30, 30; --accent: 255, 100, 0; }
+body.theme-purple { --primary: 180, 0, 255; --accent: 0, 200, 255; }
+body.theme-blue { --primary: 0, 255, 255; --accent: 0, 100, 255; }
+body.theme-light { --bg-dark: #eee; --surface: #fff; --primary: 0, 0, 0; color: #000; } /* Modo "Dia" */
