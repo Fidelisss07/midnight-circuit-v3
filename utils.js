@@ -1,4 +1,4 @@
-// utils.js - Ferramentas Profissionais Midnight Circuit
+// utils.js - Ferramentas Profissionais
 
 // ⚠️ No Railway: Deixa vazio ''. No PC: 'http://localhost:3000'
 const URL_SERVIDOR = window.location.hostname.includes('localhost') 
@@ -14,8 +14,8 @@ function showToast(msg, tipo = 'success') {
         document.body.appendChild(c);
     }
     const t = document.createElement('div');
-    const ic = tipo === 'success' ? 'check_circle' : 'error';
     const cl = tipo === 'success' ? 'text-green-500' : 'text-red-500';
+    const ic = tipo === 'success' ? 'check_circle' : 'error';
     
     t.className = `toast toast-${tipo}`;
     t.innerHTML = `<span class="material-symbols-outlined ${cl}">${ic}</span><span class="text-sm font-bold text-white">${msg}</span>`;
@@ -23,16 +23,38 @@ function showToast(msg, tipo = 'success') {
     setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
 }
 
-// 2. Feedback Botões
+// 2. Formatador de Números (Ex: 1200 -> 1.2k)
+function formatNumber(num) {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+    return num;
+}
+
+// 3. Copiar Link (Share)
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast("Link copiado!", "success");
+    }).catch(() => {
+        showToast("Erro ao copiar", "error");
+    });
+}
+
+// 4. Feedback Botões
 function setBtnLoading(id, load) {
     const btn = document.getElementById(id);
     if (btn) {
-        if (load) btn.classList.add('btn-loading');
-        else btn.classList.remove('btn-loading');
+        if (load) {
+            btn.dataset.originalText = btn.innerText;
+            btn.classList.add('btn-loading');
+            btn.innerText = "";
+        } else {
+            btn.classList.remove('btn-loading');
+            btn.innerText = btn.dataset.originalText || "Enviar";
+        }
     }
 }
 
-// 3. Segurança Login
+// 5. Segurança Login
 function verificarLogin() {
     const dados = localStorage.getItem('usuario_logado');
     if (!dados && !window.location.href.includes('login') && !window.location.href.includes('registro')) {
@@ -46,42 +68,33 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-// 4. Navegação Inteligente
+// 6. Navegação Perfil
 function verPerfil(emailAlvo) {
     if (!emailAlvo) return;
     const usuarioLogado = verificarLogin();
-    if (emailAlvo === usuarioLogado.email) {
-        window.location.href = 'perfil.html';
-    } else {
-        window.location.href = `perfil-visitante.html?email=${emailAlvo}`;
-    }
+    if (emailAlvo === usuarioLogado.email) window.location.href = 'perfil.html';
+    else window.location.href = `perfil-visitante.html?email=${emailAlvo}`;
 }
 
-// 5. NOVO: Formatação de Tempo Profissional (Ex: "Há 2 horas")
+// 7. Time Ago
 function timeAgo(dateString) {
     const date = new Date(dateString);
     const now = new Date();
     const seconds = Math.floor((now - date) / 1000);
-    
     let interval = Math.floor(seconds / 31536000);
-    if (interval > 1) return `há ${interval} anos`;
-    
+    if (interval >= 1) return `há ${interval} anos`;
     interval = Math.floor(seconds / 2592000);
-    if (interval > 1) return `há ${interval} meses`;
-    
+    if (interval >= 1) return `há ${interval} meses`;
     interval = Math.floor(seconds / 86400);
-    if (interval > 1) return `há ${interval} dias`;
-    
+    if (interval >= 1) return `há ${interval} dias`;
     interval = Math.floor(seconds / 3600);
-    if (interval > 1) return `há ${interval} horas`;
-    
+    if (interval >= 1) return `há ${interval} h`;
     interval = Math.floor(seconds / 60);
-    if (interval > 1) return `há ${interval} min`;
-    
+    if (interval >= 1) return `há ${interval} min`;
     return "agora mesmo";
 }
 
-// 6. Temas
+// 8. Temas
 (function aplicarTema() {
     const tema = localStorage.getItem('midnight_tema') || 'theme-red';
     if(document.body) document.body.classList.add(tema);
