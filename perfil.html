@@ -13,37 +13,26 @@
     
     <style>
         .garage-3d-container { perspective: 1000px; }
-        /* Animação suavizada com cubic-bezier */
         .card-3d {
             transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.4s ease;
             transform-style: preserve-3d;
             background: linear-gradient(135deg, rgba(20,20,20,0.9), rgba(10,10,10,0.95));
             border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            position: relative; overflow: hidden; cursor: pointer;
         }
         .card-glare {
-            position: absolute;
-            width: 200%; height: 200%;
+            position: absolute; width: 200%; height: 200%;
             background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 60%);
-            top: -50%; left: -50%;
-            pointer-events: none;
-            opacity: 0;
+            top: -50%; left: -50%; pointer-events: none; opacity: 0;
             transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             mix-blend-mode: overlay;
             transform: translate(var(--mx), var(--my));
         }
         .card-3d:hover .card-glare { opacity: 1; }
-        .card-3d:hover {
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(var(--primary), 0.15);
-            border-color: rgba(var(--primary), 0.5);
-        }
+        .card-3d:hover { box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(var(--primary), 0.15); border-color: rgba(var(--primary), 0.5); }
         .card-content-3d { transform: translateZ(30px); pointer-events: none; }
         .card-img-3d { transform: translateZ(10px); pointer-events: none; }
-        .card-actions-3d { transform: translateZ(40px); }
-
-        /* Estilos do Carrossel */
+        .card-actions-3d { transform: translateZ(40px); pointer-events: auto; }
         .carousel-thumb.active { border-color: rgb(var(--primary)); opacity: 1; }
         .carousel-thumb { opacity: 0.6; transition: all 0.3s; }
         .carousel-thumb:hover { opacity: 1; }
@@ -52,18 +41,8 @@
 <body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body selection:bg-primary selection:text-white">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
-    
-    <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-[#0f0f0f]/95 border-b border-[#222]">
-        <span class="material-symbols-outlined text-primary text-2xl">garage_home</span>
-        <h1 class="font-bold text-lg tracking-widest text-white italic font-display">GARAGEM</h1>
-        <div onclick="logout()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></div>
-    </div>
-
     <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20 shadow-2xl">
-        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
-            <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
-            <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
-        </a>
+        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html"><span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span><span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span></a>
         <nav class="flex flex-col w-full px-4 gap-2">
             <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">home</span> Feed</a>
             <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">search</span> Explorar</a>
@@ -79,55 +58,17 @@
     </aside>
 
     <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-14 md:pt-0">
-        
         <div class="h-64 w-full bg-cover bg-fixed bg-center relative" id="user-capa">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent"></div>
-            <button onclick="abrirModalPerfil()" class="absolute top-4 right-4 bg-black/50 hover:bg-primary text-white p-2 rounded-full backdrop-blur-md opacity-80 hover:opacity-100 transition-all shadow-lg border border-white/10">
-                <span class="material-symbols-outlined text-sm">edit</span>
-            </button>
+            <button onclick="abrirModalPerfil()" class="absolute top-4 right-4 bg-black/50 hover:bg-primary text-white p-2 rounded-full backdrop-blur-md opacity-80 hover:opacity-100 transition-all shadow-lg border border-white/10"><span class="material-symbols-outlined text-sm">edit</span></button>
         </div>
-
         <div class="max-w-7xl mx-auto px-4 md:px-10 pb-20">
-            
             <div class="relative -top-20 flex flex-col md:flex-row items-end md:items-start gap-8">
-                <div class="relative group cursor-pointer" onclick="abrirModalPerfil()">
-                    <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <img id="user-avatar" class="w-36 h-36 md:w-48 md:h-48 rounded-2xl border-4 border-[#0a0a0a] object-cover shadow-2xl bg-[#222] relative z-10 transform group-hover:scale-105 transition-transform duration-300">
-                </div>
-                
-                <div class="flex-1 mt-4 md:mt-24 text-center md:text-left w-full">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                        <div>
-                            <h1 id="user-nome" class="text-4xl md:text-5xl font-bold text-white mb-2 font-display uppercase tracking-tighter italic">...</h1>
-                            <p id="user-bio" class="text-gray-400 text-sm max-w-xl mx-auto md:mx-0 font-mono border-l-2 border-primary/50 pl-3">...</p>
-                        </div>
-                        <div class="flex gap-3 justify-center md:justify-start">
-                            <button onclick="abrirModalPerfil()" class="px-6 py-3 bg-[#151515] border border-[#333] rounded text-xs font-bold hover:bg-[#222] transition-all flex items-center gap-2 uppercase tracking-widest text-gray-300 shadow-lg">
-                                <span class="material-symbols-outlined text-base">tune</span> Editar
-                            </button>
-                            <button onclick="abrirModalCarro()" class="btn-race px-8 py-3 rounded text-xs uppercase shadow-lg shadow-primary/20 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-lg">add</span> Adicionar Carro
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-1 mt-8 bg-[#111] rounded-2xl border border-[#222] p-1 shadow-2xl max-w-2xl">
-                        <div class="text-center p-4 hover:bg-[#1a1a1a] rounded-xl transition-colors"><span id="num-seguidores" class="block text-2xl font-bold text-white font-display">0</span><span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Seguidores</span></div>
-                        <div class="text-center p-4 border-x border-[#222] hover:bg-[#1a1a1a] rounded-xl transition-colors"><span id="num-seguindo" class="block text-2xl font-bold text-white font-display">0</span><span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">A Seguir</span></div>
-                        <div class="text-center p-4 hover:bg-[#1a1a1a] rounded-xl transition-colors relative overflow-hidden group"><div class="flex justify-center items-baseline gap-1 relative z-10"><span class="text-[10px] text-primary font-bold">LVL</span><span id="user-nivel" class="text-2xl font-bold text-white font-display">1</span></div><div class="w-full h-1 bg-[#222] rounded-full mt-2 overflow-hidden"><div id="user-xp-bar" class="h-full bg-gradient-to-r from-primary to-orange-500 w-0 transition-all duration-1000"></div></div></div>
-                    </div>
-                </div>
+                <div class="relative group cursor-pointer" onclick="abrirModalPerfil()"><div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div><img id="user-avatar" class="w-36 h-36 md:w-48 md:h-48 rounded-2xl border-4 border-[#0a0a0a] object-cover shadow-2xl bg-[#222] relative z-10 transform group-hover:scale-105 transition-transform duration-300"></div>
+                <div class="flex-1 mt-4 md:mt-24 text-center md:text-left w-full"><div class="flex flex-col md:flex-row justify-between items-center gap-6"><div><h1 id="user-nome" class="text-4xl md:text-5xl font-bold text-white mb-2 font-display uppercase tracking-tighter italic">...</h1><p id="user-bio" class="text-gray-400 text-sm max-w-xl mx-auto md:mx-0 font-mono border-l-2 border-primary/50 pl-3">...</p></div><div class="flex gap-3 justify-center md:justify-start"><button onclick="abrirModalPerfil()" class="px-6 py-3 bg-[#151515] border border-[#333] rounded text-xs font-bold hover:bg-[#222] transition-all flex items-center gap-2 uppercase tracking-widest text-gray-300 shadow-lg"><span class="material-symbols-outlined text-base">tune</span> Editar</button><button onclick="abrirModalCarro()" class="btn-race px-8 py-3 rounded text-xs uppercase shadow-lg shadow-primary/20 flex items-center gap-2"><span class="material-symbols-outlined text-lg">add</span> Adicionar Carro</button></div></div><div class="grid grid-cols-3 gap-1 mt-8 bg-[#111] rounded-2xl border border-[#222] p-1 shadow-2xl max-w-2xl"><div class="text-center p-4 hover:bg-[#1a1a1a] rounded-xl transition-colors"><span id="num-seguidores" class="block text-2xl font-bold text-white font-display">0</span><span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Seguidores</span></div><div class="text-center p-4 border-x border-[#222] hover:bg-[#1a1a1a] rounded-xl transition-colors"><span id="num-seguindo" class="block text-2xl font-bold text-white font-display">0</span><span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">A Seguir</span></div><div class="text-center p-4 hover:bg-[#1a1a1a] rounded-xl transition-colors relative overflow-hidden group"><div class="flex justify-center items-baseline gap-1 relative z-10"><span class="text-[10px] text-primary font-bold">LVL</span><span id="user-nivel" class="text-2xl font-bold text-white font-display">1</span></div><div class="w-full h-1 bg-[#222] rounded-full mt-2 overflow-hidden"><div id="user-xp-bar" class="h-full bg-gradient-to-r from-primary to-orange-500 w-0 transition-all duration-1000"></div></div></div></div></div>
             </div>
-            
-            <div class="flex gap-4 border-b border-[#222] mb-10 mt-8 justify-center md:justify-start overflow-x-auto">
-                <button onclick="trocarAba('carros')" id="btn-tab-carros" class="px-6 py-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-xs tracking-widest bg-white/5 whitespace-nowrap"><span class="material-symbols-outlined text-lg">directions_car</span> Garagem (3D)</button>
-                <button onclick="trocarAba('posts')" id="btn-tab-posts" class="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-xs tracking-widest whitespace-nowrap"><span class="material-symbols-outlined text-lg">grid_view</span> Galeria</button>
-            </div>
-
-            <div id="tab-carros" class="space-y-12 animate-fade-in garage-3d-container">
-                <div class="text-center py-20 opacity-50"><p>A carregar a tua garagem...</p></div>
-            </div>
-
+            <div class="flex gap-4 border-b border-[#222] mb-10 mt-8 justify-center md:justify-start overflow-x-auto"><button onclick="trocarAba('carros')" id="btn-tab-carros" class="px-6 py-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-xs tracking-widest bg-white/5 whitespace-nowrap"><span class="material-symbols-outlined text-lg">directions_car</span> Garagem (3D)</button><button onclick="trocarAba('posts')" id="btn-tab-posts" class="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-xs tracking-widest whitespace-nowrap"><span class="material-symbols-outlined text-lg">grid_view</span> Galeria</button></div>
+            <div id="tab-carros" class="space-y-12 animate-fade-in garage-3d-container"><div class="text-center py-20 opacity-50"><p>A carregar a tua garagem...</p></div></div>
             <div id="tab-posts" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-20"></div>
         </div>
     </main>
@@ -152,41 +93,39 @@
     </nav>
 </div>
 
-<div id="modal-carro" class="hidden fixed inset-0 z-[80] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"><div class="bg-[#111] w-full max-w-5xl rounded border border-[#333] p-8 shadow-2xl h-[90vh] overflow-y-auto custom-scrollbar"><div class="flex justify-between items-center mb-6 border-b border-[#222] pb-4"><h2 class="text-2xl font-bold text-white flex items-center gap-2 font-display uppercase tracking-widest"><span class="material-symbols-outlined text-primary">garage</span> Nova Máquina</h2><button onclick="document.getElementById('modal-carro').classList.add('hidden')" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><div class="space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Identidade</h3><div class="grid grid-cols-2 gap-3"><div class="col-span-2"><label class="text-[10px] text-gray-500 uppercase">Apelido</label><input type="text" id="car-apelido" placeholder="Ex: 'The Beast'" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white focus:border-primary font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Marca</label><input type="text" id="car-marca" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Modelo</label><input type="text" id="car-modelo" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Ano</label><input type="number" id="car-ano" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Cor</label><input type="text" id="car-cor" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div><label class="text-[10px] text-gray-500 uppercase">História</label><textarea id="car-desc" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div></div><div class="space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Performance</h3><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] text-gray-500 uppercase">HP</label><input type="text" id="car-hp" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Torque</label><input type="text" id="car-torque" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">0-100</label><input type="text" id="car-zero" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Max</label><input type="text" id="car-top" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div class="space-y-3 pt-2"><div><label class="text-[10px] text-gray-500 uppercase">Motor</label><input type="text" id="car-motor" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] text-gray-500 uppercase">Tração</label><select id="car-tracao" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"><option>RWD</option><option>FWD</option><option>AWD</option></select></div><div><label class="text-[10px] text-gray-500 uppercase">Câmbio</label><input type="text" id="car-cambio" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div><label class="text-[10px] text-gray-500 uppercase">Peso (kg)</label><input type="text" id="car-peso" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div></div><div class="flex flex-col h-full space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Visual</h3><div><label class="text-[10px] text-gray-500 uppercase">Mods (Separar por vírgula)</label><textarea id="car-mods" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div><div class="flex-1 flex flex-col"><label class="text-[10px] text-gray-500 uppercase mb-2">Fotos (Até 12)</label><label class="flex-1 border-2 border-dashed border-[#333] rounded flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-white/5 relative overflow-hidden group transition-all"><div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-[#111] z-10 p-2 grid grid-cols-3 gap-2 overflow-y-auto custom-scrollbar"></div><span class="material-symbols-outlined text-4xl text-gray-600 group-hover:text-primary">add_photo_alternate</span><p class="text-gray-500 text-xs mt-2 uppercase font-bold">Selecionar Fotos</p><input type="file" id="car-imagem" class="hidden" accept="image/*" multiple onchange="previewCarro(event)"></label></div></div></div><div class="flex justify-end gap-3 mt-8 pt-4 border-t border-[#222]"><button onclick="document.getElementById('modal-carro').classList.add('hidden')" class="px-6 py-3 text-gray-400 hover:text-white font-bold uppercase text-xs">Cancelar</button><button onclick="salvarCarro()" id="btn-salvar-carro" class="px-8 py-3 bg-primary text-black rounded font-black shadow-lg uppercase text-xs hover:bg-white transition-colors">Guardar</button></div></div></div>
+<div id="modal-carro" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#111] w-full max-w-5xl rounded border border-[#333] p-8 shadow-2xl h-[90vh] overflow-y-auto custom-scrollbar">
+        <div class="flex justify-between items-center mb-6 border-b border-[#222] pb-4">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2 font-display uppercase tracking-widest"><span class="material-symbols-outlined text-primary">garage</span> <span id="modal-carro-titulo">Nova Máquina</span></h2>
+            <button onclick="document.getElementById('modal-carro').classList.add('hidden')" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        
+        <input type="hidden" id="car-id"> <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Identidade</h3><div class="grid grid-cols-2 gap-3"><div class="col-span-2"><label class="text-[10px] text-gray-500 uppercase">Apelido</label><input type="text" id="car-apelido" placeholder="Ex: 'The Beast'" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white focus:border-primary font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Marca</label><input type="text" id="car-marca" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Modelo</label><input type="text" id="car-modelo" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Ano</label><input type="number" id="car-ano" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Cor</label><input type="text" id="car-cor" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div><label class="text-[10px] text-gray-500 uppercase">História</label><textarea id="car-desc" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div></div>
+            <div class="space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Performance</h3><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] text-gray-500 uppercase">HP</label><input type="text" id="car-hp" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Torque</label><input type="text" id="car-torque" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">0-100</label><input type="text" id="car-zero" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Max</label><input type="text" id="car-top" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div class="space-y-3 pt-2"><div><label class="text-[10px] text-gray-500 uppercase">Motor</label><input type="text" id="car-motor" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] text-gray-500 uppercase">Tração</label><select id="car-tracao" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"><option>RWD</option><option>FWD</option><option>AWD</option></select></div><div><label class="text-[10px] text-gray-500 uppercase">Câmbio</label><input type="text" id="car-cambio" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div><label class="text-[10px] text-gray-500 uppercase">Peso (kg)</label><input type="text" id="car-peso" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div></div>
+            <div class="flex flex-col h-full space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Visual</h3><div><label class="text-[10px] text-gray-500 uppercase">Mods (Separar por vírgula)</label><textarea id="car-mods" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div><div class="flex-1 flex flex-col"><label class="text-[10px] text-gray-500 uppercase mb-2">Fotos (Até 12)</label><label class="flex-1 border-2 border-dashed border-[#333] rounded flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-white/5 relative overflow-hidden group transition-all"><div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-[#111] z-10 p-2 grid grid-cols-3 gap-2 overflow-y-auto custom-scrollbar"></div><span class="material-symbols-outlined text-4xl text-gray-600 group-hover:text-primary">add_photo_alternate</span><p class="text-gray-500 text-xs mt-2 uppercase font-bold">Selecionar Fotos</p><input type="file" id="car-imagem" class="hidden" accept="image/*" multiple onchange="previewCarro(event)"></label></div></div>
+        </div>
+        <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-[#222]">
+            <button onclick="document.getElementById('modal-carro').classList.add('hidden')" class="px-6 py-3 text-gray-400 hover:text-white font-bold uppercase text-xs">Cancelar</button>
+            <button onclick="salvarCarro()" id="btn-salvar-carro" class="px-8 py-3 bg-primary text-black rounded font-black shadow-lg uppercase text-xs hover:bg-white transition-colors">Guardar</button>
+        </div>
+    </div>
+</div>
 
 <div id="modal-ver-carro" class="hidden fixed inset-0 z-[90] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
     <div class="bg-[#111] w-full max-w-6xl rounded-2xl border border-[#333] shadow-2xl overflow-hidden flex flex-col lg:flex-row h-[90vh]">
         <div class="lg:w-2/3 bg-black relative flex flex-col">
-            <div class="flex-1 relative flex items-center justify-center bg-[#050505]">
-                <img id="carousel-main-img" class="max-h-full max-w-full object-contain transition-opacity duration-300">
-                <button onclick="mudarImagem(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-primary hover:text-black transition-all"><span class="material-symbols-outlined">chevron_left</span></button>
-                <button onclick="mudarImagem(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-primary hover:text-black transition-all"><span class="material-symbols-outlined">chevron_right</span></button>
-            </div>
+            <div class="flex-1 relative flex items-center justify-center bg-[#050505]"><img id="carousel-main-img" class="max-h-full max-w-full object-contain transition-opacity duration-300"><button onclick="mudarImagem(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-primary hover:text-black transition-all"><span class="material-symbols-outlined">chevron_left</span></button><button onclick="mudarImagem(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-primary hover:text-black transition-all"><span class="material-symbols-outlined">chevron_right</span></button></div>
             <div id="carousel-thumbnails" class="h-24 bg-[#111] border-t border-[#222] flex gap-2 p-2 overflow-x-auto custom-scrollbar"></div>
         </div>
         <div class="lg:w-1/3 bg-[#111] flex flex-col h-full border-l border-[#222]">
             <div class="p-6 border-b border-[#222] flex justify-between items-start">
-                <div>
-                    <div class="flex items-baseline gap-2"><h2 id="vc-marca" class="text-primary font-bold text-sm uppercase tracking-widest font-display">MARCA</h2><span id="vc-ano" class="text-gray-600 text-xs font-mono">• ANO</span></div>
-                    <h1 id="vc-modelo" class="text-3xl font-bold text-white leading-tight font-display uppercase">MODELO</h1>
-                    <h3 id="vc-apelido" class="text-xl text-gray-400 italic">"Apelido"</h3>
-                </div>
+                <div><div class="flex items-baseline gap-2"><h2 id="vc-marca" class="text-primary font-bold text-sm uppercase tracking-widest font-display">MARCA</h2><span id="vc-ano" class="text-gray-600 text-xs font-mono">• ANO</span></div><h1 id="vc-modelo" class="text-3xl font-bold text-white leading-tight font-display uppercase">MODELO</h1><h3 id="vc-apelido" class="text-xl text-gray-400 italic">"Apelido"</h3></div>
                 <button onclick="fecharModalVerCarro()" class="text-gray-400 hover:text-white p-2 bg-[#222] rounded-full hover:bg-red-500/20 transition-all"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
                 <div><h4 class="text-xs text-primary uppercase tracking-widest font-bold mb-2">História</h4><p id="vc-desc" class="text-sm text-gray-400 font-mono leading-relaxed border-l-2 border-primary/30 pl-4">...</p></div>
-                <div><h4 class="text-xs text-primary uppercase tracking-widest font-bold mb-3 border-b border-[#222] pb-2">Specs</h4>
-                    <div class="grid grid-cols-2 gap-4 font-mono text-sm">
-                        <div><p class="text-gray-600 text-[10px] uppercase">Motor</p><p id="vc-motor" class="text-white font-bold truncate">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">Potência</p><p id="vc-hp" class="text-white font-bold">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">Torque</p><p id="vc-torque" class="text-white font-bold">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">0-100</p><p id="vc-zero" class="text-white font-bold">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">Top Speed</p><p id="vc-top" class="text-white font-bold">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">Peso</p><p id="vc-peso" class="text-white font-bold">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">Tração</p><p id="vc-tracao" class="text-white font-bold">N/A</p></div>
-                        <div><p class="text-gray-600 text-[10px] uppercase">Câmbio</p><p id="vc-cambio" class="text-white font-bold">N/A</p></div>
-                    </div>
-                </div>
+                <div><h4 class="text-xs text-primary uppercase tracking-widest font-bold mb-3 border-b border-[#222] pb-2">Specs</h4><div class="grid grid-cols-2 gap-4 font-mono text-sm"><div><p class="text-gray-600 text-[10px] uppercase">Motor</p><p id="vc-motor" class="text-white font-bold truncate">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Potência</p><p id="vc-hp" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Torque</p><p id="vc-torque" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">0-100</p><p id="vc-zero" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Top Speed</p><p id="vc-top" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Peso</p><p id="vc-peso" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Tração</p><p id="vc-tracao" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Câmbio</p><p id="vc-cambio" class="text-white font-bold">N/A</p></div></div></div>
                 <div><h4 class="text-xs text-primary uppercase tracking-widest font-bold mb-2">Modificações</h4><div id="vc-mods" class="flex flex-wrap gap-2"></div></div>
             </div>
         </div>
@@ -223,16 +162,13 @@
         } catch(e) { console.error(e); }
     }
 
-    // --- LÓGICA 3D & CARROS ---
     async function carregarCarros(){
         const r=await fetch(`${URL_SERVIDOR}/carros`);const c=await r.json();const ct=document.getElementById('tab-carros');ct.innerHTML='';
         meusCarrosGlobal = c.filter(x=>x.dono===USUARIO_ATUAL.nome).reverse();
-        
         if(meusCarrosGlobal.length===0){ct.innerHTML='<div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div>';return;}
         
         meusCarrosGlobal.forEach((car, index) => {
             const mods=car.mods.map(x=>`<span class="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider">${x.trim()}</span>`).join('');
-            // Usa a primeira imagem do array se existir, senão usa a imagemUrl antiga
             const displayImage = (car.imagens && car.imagens.length > 0) ? car.imagens[0] : car.imagemUrl;
             
             ct.innerHTML+=`
@@ -241,6 +177,7 @@
                 <div class="lg:w-[45%] min-h-[300px] bg-cover bg-center relative card-img-3d" style="background-image:url('${displayImage}');">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#111] lg:bg-gradient-to-r lg:from-transparent lg:to-[#111]"></div>
                     <div class="absolute top-4 left-4 card-actions-3d opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                         <button onclick="event.stopPropagation(); editarCarro('${index}')" class="bg-black/60 hover:bg-white hover:text-black text-white p-2 rounded backdrop-blur-md transition-all"><span class="material-symbols-outlined text-sm">edit</span></button>
                          <button onclick="event.stopPropagation(); removerCarro('${car._id||car.id}')" class="bg-black/60 hover:bg-red-600 text-white p-2 rounded backdrop-blur-md transition-all"><span class="material-symbols-outlined text-sm">delete</span></button>
                     </div>
                     ${(car.imagens && car.imagens.length > 1) ? '<div class="absolute bottom-4 right-4 bg-black/60 px-2 py-1 rounded text-xs font-bold flex items-center gap-1 card-actions-3d"><span class="material-symbols-outlined text-sm">photo_library</span> '+car.imagens.length+'</div>' : ''}
@@ -264,24 +201,12 @@
         });
     }
 
-    // FÍSICA 3D SUAVIZADA
-    function rotateCard(e, card) {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-        const centerX = rect.width / 2; const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -4; // Rotação mais subtil
-        const rotateY = ((x - centerX) / centerX) * 4;
-        card.style.setProperty('--mx', `${x}px`); card.style.setProperty('--my', `${y}px`);
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    }
-    function resetCard(card) { card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`; }
+    function rotateCard(e,card){const r=card.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,cx=r.width/2,cy=r.height/2,rx=((y-cy)/cy)*-4,ry=((x-cx)/cx)*4;card.style.setProperty('--mx',`${x}px`);card.style.setProperty('--my',`${y}px`);card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;}
+    function resetCard(card){card.style.transform=`perspective(1000px) rotateX(0) rotateY(0)`;}
 
-    // --- NOVO MODAL DE VER CARRO (CARROSSEL) ---
     function abrirModalVerCarro(index) {
         const car = meusCarrosGlobal[index];
         if(!car) return;
-
-        // Preencher dados
         document.getElementById('vc-marca').innerText = car.marca;
         document.getElementById('vc-ano').innerText = `• ${car.ano}`;
         document.getElementById('vc-modelo').innerText = car.modelo;
@@ -299,109 +224,85 @@
         const modsContainer = document.getElementById('vc-mods');
         modsContainer.innerHTML = car.mods.map(m => `<span class="bg-[#222] text-gray-300 border border-[#333] px-3 py-1 rounded text-xs font-mono">${m.trim()}</span>`).join('') || '<span class="text-gray-500 text-xs">Stock</span>';
 
-        // Configurar Carrossel
-        // Verifica se tem array de imagens, senão usa a única imagemUrl
         carroAtualImagens = (car.imagens && car.imagens.length > 0) ? car.imagens : [car.imagemUrl];
         imagemIndex = 0;
         atualizarCarrossel();
-
         document.getElementById('modal-ver-carro').classList.remove('hidden');
     }
-
-    function fecharModalVerCarro() {
-        document.getElementById('modal-ver-carro').classList.add('hidden');
-    }
-
+    function fecharModalVerCarro() { document.getElementById('modal-ver-carro').classList.add('hidden'); }
     function atualizarCarrossel() {
-        const mainImg = document.getElementById('carousel-main-img');
-        const thumbsContainer = document.getElementById('carousel-thumbnails');
-        
-        // Efeito de fade na imagem principal
-        mainImg.style.opacity = 0;
-        setTimeout(() => {
-            mainImg.src = carroAtualImagens[imagemIndex];
-            mainImg.style.opacity = 1;
-        }, 150);
-
-        // Gerar miniaturas
-        thumbsContainer.innerHTML = '';
-        carroAtualImagens.forEach((img, idx) => {
-            thumbsContainer.innerHTML += `
-                <img src="${img}" onclick="selecionarImagem(${idx})" class="h-full aspect-video object-cover rounded cursor-pointer border-2 carousel-thumb ${idx === imagemIndex ? 'active' : 'border-transparent'}">
-            `;
-        });
+        const main = document.getElementById('carousel-main-img');
+        const thumbs = document.getElementById('carousel-thumbnails');
+        main.style.opacity = 0;
+        setTimeout(() => { main.src = carroAtualImagens[imagemIndex]; main.style.opacity = 1; }, 150);
+        thumbs.innerHTML = '';
+        carroAtualImagens.forEach((img, idx) => { thumbs.innerHTML += `<img src="${img}" onclick="selecionarImagem(${idx})" class="h-full aspect-video object-cover rounded cursor-pointer border-2 carousel-thumb ${idx===imagemIndex?'active':'border-transparent'}">`; });
     }
+    function mudarImagem(d) { imagemIndex+=d; if(imagemIndex<0)imagemIndex=carroAtualImagens.length-1; if(imagemIndex>=carroAtualImagens.length)imagemIndex=0; atualizarCarrossel(); }
+    function selecionarImagem(i) { imagemIndex = i; atualizarCarrossel(); }
 
-    function mudarImagem(direcao) {
-        imagemIndex += direcao;
-        if (imagemIndex < 0) imagemIndex = carroAtualImagens.length - 1;
-        if (imagemIndex >= carroAtualImagens.length) imagemIndex = 0;
-        atualizarCarrossel();
-    }
-
-    function selecionarImagem(idx) {
-        imagemIndex = idx;
-        atualizarCarrossel();
-    }
-
-
-    // --- FUNÇÕES DE MODAL E UPLOAD (ATUALIZADO PARA MÚLTIPLOS) ---
-    function abrirModalPerfil(){document.getElementById('edit-nome').value=USUARIO_ATUAL.nome;document.getElementById('edit-bio').value=USUARIO_ATUAL.bio;document.getElementById('modal-perfil').classList.remove('hidden');}
-    async function salvarPerfil(){const f=new FormData();f.append('emailOriginal',USUARIO_ATUAL.email);f.append('nome',document.getElementById('edit-nome').value);f.append('bio',document.getElementById('edit-bio').value);if(document.getElementById('edit-avatar').files[0])f.append('avatar',document.getElementById('edit-avatar').files[0]);if(document.getElementById('edit-capa').files[0])f.append('capa',document.getElementById('edit-capa').files[0]);try{const r=await fetch(`${URL_SERVIDOR}/perfil/atualizar`,{method:'POST',body:f});if(r.ok){const u=await r.json();localStorage.setItem('usuario_logado',JSON.stringify(u));window.location.reload();}else showToast('Erro','error');}catch(e){showToast('Erro','error');}}
-    function abrirModalCarro(){document.getElementById('modal-carro').classList.remove('hidden');}
-    
-    // Preview de Múltiplas Imagens
-    function previewCarro(e){
-        const files = e.target.files;
-        const container = document.getElementById('preview-container');
-        container.innerHTML = '';
-        if(files.length > 0){
-            container.classList.remove('hidden');
-            Array.from(files).slice(0, 12).forEach(file => { // Limita a 12 no preview
-                const r = new FileReader();
-                r.onload = ev => {
-                    container.innerHTML += `<img src="${ev.target.result}" class="w-full h-24 object-cover rounded border border-[#333]">`;
-                };
-                r.readAsDataURL(file);
+    function abrirModalCarro(carro = null) {
+        // Limpar ou Preencher para Edição
+        if (carro) {
+            document.getElementById('modal-carro-titulo').innerText = "Editar Máquina";
+            document.getElementById('car-id').value = carro._id || carro.id;
+            ['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(id => {
+                let key = id;
+                if(id==='desc') key='descricao'; else if(id==='zero') key='zero_cem'; else if(id==='top') key='top_speed'; else if(id==='hp') key='potencia';
+                // Para specs
+                if(['hp','torque','zero','top','motor','cambio','tracao','peso','cor','ano'].includes(id)) {
+                    document.getElementById(`car-${id}`).value = carro.specs[key] || '';
+                } else if (id === 'mods') {
+                    document.getElementById(`car-${id}`).value = carro.mods.join(', ');
+                } else {
+                    document.getElementById(`car-${id}`).value = carro[key] || '';
+                }
             });
         } else {
-            container.classList.add('hidden');
+            document.getElementById('modal-carro-titulo').innerText = "Nova Máquina";
+            document.getElementById('car-id').value = "";
+            document.querySelectorAll('#modal-carro input, #modal-carro textarea').forEach(i => i.value = '');
+            document.getElementById('preview-container').innerHTML = '';
+            document.getElementById('preview-container').classList.add('hidden');
         }
+        document.getElementById('modal-carro').classList.remove('hidden');
     }
 
-    // Salvar com Múltiplas Imagens
+    function editarCarro(index) {
+        const car = meusCarrosGlobal[index];
+        if(car) abrirModalCarro(car);
+    }
+
+    function previewCarro(e){const f=e.target.files;const c=document.getElementById('preview-container');c.innerHTML='';if(f.length>0){c.classList.remove('hidden');Array.from(f).slice(0,12).forEach(file=>{const r=new FileReader();r.onload=ev=>{c.innerHTML+=`<img src="${ev.target.result}" class="w-full h-24 object-cover rounded border border-[#333]">`;};r.readAsDataURL(file);});}else{c.classList.add('hidden');}}
+
     async function salvarCarro(){
         const btn = document.getElementById('btn-salvar-carro');
+        const id = document.getElementById('car-id').value;
         setBtnLoading(btn.id, true);
         
         const f=new FormData();
         f.append('dono',USUARIO_ATUAL.nome);
         f.append('emailDono',USUARIO_ATUAL.email);
-        ['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(id=>f.append(id==='desc'?'descricao':(id==='zero'?'zero_cem':(id==='top'?'top_speed':(id==='hp'?'potencia':id))),document.getElementById(`car-${id}`).value));
-        
-        const imagesInput = document.getElementById('car-imagem');
-        if(imagesInput.files.length > 0){
-            // Envia múltiplos ficheiros com o nome 'imagens' (o backend deve esperar um array)
-            Array.from(imagesInput.files).slice(0, 12).forEach(file => {
-                f.append('imagens', file); 
-            });
-        }
+        ['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(k=>f.append(k==='desc'?'descricao':(k==='zero'?'zero_cem':(k==='top'?'top_speed':(k==='hp'?'potencia':k))),document.getElementById(`car-${k}`).value));
+        const imgs = document.getElementById('car-imagem');
+        if(imgs.files.length>0) Array.from(imgs.files).slice(0,12).forEach(file=>f.append('imagens',file));
 
         try {
-            await fetch(`${URL_SERVIDOR}/carros`,{method:'POST',body:f});
+            const url = id ? `${URL_SERVIDOR}/carros/${id}` : `${URL_SERVIDOR}/carros`;
+            const method = id ? 'PUT' : 'POST';
+            await fetch(url,{method:method,body:f});
             document.getElementById('modal-carro').classList.add('hidden');
-            // Limpar form
-            document.getElementById('preview-container').innerHTML = '';
-            document.getElementById('preview-container').classList.add('hidden');
-            imagesInput.value = '';
             carregarPerfil();
-        } catch(e) {
-            showToast("Erro ao salvar", 'error');
-        }
+            showToast(id ? "Máquina atualizada!" : "Máquina adicionada!", "success");
+        } catch(e) { showToast("Erro ao salvar", 'error'); }
         setBtnLoading(btn.id, false);
     }
 
     async function removerCarro(id){if(confirm('Apagar esta máquina?')){await fetch(`${URL_SERVIDOR}/carros/${id}`,{method:'DELETE'});carregarPerfil();}}
+    
+    // (RESTO IGUAL)
+    function abrirModalPerfil(){document.getElementById('edit-nome').value=USUARIO_ATUAL.nome;document.getElementById('edit-bio').value=USUARIO_ATUAL.bio;document.getElementById('modal-perfil').classList.remove('hidden');}
+    async function salvarPerfil(){const f=new FormData();f.append('emailOriginal',USUARIO_ATUAL.email);f.append('nome',document.getElementById('edit-nome').value);f.append('bio',document.getElementById('edit-bio').value);if(document.getElementById('edit-avatar').files[0])f.append('avatar',document.getElementById('edit-avatar').files[0]);if(document.getElementById('edit-capa').files[0])f.append('capa',document.getElementById('edit-capa').files[0]);try{const r=await fetch(`${URL_SERVIDOR}/perfil/atualizar`,{method:'POST',body:f});if(r.ok){const u=await r.json();localStorage.setItem('usuario_logado',JSON.stringify(u));window.location.reload();}else showToast('Erro','error');}catch(e){showToast('Erro','error');}}
     function trocarAba(a){const tc=document.getElementById('tab-carros');const tp=document.getElementById('tab-posts');const bc=document.getElementById('btn-tab-carros');const bp=document.getElementById('btn-tab-posts');if(a==='carros'){tc.classList.remove('hidden');tp.classList.add('hidden');bc.className="px-6 py-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-xs tracking-widest bg-white/5 whitespace-nowrap";bp.className="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-xs tracking-widest whitespace-nowrap";}else{tc.classList.add('hidden');tp.classList.remove('hidden');bp.className="px-6 py-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-xs tracking-widest bg-white/5 whitespace-nowrap";bc.className="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-xs tracking-widest whitespace-nowrap";}}
     async function carregarPostsFotos(){const r=await fetch(`${URL_SERVIDOR}/posts`);const p=await r.json();const g=document.getElementById('tab-posts');g.innerHTML='';p.filter(x=>x.nome===USUARIO_ATUAL.nome).forEach(x=>{g.innerHTML+=`<div onclick="verPost('${x.midiaUrl || x.imagemUrl}')" class="aspect-square bg-cover bg-center rounded border border-[#222] hover:scale-105 transition-transform cursor-pointer shadow-lg" style="background-image: url('${x.midiaUrl||x.imagemUrl}')"></div>`;});}
     function verPost(url) { document.getElementById('m-img').src = url; document.getElementById('modal').classList.remove('hidden'); }
