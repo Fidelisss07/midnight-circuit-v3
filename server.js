@@ -20,7 +20,7 @@ mongoose.connect(MONGO_URI)
 if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+    filename: (req, file, cb) => cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
 });
 const upload = multer({ storage, limits: { fileSize: 100 * 1024 * 1024 } });
 
@@ -29,7 +29,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use(express.static(__dirname));
 
-// SCHEMAS
+// --- SCHEMAS ---
 const UserSchema = new mongoose.Schema({
     nome: String, email: { type: String, unique: true }, senha: String,
     avatar: String, capa: String, bio: String, xp: { type: Number, default: 0 },
@@ -45,9 +45,13 @@ const PostSchema = new mongoose.Schema({
 });
 const Post = mongoose.model('Post', PostSchema);
 
+// SCHEMA CARRO ATUALIZADO (Suporta multiplas imagens)
 const CarroSchema = new mongoose.Schema({
     dono: String, emailDono: String, marca: String, modelo: String, apelido: String,
-    imagemUrl: String, descricao: String, specs: Object, mods: [String]
+    imagemUrl: String, // Mantido para compatibilidade antiga
+    imagens: [String], // NOVO: Array de imagens
+    descricao: String, specs: Object, mods: [String],
+    timestamp: { type: Date, default: Date.now }
 });
 const Carro = mongoose.model('Carro', CarroSchema);
 
@@ -93,7 +97,7 @@ const NewsSchema = new mongoose.Schema({
 });
 const News = mongoose.model('News', NewsSchema);
 
-// HELPERS
+// --- HELPERS ---
 async function ganharXP(email, qtd) {
     if(!email) return;
     const user = await User.findOne({ email });
@@ -110,7 +114,9 @@ async function notificar(tipo, deObj, paraEmail, texto, img = null) {
     if (!recente) await Notificacao.create({ tipo, de: deObj.nome, avatar: deObj.avatar, para: paraEmail, texto, imgPreview: img });
 }
 
-// --- ROTAS DE UTILIZADOR ---
+// --- ROTAS ---
+
+// AUTH & USER
 app.post('/registro', async (req, res) => {
     try {
         if (await User.findOne({ email: req.body.email })) return res.status(400).send('Email em uso');
@@ -130,14 +136,11 @@ app.post('/login', async (req, res) => {
 
 app.get('/perfil/dados', async (req, res) => res.json(await User.findOne({ email: req.query.email }) || {}));
 
-// ROTA DE ATUALIZAR PERFIL (CORRIGIDA)
 app.post('/perfil/atualizar', upload.fields([{name:'avatar'},{name:'capa'}]), async (req, res) => {
     try {
         const upd = { nome: req.body.nome, bio: req.body.bio };
         if(req.files['avatar']) upd.avatar = `/uploads/${req.files['avatar'][0].filename}`;
         if(req.files['capa']) upd.capa = `/uploads/${req.files['capa'][0].filename}`;
-        
-        // Retorna o novo documento atualizado (new: true)
         const u = await User.findOneAndUpdate({ email: req.body.emailOriginal }, upd, { new: true });
         res.json(u);
     } catch(e) { res.status(500).send("Erro"); }
@@ -149,22 +152,44 @@ app.post('/perfil/senha', async (req, res) => {
         u.senha = await bcrypt.hash(req.body.senhaNova, 10); await u.save(); res.send('Ok');
     } else res.status(401).send('Senha errada');
 });
-
 app.post('/perfil/email', async (req, res) => {
     if(await User.findOne({ email: req.body.novoEmail })) return res.status(400).send('Em uso');
     const u = await User.findOneAndUpdate({ email: req.body.emailAtual }, { email: req.body.novoEmail }, { new: true });
     res.json(u);
 });
+app.delete('/perfil/deletar', async (req, res) => { try { await User.findOneAndDelete({ email: req.body.email }); res.send('Ok'); } catch(e) { res.status(500).send('Erro'); } });
 
-// ROTA APAGAR CONTA (CORRIGIDA)
-app.delete('/perfil/deletar', async (req, res) => { 
+// CARROS (CORRIGIDO PARA MULTIPLAS IMAGENS)
+app.get('/carros', async (req, res) => res.json(await Carro.find()));
+
+app.post('/carros', upload.array('imagens', 12), async (req, res) => {
     try {
-        await User.findOneAndDelete({ email: req.body.email });
-        res.send('Ok');
-    } catch(e) { res.status(500).send('Erro'); }
+        // Processar múltiplas imagens
+        const imagensUrls = req.files ? req.files.map(f => `/uploads/${f.filename}`) : [];
+        const imagemPrincipal = imagensUrls.length > 0 ? imagensUrls[0] : 'https://via.placeholder.com/600';
+
+        await Carro.create({
+            ...req.body,
+            imagemUrl: imagemPrincipal, // Mantém compatibilidade
+            imagens: imagensUrls,       // Novo array
+            mods: req.body.mods ? req.body.mods.split(',') : [],
+            specs: {
+                hp: req.body.potencia, torque: req.body.torque, zero_cem: req.body.zero_cem,
+                top_speed: req.body.top_speed, cor: req.body.cor, ano: req.body.ano,
+                motor: req.body.motor, cambio: req.body.cambio, tracao: req.body.tracao, peso: req.body.peso
+            }
+        });
+        ganharXP(req.body.emailDono, 100);
+        res.status(201).send('Ok');
+    } catch(e) {
+        console.error(e);
+        res.status(500).send("Erro ao salvar carro");
+    }
 });
 
-// --- FEED ---
+app.delete('/carros/:id', async (req, res) => { if(mongoose.isValidObjectId(req.params.id)) await Carro.findByIdAndDelete(req.params.id); res.send('Ok'); });
+
+// POSTS, SPRINTS, COMUNIDADES (Resto igual)
 app.get('/posts', async (req, res) => res.json(await Post.find().sort({ timestamp: -1 }).limit(50)));
 app.post('/posts', upload.single('midia'), async (req, res) => {
     const url = req.file ? `/uploads/${req.file.filename}` : null;
@@ -173,19 +198,12 @@ app.post('/posts', upload.single('midia'), async (req, res) => {
     ganharXP(req.body.emailAutor, 50); res.status(201).send('Ok');
 });
 app.post('/posts/like/:id', async (req, res) => {
-    try {
-        let p; if (mongoose.isValidObjectId(req.params.id)) p = await Post.findById(req.params.id);
-        if (p) { p.likes++; await p.save(); if(p.emailAutor) notificar('like', req.body, p.emailAutor, 'curtiu.', p.midiaUrl); res.send('Ok'); }
-    } catch (e) { res.status(500).send('Erro'); }
+    try { let p; if (mongoose.isValidObjectId(req.params.id)) p = await Post.findById(req.params.id); if (p) { p.likes++; await p.save(); if(p.emailAutor) notificar('like', req.body, p.emailAutor, 'curtiu.', p.midiaUrl); res.send('Ok'); } } catch (e) { res.status(500).send('Erro'); }
 });
 app.post('/posts/comentar/:id', async (req, res) => {
-    try {
-        let p; if (mongoose.isValidObjectId(req.params.id)) p = await Post.findById(req.params.id);
-        if (p) { p.comentarios.push(req.body); await p.save(); if(p.emailAutor) notificar('comentario', req.body, p.emailAutor, 'comentou.', p.midiaUrl); res.json(p.comentarios); }
-    } catch(e) { res.status(500).send('Erro'); }
+    try { let p; if (mongoose.isValidObjectId(req.params.id)) p = await Post.findById(req.params.id); if (p) { p.comentarios.push(req.body); await p.save(); if(p.emailAutor) notificar('comentario', req.body, p.emailAutor, 'comentou.', p.midiaUrl); res.json(p.comentarios); } } catch(e) { res.status(500).send('Erro'); }
 });
 
-// --- STORIES ---
 app.get('/stories', async (req, res) => res.json(await Story.find({ timestamp: { $gt: Date.now() - 86400000 } })));
 app.post('/stories', upload.single('midia'), async (req, res) => {
     const v = req.file.mimetype.startsWith('video');
@@ -193,38 +211,14 @@ app.post('/stories', upload.single('midia'), async (req, res) => {
     res.status(201).send('Ok');
 });
 
-// --- SPRINTS (CORRIGIDO PARA MONGODB) ---
 app.get('/sprints', async (req, res) => res.json(await Sprint.find().sort({ timestamp: -1 })));
 app.post('/sprints', upload.single('video'), async (req, res) => {
     if(!req.file) return res.status(400).send('X');
     await Sprint.create({ ...req.body, videoUrl: `/uploads/${req.file.filename}` });
     ganharXP(req.body.emailAutor, 40); res.status(201).send('Ok');
 });
-app.post('/sprints/like/:id', async (req, res) => {
-    try {
-        if(mongoose.isValidObjectId(req.params.id)) {
-            const s = await Sprint.findById(req.params.id);
-            if(s) { s.likes++; await s.save(); res.send('Ok'); }
-        }
-    } catch(e) {}
-});
-app.post('/sprints/comentar/:id', async (req, res) => {
-    try {
-        if(mongoose.isValidObjectId(req.params.id)){
-            const s = await Sprint.findById(req.params.id);
-            if(s){ s.comentarios.push(req.body); await s.save(); res.json(s.comentarios); }
-        }
-    } catch(e) {}
-});
-
-// --- CARROS, COMUNIDADES, OUTROS (MANTIDOS) ---
-app.get('/carros', async (req, res) => res.json(await Carro.find()));
-app.post('/carros', upload.single('imagem'), async (req, res) => {
-    const u = req.file ? `/uploads/${req.file.filename}` : 'https://via.placeholder.com/600';
-    await Carro.create({ ...req.body, imagemUrl: u, mods: req.body.mods?req.body.mods.split(','):[], specs: { hp: req.body.potencia, torque: req.body.torque, zero_cem: req.body.zero_cem, top_speed: req.body.top_speed, cor: req.body.cor, ano: req.body.ano, motor: req.body.motor, cambio: req.body.cambio, tracao: req.body.tracao, peso: req.body.peso } });
-    ganharXP(req.body.emailDono, 100); res.status(201).send('Ok');
-});
-app.delete('/carros/:id', async (req, res) => { if(mongoose.isValidObjectId(req.params.id)) await Carro.findByIdAndDelete(req.params.id); res.send('Ok'); });
+app.post('/sprints/like/:id', async (req, res) => { try { if(mongoose.isValidObjectId(req.params.id)) { const s = await Sprint.findById(req.params.id); if(s) { s.likes++; await s.save(); res.send('Ok'); } } } catch(e) {} });
+app.post('/sprints/comentar/:id', async (req, res) => { try { if(mongoose.isValidObjectId(req.params.id)){ const s = await Sprint.findById(req.params.id); if(s){ s.comentarios.push(req.body); await s.save(); res.json(s.comentarios); } } } catch(e) {} });
 
 app.get('/comunidades', async (req, res) => res.json(await Comunidade.find()));
 app.post('/comunidades', upload.single('imagem'), async (req, res) => { 
@@ -232,17 +226,10 @@ app.post('/comunidades', upload.single('imagem'), async (req, res) => {
     await Comunidade.create({ ...req.body, imagem: u, membros: [req.body.donoEmail] });
     ganharXP(req.body.donoEmail, 150); res.status(201).send('Ok');
 });
-app.post('/comunidades/entrar', async (req, res) => {
-    if(mongoose.isValidObjectId(req.body.id)){ const c=await Comunidade.findById(req.body.id); if(c&&!c.membros.includes(req.body.email)){c.membros.push(req.body.email); await c.save(); ganharXP(req.body.email, 20); res.send('Ok');} }
-});
-app.post('/comunidades/sair', async (req, res) => {
-    if(mongoose.isValidObjectId(req.body.id)){ const c=await Comunidade.findById(req.body.id); if(c){c.membros=c.membros.filter(m=>m!==req.body.email); await c.save(); res.send('Ok');} }
-});
+app.post('/comunidades/entrar', async (req, res) => { if(mongoose.isValidObjectId(req.body.id)){ const c=await Comunidade.findById(req.body.id); if(c&&!c.membros.includes(req.body.email)){c.membros.push(req.body.email); await c.save(); ganharXP(req.body.email, 20); res.send('Ok');} } });
+app.post('/comunidades/sair', async (req, res) => { if(mongoose.isValidObjectId(req.body.id)){ const c=await Comunidade.findById(req.body.id); if(c){c.membros=c.membros.filter(m=>m!==req.body.email); await c.save(); res.send('Ok');} } });
 app.get('/topicos/:id', async (req, res) => res.json(await Forum.find({ comunidadeId: req.params.id })));
-app.post('/topicos', upload.single('imagem'), async (req, res) => {
-    const u = req.file ? `/uploads/${req.file.filename}` : null;
-    await Forum.create({ ...req.body, imagemUrl: u }); ganharXP(req.body.emailAutor, 30); res.status(201).send('Ok');
-});
+app.post('/topicos', upload.single('imagem'), async (req, res) => { const u = req.file ? `/uploads/${req.file.filename}` : null; await Forum.create({ ...req.body, imagemUrl: u }); ganharXP(req.body.emailAutor, 30); res.status(201).send('Ok'); });
 app.post('/topicos/like/:id', async (req, res) => { if(mongoose.isValidObjectId(req.params.id)){ const t=await Forum.findById(req.params.id); if(t){t.likes++; await t.save(); res.send('Ok');}} });
 app.delete('/topicos/:id', (req, res) => { if(mongoose.isValidObjectId(req.params.id)) Forum.findByIdAndDelete(req.params.id); res.send('Ok'); });
 
@@ -262,4 +249,4 @@ app.post('/mensagens', async (req, res) => { await Chat.create(req.body); res.st
 app.get('/ranking', async (req, res) => res.json(await User.find({}, 'nome avatar nivel xp email').sort({ xp: -1 }).limit(50)));
 app.get('/news', (req, res) => { try{res.json(JSON.parse(fs.readFileSync('news.json')))}catch{res.json([])} });
 
-app.listen(PORT, () => console.log(`🔥 Midnight Server (Fixed): http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🔥 Server Online na porta ${PORT}`));
