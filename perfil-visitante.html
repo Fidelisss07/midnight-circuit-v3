@@ -16,7 +16,10 @@
 <div class="relative flex h-screen w-full flex-col md:flex-row">
     
     <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20">
-        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html"><span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span><span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span></a>
+        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
+            <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
+            <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
+        </a>
         <nav class="flex flex-col w-full px-4 gap-2">
             <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">home</span> Feed</a>
             <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">search</span> Explorar</a>
@@ -28,6 +31,7 @@
     </aside>
 
     <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-14 md:pt-0">
+        
         <div class="h-64 w-full bg-cover bg-center relative" id="visit-capa">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
             <a href="javascript:history.back()" class="absolute top-4 left-4 bg-black/50 hover:bg-white text-white hover:text-black px-4 py-2 rounded-full backdrop-blur-sm flex items-center gap-2 transition-all z-10 text-xs font-bold uppercase">
@@ -36,6 +40,7 @@
         </div>
 
         <div class="max-w-6xl mx-auto px-4 md:px-10 pb-20">
+            
             <div class="relative -top-16 flex flex-col md:flex-row items-end md:items-start gap-6">
                 <img id="visit-avatar" class="w-32 h-32 md:w-40 md:h-40 rounded border-4 border-[#0a0a0a] object-cover shadow-2xl bg-[#222]">
                 
@@ -58,9 +63,23 @@
                     </div>
 
                     <div class="flex flex-wrap justify-center md:justify-start items-center gap-6 mt-6 p-4 bg-[#111] rounded border border-[#222] shadow-lg">
-                        <div class="text-center min-w-[60px]"><span id="visit-seguidores" class="block text-lg font-bold text-white font-mono">0</span><span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Seguidores</span></div>
-                        <div class="text-center min-w-[60px]"><span id="visit-seguindo" class="block text-lg font-bold text-white font-mono">0</span><span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">A Seguir</span></div>
-                        <div class="flex-1 min-w-[150px] border-l border-[#333] pl-6 hidden sm:block"><div class="flex justify-between text-xs font-bold mb-1"><span class="text-primary font-display" id="visit-nivel">Lvl 1</span><span class="text-gray-500">XP</span></div><div class="w-full h-2 bg-[#222] rounded overflow-hidden"><div id="visit-xp-bar" class="h-full bg-primary w-0 transition-all duration-1000 box-shadow-[0_0_10px_rgba(var(--primary),0.5)]"></div></div></div>
+                        <div class="text-center min-w-[60px]">
+                            <span id="visit-seguidores" class="block text-lg font-bold text-white font-mono">0</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Seguidores</span>
+                        </div>
+                        <div class="text-center min-w-[60px]">
+                            <span id="visit-seguindo" class="block text-lg font-bold text-white font-mono">0</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">A Seguir</span>
+                        </div>
+                        <div class="flex-1 min-w-[150px] border-l border-[#333] pl-6 hidden sm:block">
+                            <div class="flex justify-between text-xs font-bold mb-1">
+                                <span class="text-primary font-display" id="visit-nivel">Lvl 1</span>
+                                <span class="text-gray-500">XP</span>
+                            </div>
+                            <div class="w-full h-2 bg-[#222] rounded overflow-hidden">
+                                <div id="visit-xp-bar" class="h-full bg-primary w-0 transition-all duration-1000 box-shadow-[0_0_10px_rgba(var(--primary),0.5)]"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,8 +89,11 @@
                 <button onclick="trocarAba('posts')" id="btn-tab-posts" class="px-6 py-2 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-sm tracking-wide"><span class="material-symbols-outlined">grid_view</span> Posts</button>
             </div>
 
-            <div id="tab-carros" class="space-y-8 animate-fade-in"><div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div></div>
+            <div id="tab-carros" class="space-y-8 animate-fade-in">
+                <div class="text-center py-10 opacity-50"><p>A carregar garagem...</p></div>
+            </div>
             <div id="tab-posts" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-20"></div>
+
         </div>
     </main>
 
@@ -93,6 +115,7 @@
         <a href="sprints.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">bolt</span></a>
         <a href="perfil.html" class="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"><span class="material-symbols-outlined text-2xl">person</span></a>
     </nav>
+
 </div>
 
 <div id="modal" class="hidden fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4">
@@ -106,39 +129,60 @@
 
 <script>
     const USUARIO_LOGADO = verificarLogin();
+    
+    // 1. PEGAR EMAIL DA URL
     const params = new URLSearchParams(window.location.search);
     const EMAIL_ALVO = params.get('email');
-    if (!EMAIL_ALVO || EMAIL_ALVO === 'undefined' || EMAIL_ALVO === USUARIO_LOGADO.email) { window.location.href = 'perfil.html'; }
+
+    // Se não houver email ou for eu, vai para o meu perfil
+    if (!EMAIL_ALVO || EMAIL_ALVO === 'undefined' || EMAIL_ALVO === USUARIO_LOGADO.email) {
+        window.location.href = 'perfil.html';
+    }
 
     function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';i.style.transform='rotate(0deg)';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';i.style.transform='rotate(90deg)';}}
 
     let usuarioAlvo = {};
 
+    // 2. CARREGAR DADOS
     async function init() {
         try {
-            const r = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${EMAIL_ALVO}`);
-            const u = await r.json();
-            if (!u || !u.email) { alert("Utilizador não encontrado"); window.location.href = 'feed.html'; return; }
+            const res = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${EMAIL_ALVO}`);
+            const u = await res.json();
+            
+            if (!u || !u.email) {
+                alert("Utilizador não encontrado");
+                window.location.href = 'feed.html';
+                return;
+            }
             usuarioAlvo = u;
+
+            // Preencher UI
             document.getElementById('visit-nome').innerText = u.nome || "Piloto";
             document.getElementById('visit-bio').innerText = u.bio || "Sem bio.";
             document.getElementById('visit-avatar').src = u.avatar || "https://i.pravatar.cc/150";
             document.getElementById('visit-capa').style.backgroundImage = `url('${u.capa}')`;
             document.getElementById('visit-nivel').innerText = `Lvl ${u.nivel || 1}`;
-            setTimeout(() => { document.getElementById('visit-xp-bar').style.width = `${((u.xp || 0) % 1000) / 10}%`; }, 300);
+            
+            const progresso = ((u.xp || 0) % 1000) / 10;
+            setTimeout(() => { document.getElementById('visit-xp-bar').style.width = `${progresso}%`; }, 300);
+
             document.getElementById('visit-seguidores').innerText = u.seguidores ? u.seguidores.length : 0;
             document.getElementById('visit-seguindo').innerText = u.seguindo ? u.seguindo.length : 0;
+
             verificarSeSigo();
             carregarCarros(u.nome);
             carregarPosts(u.nome);
+
         } catch(e){ console.error(e); }
     }
 
+    // 3. SEGUIR / DEIXAR DE SEGUIR
     async function verificarSeSigo() {
         try {
             const r = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO_LOGADO.email}`);
             const eu = await r.json();
             const btn = document.getElementById('btn-seguir');
+            
             if (eu.seguindo && eu.seguindo.includes(EMAIL_ALVO)) {
                 btn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> A Seguir';
                 btn.className = "px-8 py-2 bg-[#222] text-gray-400 rounded font-bold flex items-center gap-2 uppercase tracking-wide border border-[#333]";
@@ -150,34 +194,99 @@
     }
 
     async function toggleSeguir(){
-        const btn = document.getElementById('btn-seguir'); btn.disabled = true;
-        try { await fetch(`${URL_SERVIDOR}/seguir`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({eu:USUARIO_LOGADO.email, ele:EMAIL_ALVO}) }); window.location.reload(); } 
-        catch(e) { btn.disabled = false; showToast("Erro ao seguir", 'error'); }
+        const btn = document.getElementById('btn-seguir');
+        btn.disabled = true;
+        try {
+            await fetch(`${URL_SERVIDOR}/seguir`, { 
+                method:'POST', 
+                headers:{'Content-Type':'application/json'}, 
+                body:JSON.stringify({eu:USUARIO_LOGADO.email, ele:EMAIL_ALVO}) 
+            });
+            window.location.reload();
+        } catch(e) { 
+            btn.disabled = false; 
+            showToast("Erro ao seguir", 'error');
+        }
     }
 
     function iniciarChat() { window.location.href = 'chat.html'; }
 
+    // 4. CARROS & POSTS
     async function carregarCarros(donoNome) {
-        const r = await fetch(`${URL_SERVIDOR}/carros`); const c = await r.json();
-        const lista = document.getElementById('tab-carros'); lista.innerHTML = '';
+        const r = await fetch(`${URL_SERVIDOR}/carros`); 
+        const c = await r.json();
+        const lista = document.getElementById('tab-carros');
+        lista.innerHTML = '';
+        
         const meus = c.filter(x => x.dono === donoNome);
-        if(meus.length===0) { lista.innerHTML='<div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div>'; return; }
+        
+        if(meus.length===0) {
+            lista.innerHTML='<div class="text-center py-10 opacity-50"><p>Garagem vazia.</p></div>';
+            return;
+        }
+        
         meus.reverse().forEach(car => { 
             const modsHtml = car.mods.map(m => `<span class="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider">${m.trim()}</span>`).join('');
-            lista.innerHTML+=`<div class="flex flex-col lg:flex-row bg-[#111] rounded border border-[#222] shadow-2xl transition-all animate-fade-in"><div class="lg:w-[45%] min-h-[300px] bg-cover bg-center relative" style="background-image:url('${car.imagemUrl}');"><div class="absolute inset-0 bg-gradient-to-t from-[#111] lg:bg-gradient-to-r lg:from-transparent lg:to-[#111]"></div></div><div class="lg:w-[55%] p-6 lg:p-8 flex flex-col justify-center relative"><div class="mb-6"><div class="flex items-baseline gap-2"><h2 class="text-primary font-bold text-sm uppercase tracking-widest font-display">${car.marca}</h2><span class="text-gray-600 text-xs font-mono">• ${car.ano}</span></div><h1 class="text-3xl font-bold text-white leading-tight font-display uppercase">${car.modelo}</h1><h3 class="text-xl text-gray-400 italic mb-2">"${car.apelido||'Stock'}"</h3><p class="text-sm text-gray-500 line-clamp-2 border-l-2 border-primary/50 pl-3 font-mono">${car.descricao}</p></div><div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 border-y border-[#222] py-4"><div><p class="text-[10px] text-gray-500 uppercase tracking-widest">Motor</p><p class="text-sm font-bold text-white truncate font-mono">${car.specs.motor||'N/A'}</p></div><div><p class="text-[10px] text-gray-500 uppercase tracking-widest">Potência</p><p class="text-sm font-bold text-white font-mono">${car.specs.hp} HP</p></div><div><p class="text-[10px] text-gray-500 uppercase tracking-widest">0-100</p><p class="text-sm font-bold text-white font-mono">${car.specs.zero_cem}</p></div><div><p class="text-[10px] text-gray-500 uppercase tracking-widest">Top</p><p class="text-sm font-bold text-white font-mono">${car.specs.top_speed}</p></div></div><div><p class="text-[10px] text-gray-500 uppercase mb-2 tracking-widest">Modificações</p><div class="flex flex-wrap gap-2">${modsHtml||'<span class="text-xs text-gray-600 font-mono">Stock</span>'}</div></div></div></div>`; 
+            lista.innerHTML+=`
+            <div class="flex flex-col lg:flex-row bg-[#111] rounded border border-[#222] shadow-2xl transition-all animate-fade-in">
+                <div class="lg:w-[45%] min-h-[300px] bg-cover bg-center relative" style="background-image: url('${car.imagemUrl}');">
+                     <div class="absolute inset-0 bg-gradient-to-t from-[#111] lg:bg-gradient-to-r lg:from-transparent lg:to-[#111]"></div>
+                </div>
+                <div class="lg:w-[55%] p-6 lg:p-8 flex flex-col justify-center relative">
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2"><h2 class="text-primary font-bold text-sm uppercase tracking-widest font-display">${car.marca}</h2><span class="text-gray-600 text-xs font-mono">• ${car.ano}</span></div>
+                        <h1 class="text-3xl font-bold text-white leading-tight font-display uppercase">${car.modelo}</h1>
+                        <h3 class="text-xl text-gray-400 italic mb-2">"${car.apelido || 'Stock'}"</h3>
+                        <p class="text-sm text-gray-500 line-clamp-2 border-l-2 border-primary/50 pl-3 font-mono">${car.descricao}</p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 border-y border-[#222] py-4">
+                        <div><p class="text-[10px] text-gray-500 uppercase tracking-widest">Motor</p><p class="text-sm font-bold text-white truncate font-mono">${car.specs.motor||'N/A'}</p></div>
+                        <div><p class="text-[10px] text-gray-500 uppercase tracking-widest">Potência</p><p class="text-sm font-bold text-white font-mono">${car.specs.hp} HP</p></div>
+                        <div><p class="text-[10px] text-gray-500 uppercase tracking-widest">0-100</p><p class="text-sm font-bold text-white font-mono">${car.specs.zero_cem}</p></div>
+                        <div><p class="text-[10px] text-gray-500 uppercase tracking-widest">Top</p><p class="text-sm font-bold text-white font-mono">${car.specs.top_speed}</p></div>
+                    </div>
+                    <div><p class="text-[10px] text-gray-500 uppercase mb-2 tracking-widest">Modificações</p><div class="flex flex-wrap gap-2">${modsHtml || '<span class="text-xs text-gray-600 font-mono">Stock</span>'}</div></div>
+                </div>
+            </div>`; 
         });
     }
 
     async function carregarPosts(donoNome) {
-        const res = await fetch(`${URL_SERVIDOR}/posts`); const posts = await res.json();
-        const grid = document.getElementById('tab-posts'); grid.innerHTML = '';
+        const res = await fetch(`${URL_SERVIDOR}/posts`); 
+        const posts = await res.json();
+        const grid = document.getElementById('tab-posts'); 
+        grid.innerHTML = '';
+        
         const meusPosts = posts.filter(p => p.nome === donoNome);
-        if(meusPosts.length === 0) { grid.innerHTML = '<p class="text-center text-gray-500 col-span-full py-10">Sem posts.</p>'; return; }
-        meusPosts.forEach(post => { grid.innerHTML += `<div onclick="verPost('${post.midiaUrl || post.imagemUrl}')" class="aspect-square bg-cover bg-center rounded border border-[#222] hover:scale-105 transition-transform cursor-pointer shadow-lg" style="background-image: url('${post.midiaUrl || post.imagemUrl}')"></div>`; });
+        
+        if(meusPosts.length === 0) {
+            grid.innerHTML = '<p class="text-center text-gray-500 col-span-full py-10">Sem posts.</p>';
+            return;
+        }
+
+        meusPosts.forEach(post => { 
+            grid.innerHTML += `<div onclick="verPost('${post.midiaUrl || post.imagemUrl}')" class="aspect-square bg-cover bg-center rounded border border-[#222] hover:scale-105 transition-transform cursor-pointer shadow-lg" style="background-image: url('${post.midiaUrl || post.imagemUrl}')"></div>`; 
+        });
     }
 
-    function verPost(url) { document.getElementById('m-img').src = url; document.getElementById('modal').classList.remove('hidden'); }
-    function trocarAba(a){const tc=document.getElementById('tab-carros');const tp=document.getElementById('tab-posts');const bc=document.getElementById('btn-tab-carros');const bp=document.getElementById('btn-tab-posts');if(a==='carros'){tc.classList.remove('hidden');tp.classList.add('hidden');bc.className="px-6 py-2 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-sm tracking-wide bg-white/5";bp.className="px-6 py-2 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-sm tracking-wide";}else{tc.classList.add('hidden');tp.classList.remove('hidden');bp.className="px-6 py-2 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-sm tracking-wide bg-white/5";bc.className="px-6 py-2 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-sm tracking-wide";}}
+    function verPost(url) {
+        document.getElementById('m-img').src = url;
+        document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function trocarAba(a){
+        const tc=document.getElementById('tab-carros'); const tp=document.getElementById('tab-posts');
+        const bc=document.getElementById('btn-tab-carros'); const bp=document.getElementById('btn-tab-posts');
+        if(a==='carros'){
+            tc.classList.remove('hidden'); tp.classList.add('hidden');
+            bc.className="px-6 py-2 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-sm tracking-wide bg-white/5";
+            bp.className="px-6 py-2 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-sm tracking-wide";
+        }else{
+            tc.classList.add('hidden'); tp.classList.remove('hidden');
+            bp.className="px-6 py-2 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-sm tracking-wide bg-white/5";
+            bc.className="px-6 py-2 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-sm tracking-wide";
+        }
+    }
 
     init();
 </script>
