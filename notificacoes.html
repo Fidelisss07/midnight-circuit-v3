@@ -11,45 +11,17 @@
     <script src="utils.js"></script>
     <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}</script>
     <style>
-        /* Estilo Específico para Notificações */
-        .notif-card {
-            background: linear-gradient(90deg, #111 0%, #0a0a0a 100%);
-            border: 1px solid #222;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .notif-card:hover {
-            transform: translateX(5px);
-            border-color: rgba(255,255,255,0.1);
-            background: #151515;
-        }
-        /* Notificação Não Lida */
-        .notif-unread {
-            border-left: 4px solid rgb(var(--primary));
-            background: linear-gradient(90deg, rgba(var(--primary), 0.05) 0%, #0a0a0a 100%);
-        }
-        .notif-unread:hover {
-            background: linear-gradient(90deg, rgba(var(--primary), 0.1) 0%, #111 100%);
-        }
-        /* Ícone Pulsante */
-        .icon-pulse { animation: pulse-soft 2s infinite; }
-        @keyframes pulse-soft { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(0.95); } }
+        .notif-card { background: linear-gradient(90deg, #111 0%, #0a0a0a 100%); border: 1px solid #222; transition: all 0.3s; }
+        .notif-card:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.1); background: #151515; }
+        .notif-unread { border-left: 4px solid rgb(var(--primary)); background: linear-gradient(90deg, rgba(var(--primary), 0.05) 0%, #0a0a0a 100%); }
     </style>
 </head>
 <body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
     
-    <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-[#0f0f0f]/95 border-b border-[#222] backdrop-blur-md">
-        <span class="material-symbols-outlined text-primary text-2xl icon-pulse">satellite_alt</span>
-        <h1 class="font-bold text-lg tracking-widest text-white italic font-display">ALERTAS</h1>
-        <div onclick="logout()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></div>
-    </div>
-
     <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20 shadow-2xl">
-        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
-            <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
-            <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
-        </a>
+        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html"><span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span><span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span></a>
         <nav class="flex flex-col w-full px-4 gap-2">
             <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">home</span> Feed</a>
             <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">search</span> Explorar</a>
@@ -68,17 +40,11 @@
         <div class="max-w-3xl mx-auto">
             
             <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h1 class="text-3xl md:text-4xl font-display font-bold text-white italic uppercase">Centro de Comando</h1>
-                    <p class="text-gray-500 text-xs font-mono uppercase tracking-widest mt-1">Registo de Atividade</p>
-                </div>
-                <button onclick="marcarLidas()" class="btn-race px-5 py-2 rounded text-xs uppercase flex items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40">
-                    <span class="material-symbols-outlined text-base">done_all</span> Limpar
-                </button>
+                <div><h1 class="text-3xl md:text-4xl font-display font-bold text-white italic uppercase">Centro de Comando</h1><p class="text-gray-500 text-xs font-mono uppercase tracking-widest mt-1">Registo de Atividade</p></div>
+                <button onclick="marcarLidas()" class="px-5 py-2 rounded text-xs uppercase flex items-center gap-2 bg-white/10 text-white font-bold hover:bg-primary hover:text-black transition-all shadow-lg"><span class="material-symbols-outlined text-base">done_all</span> Limpar</button>
             </div>
 
             <div id="lista-notificacoes" class="space-y-3 pb-20">
-                <div class="skeleton h-20 w-full rounded-xl"></div>
                 <div class="skeleton h-20 w-full rounded-xl"></div>
                 <div class="skeleton h-20 w-full rounded-xl"></div>
             </div>
@@ -110,15 +76,17 @@
 <script>
     const USUARIO = verificarLogin();
     let todosUsuarios = [];
+    let intervalPolling = null;
 
     function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';i.style.transform='rotate(0deg)';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';i.style.transform='rotate(90deg)';}}
 
-    // Obter dados de utilizadores para linkar perfis corretamente
     async function carregarUsuarios() {
         try {
             const res = await fetch(`${URL_SERVIDOR}/usuarios`);
             todosUsuarios = await res.json();
             carregarNotificacoes();
+            // Polling para novas notificações a cada 5s
+            if(!intervalPolling) intervalPolling = setInterval(carregarNotificacoes, 5000);
         } catch(e) { console.error(e); }
     }
 
@@ -127,37 +95,29 @@
             const res = await fetch(`${URL_SERVIDOR}/notificacoes?user=${USUARIO.email}`);
             const notificacoes = await res.json();
             const container = document.getElementById('lista-notificacoes');
+            
+            // Só redesenha se houver mudança ou for a primeira vez, para não piscar
+            // Simplificado: Redesenha sempre, mas é rápido
             container.innerHTML = '';
 
             if (notificacoes.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-20 flex flex-col items-center opacity-50">
-                        <span class="material-symbols-outlined text-6xl mb-4 text-gray-700">satellite_alt</span>
-                        <p class="text-gray-400 text-sm font-mono uppercase tracking-widest">Sem transmissões recentes</p>
-                    </div>`;
+                container.innerHTML = `<div class="text-center py-20 flex flex-col items-center opacity-50"><span class="material-symbols-outlined text-6xl mb-4 text-gray-700">satellite_alt</span><p class="text-gray-400 text-sm font-mono uppercase tracking-widest">Sem transmissões recentes</p></div>`;
                 return;
             }
 
             notificacoes.reverse().forEach(notif => {
                 let icon='', color='', bgIcon='';
-                
-                // Estilo por tipo de notificação
-                if(notif.tipo === 'like') { 
-                    icon = 'favorite'; color = 'text-red-500'; bgIcon = 'bg-red-500/10 border-red-500/20'; 
-                } else if(notif.tipo === 'comentario') { 
-                    icon = 'chat_bubble'; color = 'text-blue-400'; bgIcon = 'bg-blue-500/10 border-blue-500/20'; 
-                } else if(notif.tipo === 'follow') { 
-                    icon = 'person_add'; color = 'text-green-400'; bgIcon = 'bg-green-500/10 border-green-500/20'; 
-                } else { 
-                    icon = 'info'; color = 'text-gray-400'; bgIcon = 'bg-gray-500/10 border-gray-500/20'; 
-                }
+                if(notif.tipo === 'like') { icon = 'favorite'; color = 'text-red-500'; bgIcon = 'bg-red-500/10 border-red-500/20'; } 
+                else if(notif.tipo === 'comentario') { icon = 'chat_bubble'; color = 'text-blue-400'; bgIcon = 'bg-blue-500/10 border-blue-500/20'; } 
+                else if(notif.tipo === 'follow') { icon = 'person_add'; color = 'text-green-400'; bgIcon = 'bg-green-500/10 border-green-500/20'; } 
+                else { icon = 'info'; color = 'text-gray-400'; bgIcon = 'bg-gray-500/10 border-gray-500/20'; }
 
                 const statusClass = notif.lida ? 'opacity-60 grayscale-[0.5]' : 'notif-unread shadow-[0_0_15px_rgba(0,0,0,0.3)]';
                 const preview = notif.imgPreview ? `<div class="w-14 h-14 rounded bg-cover bg-center border border-[#333] ml-4 flex-shrink-0" style="background-image: url('${notif.imgPreview}')"></div>` : '';
                 const avatarUrl = notif.avatar || "https://i.pravatar.cc/150";
                 const tempo = typeof timeAgo === 'function' ? timeAgo(notif.timestamp) : 'Recente';
 
-                // Tenta encontrar o email pelo nome (workaround)
+                // Tenta encontrar o email pelo nome (workaround para ver perfil)
                 const userEncontrado = todosUsuarios.find(u => u.nome === notif.de);
                 const emailLink = userEncontrado ? userEncontrado.email : '';
 
@@ -177,7 +137,6 @@
                             <p class="text-sm text-gray-400 leading-tight">${notif.texto}</p>
                         </div>
                         ${preview}
-                        
                         <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                     </div>`;
             });
@@ -185,11 +144,8 @@
     }
 
     async function marcarLidas() {
-        try { 
-            await fetch(`${URL_SERVIDOR}/notificacoes/ler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user: USUARIO.email }) }); 
-            showToast("Sistema limpo.", "success"); 
-            carregarNotificacoes(); 
-        } catch(e) { showToast("Erro de sistema.", 'error'); }
+        try { await fetch(`${URL_SERVIDOR}/notificacoes/ler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user: USUARIO.email }) }); showToast("Sistema limpo.", "success"); carregarNotificacoes(); } 
+        catch(e) { showToast("Erro de sistema.", 'error'); }
     }
 
     carregarUsuarios();
