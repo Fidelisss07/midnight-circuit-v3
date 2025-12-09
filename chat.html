@@ -3,25 +3,47 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chat - Midnight Circuit</title>
+    <title>Comms - Midnight Circuit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
     <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}</script>
+    <style>
+        /* Fundo estilo Fibra de Carbono */
+        .bg-carbon {
+            background-color: #080808;
+            background-image: linear-gradient(135deg, #111 25%, transparent 25%), linear-gradient(225deg, #111 25%, transparent 25%), linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(315deg, #111 25%, transparent 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 20px 20px;
+            background-repeat: repeat;
+        }
+        /* Balões de Mensagem Tech */
+        .msg-bubble {
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            backdrop-filter: blur(5px);
+        }
+        /* Scrollbar fina */
+        .slim-scroll::-webkit-scrollbar { width: 4px; }
+        .slim-scroll::-webkit-scrollbar-track { background: #111; }
+        .slim-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        .slim-scroll::-webkit-scrollbar-thumb:hover { background: rgb(var(--primary)); }
+    </style>
 </head>
-<body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body">
+<body class="bg-[#050505] text-gray-200 overflow-hidden font-body">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
     
     <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-[#0f0f0f]/95 border-b border-[#222]">
-        <span class="material-symbols-outlined text-primary text-2xl">chat_bubble</span>
-        <h1 class="font-bold text-lg tracking-widest text-white italic font-display">RÁDIO</h1>
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-2xl animate-pulse">sensors</span>
+            <h1 class="font-bold text-lg tracking-widest text-white italic font-display">COMMS</h1>
+        </div>
         <div onclick="logout()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></div>
     </div>
 
-    <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20">
+    <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20 shadow-2xl">
         <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
             <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
             <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
@@ -37,47 +59,79 @@
         <div class="mt-auto px-4 w-full"><button onclick="logout()" class="w-full py-2 rounded bg-red-500/10 text-red-500 font-bold text-xs uppercase hover:bg-red-500/20">Sair</button></div>
     </aside>
 
-    <main class="flex-1 flex h-full bg-[#0a0a0a] pt-16 md:pt-0">
+    <main class="flex-1 flex h-full bg-[#050505] pt-16 md:pt-0 overflow-hidden">
         
-        <div id="painel-lista" class="w-full md:w-80 border-r border-[#222] flex flex-col bg-[#0f0f0f]">
+        <div id="painel-lista" class="w-full md:w-80 border-r border-[#222] flex flex-col bg-[#0a0a0a]">
             <div class="p-6 border-b border-[#222]">
-                <h1 class="text-xl font-bold text-white mb-4 hidden md:block font-display uppercase italic">Mensagens</h1>
-                <div class="relative">
-                    <span class="absolute left-3 top-2.5 text-gray-500 material-symbols-outlined text-sm">search</span>
-                    <input type="text" id="search-contact" onkeyup="filtrarContactos()" placeholder="Procurar piloto..." class="w-full bg-[#1a1a1a] border border-[#333] rounded py-2 pl-9 text-sm text-white focus:border-primary outline-none font-medium">
+                <h1 class="text-xl font-bold text-white mb-4 hidden md:block font-display uppercase italic tracking-wide">Frequências</h1>
+                <div class="relative group">
+                    <span class="absolute left-3 top-2.5 text-gray-500 material-symbols-outlined text-sm group-focus-within:text-primary transition-colors">search</span>
+                    <input type="text" id="search-contact" onkeyup="filtrarContactos()" placeholder="Procurar Piloto..." class="w-full bg-[#151515] border border-[#333] rounded-lg py-2 pl-9 text-sm text-white focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none font-mono transition-all">
                 </div>
             </div>
             
-            <div id="lista-contactos" class="flex-1 overflow-y-auto p-2 space-y-1">
-                <div class="text-center text-gray-500 text-xs mt-10 uppercase tracking-widest font-bold animate-pulse">A procurar sinal...</div>
+            <div id="lista-contactos" class="flex-1 overflow-y-auto p-2 space-y-1 slim-scroll">
+                <div class="text-center text-gray-600 text-xs mt-10 uppercase tracking-widest font-bold animate-pulse">A procurar sinal...</div>
             </div>
         </div>
 
-        <div id="area-chat" class="hidden md:flex flex-1 flex-col relative w-full absolute md:relative inset-0 z-50 md:z-auto bg-[#0a0a0a] md:bg-transparent">
+        <div id="area-chat" class="hidden md:flex flex-1 flex-col relative w-full absolute md:relative inset-0 z-50 md:z-auto bg-carbon md:bg-none">
             
-            <div id="chat-header" class="p-4 border-b border-[#222] flex items-center gap-4 bg-[#0f0f0f]/95 backdrop-blur-md z-10 shadow-lg">
-                <button onclick="fecharConversaMobile()" class="md:hidden text-gray-400 hover:text-white mr-2"><span class="material-symbols-outlined">arrow_back</span></button>
-                <div class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="verPerfil(contactoAtual)">
-                    <img id="chat-avatar" class="w-10 h-10 rounded border border-primary object-cover">
-                    <div>
-                        <h3 id="chat-nome" class="font-bold text-white font-display uppercase tracking-wide">...</h3>
-                        <p class="text-[10px] text-green-500 flex items-center gap-1 font-mono"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> ONLINE</p>
+            <div id="chat-header" class="p-4 border-b border-[#222] flex items-center justify-between bg-[#0f0f0f]/95 backdrop-blur-xl z-20 shadow-lg relative">
+                <div class="flex items-center gap-4">
+                    <button onclick="fecharConversaMobile()" class="md:hidden text-gray-400 hover:text-white mr-1 active:scale-90 transition-transform"><span class="material-symbols-outlined">arrow_back</span></button>
+                    
+                    <div class="flex items-center gap-4 cursor-pointer group" onclick="verPerfil(contactoAtual)">
+                        <div class="relative">
+                            <img id="chat-avatar" class="w-10 h-10 rounded border border-primary/50 object-cover group-hover:border-primary transition-colors">
+                            <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-[#0f0f0f] rounded-full animate-pulse"></span>
+                        </div>
+                        <div>
+                            <h3 id="chat-nome" class="font-bold text-white font-display uppercase tracking-wide text-sm group-hover:text-primary transition-colors">...</h3>
+                            <p class="text-[10px] text-gray-500 font-mono flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">wifi</span> SINAL FORTE</p>
+                        </div>
                     </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded border border-[#333] bg-[#0a0a0a]">
+                    <span class="w-2 h-2 bg-primary rounded-full animate-ping"></span>
+                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">LIVE FEED</span>
                 </div>
             </div>
 
-            <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-600 hidden md:flex">
-                <span class="material-symbols-outlined text-6xl mb-4 opacity-30">forum</span>
-                <p class="uppercase font-bold text-sm tracking-widest">Sintoniza um canal.</p>
+            <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-600 hidden md:flex bg-carbon">
+                <div class="w-24 h-24 border-2 border-[#222] rounded-full flex items-center justify-center mb-4 relative">
+                    <span class="material-symbols-outlined text-5xl opacity-20">headset_mic</span>
+                    <div class="absolute inset-0 border-t-2 border-primary rounded-full animate-spin opacity-50"></div>
+                </div>
+                <p class="uppercase font-bold text-xs tracking-[0.2em] opacity-50">Aguardando Transmissão</p>
             </div>
 
-            <div id="mensagens-container" class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col hidden bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-fixed"></div>
+            <div id="mensagens-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 flex flex-col hidden bg-carbon slim-scroll relative">
+                <div class="flex justify-center my-4"><span class="text-[10px] text-gray-600 bg-[#111] px-3 py-1 rounded-full border border-[#222] font-mono">HOJE</span></div>
+            </div>
 
-            <div id="chat-input-area" class="p-4 bg-[#0f0f0f] border-t border-[#222] hidden">
-                <form onsubmit="enviarMensagem(event)" class="flex gap-3">
-                    <input type="text" id="msg-texto" placeholder="Câmbio..." class="flex-1 bg-[#1a1a1a] border border-[#333] rounded px-4 py-3 text-white focus:border-primary outline-none transition-all font-medium" autocomplete="off">
-                    <button type="submit" class="bg-primary hover:bg-white text-black p-3 rounded transition-transform active:scale-95 flex items-center justify-center shadow-lg font-bold">
-                        <span class="material-symbols-outlined">send</span>
+            <div id="chat-input-area" class="bg-[#0a0a0a] border-t border-[#222] hidden flex-col">
+                
+                <div class="flex gap-2 p-2 overflow-x-auto no-scrollbar border-b border-[#1a1a1a]">
+                    <button onclick="enviarRapido('Bora correr? 🏁')" class="px-3 py-1 bg-[#1a1a1a] border border-[#333] rounded text-[10px] text-gray-400 hover:text-white hover:border-primary uppercase font-bold whitespace-nowrap transition-all">Bora correr? 🏁</button>
+                    <button onclick="enviarRapido('Onde estás? 📍')" class="px-3 py-1 bg-[#1a1a1a] border border-[#333] rounded text-[10px] text-gray-400 hover:text-white hover:border-primary uppercase font-bold whitespace-nowrap transition-all">Onde estás? 📍</button>
+                    <button onclick="enviarRapido('Bela máquina! 🔥')" class="px-3 py-1 bg-[#1a1a1a] border border-[#333] rounded text-[10px] text-gray-400 hover:text-white hover:border-primary uppercase font-bold whitespace-nowrap transition-all">Bela máquina! 🔥</button>
+                    <button onclick="enviarRapido('Check engine 🔧')" class="px-3 py-1 bg-[#1a1a1a] border border-[#333] rounded text-[10px] text-gray-400 hover:text-white hover:border-primary uppercase font-bold whitespace-nowrap transition-all">Check engine 🔧</button>
+                </div>
+
+                <form onsubmit="enviarMensagem(event)" class="flex gap-3 p-4 items-center">
+                    <button type="button" class="text-gray-500 hover:text-white transition-colors" title="Enviar Foto (Em breve)"><span class="material-symbols-outlined">add_a_photo</span></button>
+                    <div class="flex-1 relative">
+                        <input type="text" id="msg-texto" placeholder="Câmbio..." class="w-full bg-[#151515] border border-[#333] rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all font-medium text-sm placeholder-gray-600" autocomplete="off">
+                        <div id="typing-indicator" class="hidden absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
+                            <span class="w-1 h-1 bg-primary rounded-full animate-bounce"></span>
+                            <span class="w-1 h-1 bg-primary rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
+                            <span class="w-1 h-1 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-primary hover:bg-white hover:text-black text-black p-3 rounded-lg transition-all active:scale-95 flex items-center justify-center shadow-[0_0_15px_rgba(var(--primary),0.3)] group">
+                        <span class="material-symbols-outlined group-hover:rotate-45 transition-transform">send</span>
                     </button>
                 </form>
             </div>
@@ -86,7 +140,7 @@
     </main>
 
     <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
-    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl">
+    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl shadow-2xl">
         <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
         <div class="grid grid-cols-3 gap-6 p-6 pt-0">
              <div onclick="window.location.href='feed.html'" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white group-active:border-primary transition-all shadow-md"><span class="material-symbols-outlined">add</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Post</span></div>
@@ -101,7 +155,7 @@
         <a href="explorar.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">search</span></a>
         <button onclick="toggleMenu()" class="w-14 h-14 bg-background-dark border-2 border-primary rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(var(--primary),0.4)] relative -top-6 active:scale-95 transition-transform"><span class="material-symbols-outlined text-3xl transition-transform duration-300" id="menu-icon">apps</span></button>
         <a href="sprints.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">bolt</span></a>
-        <a href="perfil.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">person</span></a>
+        <a href="chat.html" class="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"><span class="material-symbols-outlined text-2xl">chat_bubble</span></a>
     </nav>
 
 </div>
@@ -115,6 +169,7 @@
 
     function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';i.style.transform='rotate(0deg)';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';i.style.transform='rotate(90deg)';}}
 
+    // 1. CARREGAR CONTACTOS (SÓ AMIGOS)
     async function carregarContactos() {
         try {
             const resMe = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO.email}`);
@@ -130,22 +185,32 @@
     function renderizarLista(lista) {
         const container = document.getElementById('lista-contactos');
         container.innerHTML = '';
+
         if (lista.length === 0) {
-            container.innerHTML = `<div class="text-center text-gray-500 text-xs mt-10 flex flex-col items-center"><span class="material-symbols-outlined text-4xl mb-2 text-gray-700">person_off</span><p class="uppercase font-bold tracking-wider">Garagem vazia</p><a href="explorar.html" class="text-primary font-bold mt-2 hover:underline">Recrutar</a></div>`;
+            container.innerHTML = `
+                <div class="text-center text-gray-500 text-xs mt-10 flex flex-col items-center">
+                    <span class="material-symbols-outlined text-4xl mb-4 text-gray-700">no_accounts</span>
+                    <p class="uppercase font-bold tracking-wider">Sem frequências</p>
+                    <a href="explorar.html" class="text-primary font-bold mt-2 hover:underline text-[10px] uppercase">Recrutar Pilotos</a>
+                </div>`;
             return;
         }
+
         lista.forEach(user => {
             container.innerHTML += `
-                <div onclick="abrirConversa('${user.email}', '${user.nome}', '${user.avatar}')" class="flex items-center gap-3 p-3 rounded hover:bg-[#1a1a1a] cursor-pointer transition-colors border-b border-[#1a1a1a] last:border-0 group">
+                <div onclick="abrirConversa('${user.email}', '${user.nome}', '${user.avatar}')" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#1a1a1a] cursor-pointer transition-colors border-b border-[#1a1a1a] last:border-0 group">
                     <div class="relative">
-                        <img src="${user.avatar}" class="w-10 h-10 rounded object-cover border border-[#333] group-hover:border-primary transition-colors">
+                        <img src="${user.avatar}" class="w-12 h-12 rounded border border-[#333] object-cover group-hover:border-primary transition-colors">
                         <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#0f0f0f] rounded-full"></div>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-white font-bold text-sm truncate uppercase font-display">${user.nome}</h4>
-                        <p class="text-gray-500 text-[10px] truncate uppercase tracking-wide">Online</p>
+                        <h4 class="text-white font-bold text-sm truncate font-display uppercase tracking-wide group-hover:text-primary transition-colors">${user.nome}</h4>
+                        <p class="text-gray-500 text-[10px] truncate flex items-center gap-1 font-mono">
+                            <span class="material-symbols-outlined text-[10px]">sensors</span> Online
+                        </p>
                     </div>
-                </div>`;
+                </div>
+            `;
         });
     }
 
@@ -155,6 +220,7 @@
         renderizarLista(filtrados);
     }
 
+    // 2. ABRIR CONVERSA
     function abrirConversa(email, nome, avatar) {
         contactoAtual = email;
         document.getElementById('empty-state').classList.remove('flex');
@@ -163,6 +229,8 @@
         areaChat.classList.remove('hidden');
         areaChat.classList.add('flex');
         document.getElementById('mensagens-container').classList.remove('hidden');
+        document.getElementById('chat-input-area').classList.remove('flex');
+        document.getElementById('chat-input-area').classList.add('flex'); // Garante flex para o Quick Comms
         document.getElementById('chat-input-area').classList.remove('hidden');
         
         document.getElementById('chat-nome').innerText = nome;
@@ -184,6 +252,7 @@
         document.getElementById('painel-lista').classList.remove('hidden');
     }
 
+    // 3. MENSAGENS & ENVIO
     async function carregarMensagens() {
         if (!contactoAtual) return;
         try {
@@ -192,18 +261,18 @@
             const container = document.getElementById('mensagens-container');
             container.innerHTML = '';
             
-            if (msgs.length === 0) { container.innerHTML = '<p class="text-center text-gray-600 text-xs mt-10 font-mono uppercase">Inicia a transmissão...</p>'; }
+            if (msgs.length === 0) { container.innerHTML = '<p class="text-center text-gray-600 text-xs mt-10 font-mono uppercase tracking-widest">Inicia a transmissão...</p>'; }
 
             msgs.forEach(m => {
                 const souEu = m.de === USUARIO.email;
-                const classe = souEu ? 'bg-primary text-black rounded-tr-none font-medium' : 'bg-[#1a1a1a] text-white rounded-tl-none border border-[#333]';
+                const classe = souEu ? 'bg-primary text-black rounded-tr-none font-bold' : 'bg-[#151515] border border-[#222] text-white rounded-tl-none';
                 const align = souEu ? 'items-end' : 'items-start';
                 const data = new Date(m.timestamp);
                 const hora = data.getHours() + ':' + String(data.getMinutes()).padStart(2, '0');
 
                 container.innerHTML += `
                     <div class="flex flex-col ${align} animate-slide-in">
-                        <div class="max-w-[75%] px-4 py-2 text-sm rounded-xl shadow-md ${classe}">
+                        <div class="max-w-[75%] px-4 py-2 text-sm msg-bubble shadow-lg ${classe}">
                             ${m.texto}
                         </div>
                         <span class="text-[10px] text-gray-600 mt-1 mx-1 font-mono">${hora}</span>
@@ -211,6 +280,12 @@
             });
             container.scrollTop = container.scrollHeight;
         } catch(e) { console.error(e); }
+    }
+
+    // Enviar mensagem rápida (Botões de cima)
+    function enviarRapido(texto) {
+        document.getElementById('msg-texto').value = texto;
+        enviarMensagem(new Event('submit'));
     }
 
     async function enviarMensagem(e) {
@@ -223,7 +298,7 @@
         const hora = new Date().getHours() + ':' + String(new Date().getMinutes()).padStart(2, '0');
         container.innerHTML += `
             <div class="flex flex-col items-end animate-slide-in opacity-50" id="temp-msg">
-                <div class="max-w-[75%] px-4 py-2 text-sm bg-primary text-black rounded-xl rounded-tr-none font-medium shadow-md">${texto}</div>
+                <div class="max-w-[75%] px-4 py-2 text-sm msg-bubble bg-primary text-black rounded-tr-none font-bold shadow-lg">${texto}</div>
                 <span class="text-[10px] text-gray-600 mt-1 mx-1 font-mono">${hora} • ...</span>
             </div>`;
         container.scrollTop = container.scrollHeight;
