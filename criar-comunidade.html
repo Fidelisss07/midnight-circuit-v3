@@ -5,62 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Criar Clube - Midnight Circuit</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
-    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}</script>
 </head>
-<body class="bg-background-dark text-white flex items-center justify-center h-screen p-4">
+<body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body">
 
-<script>
-    const USUARIO = verificarLogin();
-</script>
-
-<div class="bg-surface-dark w-full max-w-lg p-8 rounded-2xl border border-white/10 shadow-2xl animate-fade-in">
-    <div class="flex justify-between items-start mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-white mb-1">Fundar Clube</h1>
-            <p class="text-gray-400 text-sm">Junta a tribo. Tu és o admin.</p>
-        </div>
-        <button onclick="window.location.href='comunidades-hub.html'" class="text-gray-500 hover:text-white transition-colors">
-            <span class="material-symbols-outlined">close</span>
-        </button>
+<div class="relative flex h-screen w-full flex-col md:flex-row">
+    
+    <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-[#0f0f0f]/95 border-b border-[#222]">
+        <span class="material-symbols-outlined text-primary text-2xl">add_circle</span>
+        <h1 class="font-bold text-lg tracking-widest text-white italic font-display">FUNDAR</h1>
+        <div onclick="logout()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></div>
     </div>
 
-    <div class="space-y-5">
-        <div>
-            <label class="text-xs text-gray-500 uppercase font-bold ml-1">Nome do Clube</label>
-            <input type="text" id="com-nome" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Ex: BMW Fans PT">
-        </div>
+    <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20">
+        <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
+            <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
+            <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
+        </a>
+        <nav class="flex flex-col w-full px-4 gap-2">
+            <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">home</span> Feed</a>
+            <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">search</span> Explorar</a>
+            <a href="sprints.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">bolt</span> Sprints</a>
+            <a href="comunidades-hub.html" class="flex items-center gap-4 p-3 rounded bg-[#1a1a1a] border-l-4 border-primary text-white font-bold transition-all"><span class="material-symbols-outlined">groups</span> Clubes</a>
+            
+            <a href="chat.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">chat_bubble</span> Chat</a>
+            <a href="perfil.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">person</span> Garagem</a>
+        </nav>
+        <div class="mt-auto px-4 w-full"><button onclick="logout()" class="w-full py-2 rounded bg-red-500/10 text-red-500 font-bold text-xs uppercase hover:bg-red-500/20">Sair</button></div>
+    </aside>
+
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-20 pb-24 md:pt-0 md:pb-0 p-4 md:p-8 flex items-center justify-center">
         
-        <div>
-            <label class="text-xs text-gray-500 uppercase font-bold ml-1">Descrição</label>
-            <textarea id="com-desc" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white h-24 resize-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Sobre o que é este grupo? Regras, encontros..."></textarea>
-        </div>
-        
-        <div>
-            <label class="text-xs text-gray-500 uppercase font-bold ml-1">Capa (Banner)</label>
-            <label class="block mt-2 w-full h-32 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-white/5 transition-all relative overflow-hidden group">
-                <div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-black z-10">
-                    <img id="image-preview" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity">
+        <div class="bg-[#111] w-full max-w-lg p-8 rounded border border-[#222] shadow-2xl animate-fade-in relative">
+            
+            <div class="flex justify-between items-start mb-8 border-b border-[#222] pb-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-1 font-display uppercase italic tracking-wider">Novo Clube</h1>
+                    <p class="text-gray-500 text-xs font-mono">Cria a tua equipa. Tu serás o Admin.</p>
                 </div>
-                <span class="material-symbols-outlined text-3xl text-gray-600 group-hover:text-primary transition-colors">add_photo_alternate</span>
-                <p class="text-xs text-gray-500 mt-1">Carregar Imagem</p>
-                <input type="file" id="com-img" class="hidden" accept="image/*" onchange="verImg(event)">
-            </label>
+                <button onclick="window.location.href='comunidades-hub.html'" class="text-gray-500 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block tracking-widest">Nome do Clube</label>
+                    <input type="text" id="com-nome" class="w-full bg-[#1a1a1a] border border-[#333] rounded p-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-display uppercase placeholder-gray-600" placeholder="Ex: NIGHT RUNNERS">
+                </div>
+                
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block tracking-widest">Descrição</label>
+                    <textarea id="com-desc" class="w-full bg-[#1a1a1a] border border-[#333] rounded p-3 text-white h-24 resize-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-mono text-sm placeholder-gray-600" placeholder="Regras, localização, estilo..."></textarea>
+                </div>
+                
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block tracking-widest">Banner Oficial</label>
+                    <label class="block mt-2 w-full h-32 border-2 border-dashed border-[#333] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-white/5 transition-all relative overflow-hidden group">
+                        <div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-black z-10">
+                            <img id="image-preview" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="material-symbols-outlined text-3xl text-gray-600 group-hover:text-primary transition-colors">add_photo_alternate</span>
+                        <p class="text-[10px] text-gray-500 mt-2 uppercase font-bold">Carregar Imagem</p>
+                        <input type="file" id="com-img" class="hidden" accept="image/*" onchange="verImg(event)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-[#222]">
+                <button onclick="window.location.href='comunidades-hub.html'" class="px-6 py-2 text-gray-500 hover:text-white font-bold text-xs uppercase transition-colors">Cancelar</button>
+                <button onclick="criar()" id="btn-criar" class="btn-race px-8 py-3 rounded text-xs uppercase shadow-lg hover:shadow-primary/40 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">flag</span> Fundar
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
+    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl">
+        <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+        <div class="grid grid-cols-3 gap-6 p-6 pt-0">
+             <div onclick="window.location.href='feed.html'" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white group-active:border-primary transition-all shadow-md"><span class="material-symbols-outlined">add</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Post</span></div>
+             <a href="ranking.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-yellow-500 group-active:border-yellow-500 transition-all shadow-md"><span class="material-symbols-outlined">emoji_events</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Rank</span></a>
+             <a href="comunidades-hub.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-blue-500 group-active:border-blue-500 transition-all shadow-md"><span class="material-symbols-outlined">groups</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Clubes</span></a>
+             <a href="configuracoes.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400 group-active:border-white transition-all shadow-md"><span class="material-symbols-outlined">settings</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Setup</span></a>
+             <div onclick="logout()" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-red-900/20"><div class="w-12 h-12 bg-red-900/10 border border-red-900/30 rounded-xl flex items-center justify-center text-red-500 group-active:bg-red-900/30 transition-all shadow-md"><span class="material-symbols-outlined">power_settings_new</span></div><span class="text-[10px] uppercase font-bold text-red-500">Sair</span></div>
         </div>
     </div>
 
-    <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-white/10">
-        <button onclick="window.location.href='comunidades-hub.html'" class="px-4 py-2 text-gray-400 hover:text-white font-bold transition-colors">Cancelar</button>
-        <button onclick="criar()" id="btn-criar" class="px-6 py-2 bg-primary rounded-lg font-bold text-white hover:bg-red-600 shadow-lg transition-all flex items-center gap-2 transform active:scale-95">
-            <span class="material-symbols-outlined">add_circle</span> Criar
-        </button>
-    </div>
+    <nav class="md:hidden fixed bottom-6 left-4 right-4 h-16 bg-[#111]/90 backdrop-blur-md border border-[#333] rounded-2xl z-50 flex justify-between items-center px-6 shadow-2xl">
+        <a href="feed.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">home</span></a>
+        <a href="explorar.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">search</span></a>
+        <button onclick="toggleMenu()" class="w-14 h-14 bg-background-dark border-2 border-primary rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(var(--primary),0.4)] relative -top-6 active:scale-95 transition-transform"><span class="material-symbols-outlined text-3xl transition-transform duration-300" id="menu-icon">apps</span></button>
+        <a href="sprints.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">bolt</span></a>
+        <a href="comunidades-hub.html" class="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"><span class="material-symbols-outlined text-2xl">groups</span></a>
+    </nav>
+
 </div>
 
 <script>
+    const USUARIO = verificarLogin();
+
+    function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';i.style.transform='rotate(0deg)';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';i.style.transform='rotate(90deg)';}}
+
     function verImg(e) {
         const file = e.target.files[0];
         if (file) {
