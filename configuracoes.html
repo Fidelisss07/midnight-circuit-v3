@@ -43,6 +43,40 @@
             <h1 class="text-3xl md:text-4xl font-display font-bold text-white mb-8 hidden md:block italic">CONFIGURAÇÕES</h1>
 
             <div class="bg-[#111] border border-[#222] rounded-xl p-6 mb-8 shadow-lg">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2 font-display uppercase tracking-wide"><span class="material-symbols-outlined text-primary">palette</span> Pintura & Tema</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="mudar('theme-red')" class="group relative h-24 rounded-xl border border-[#333] hover:border-white transition-all overflow-hidden bg-black">
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent"></div>
+                        <div class="absolute bottom-2 left-2 flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full bg-red-500 shadow-[0_0_10px_red]"></div>
+                            <span class="text-xs font-bold text-white uppercase">Rosso</span>
+                        </div>
+                    </button>
+                    <button onclick="mudar('theme-purple')" class="group relative h-24 rounded-xl border border-[#333] hover:border-white transition-all overflow-hidden bg-black">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent"></div>
+                        <div class="absolute bottom-2 left-2 flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_10px_purple]"></div>
+                            <span class="text-xs font-bold text-white uppercase">Neon</span>
+                        </div>
+                    </button>
+                    <button onclick="mudar('theme-blue')" class="group relative h-24 rounded-xl border border-[#333] hover:border-white transition-all overflow-hidden bg-black">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-transparent"></div>
+                        <div class="absolute bottom-2 left-2 flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_10px_blue]"></div>
+                            <span class="text-xs font-bold text-white uppercase">Nitro</span>
+                        </div>
+                    </button>
+                    <button onclick="mudar('theme-light')" class="group relative h-24 rounded-xl border border-[#333] hover:border-white transition-all overflow-hidden bg-white">
+                        <div class="absolute inset-0 bg-gradient-to-br from-gray-200 to-transparent"></div>
+                        <div class="absolute bottom-2 left-2 flex items-center gap-2">
+                            <div class="w-4 h-4 rounded-full bg-gray-900 border border-gray-200"></div>
+                            <span class="text-xs font-bold text-black uppercase">Dia</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-[#111] border border-[#222] rounded-xl p-6 mb-8 shadow-lg">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2 font-display uppercase tracking-wide"><span class="material-symbols-outlined text-primary">mail</span> Email</h2>
                 <div class="space-y-4">
                     <p class="text-xs text-gray-500 font-mono">ATUAL: <span class="text-white" id="email-atual">...</span></p>
@@ -79,7 +113,7 @@
         </div>
     </main>
 
-    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm"></div>
+    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
     <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
         <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
         <div class="grid grid-cols-3 gap-6 p-6 pt-0">
@@ -108,11 +142,19 @@
     function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';i.style.transform='rotate(0deg)';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';i.style.transform='rotate(90deg)';}}
     function abrirModalMobilePost(){document.getElementById('modal-mobile-post').classList.remove('hidden');}
     function verImgMobile(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview-mobile');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
-    async function postarMobile(){ /* (Lógica de post igual aos outros) */ 
+    async function postarMobile(){
         const c=document.getElementById('conteudo-mobile').value; const i=document.getElementById('imgInp-mobile').files[0];
         if(!i&&!c)return showToast('Escreve algo!','error');
         const f=new FormData(); f.append('nome',USUARIO.nome); f.append('avatar',USUARIO.avatar); f.append('emailAutor',USUARIO.email); f.append('conteudo',c); if(i)f.append('midia',i);
         try{await fetch(`${URL_SERVIDOR}/posts`,{method:'POST',body:f}); window.location.href='feed.html';}catch(e){}
+    }
+
+    // Função de Trocar Tema (Global)
+    function mudar(t){
+        document.body.classList.remove('theme-red', 'theme-purple', 'theme-blue', 'theme-light');
+        document.body.classList.add(t);
+        localStorage.setItem('midnight_tema', t);
+        showToast("Nova pintura aplicada!");
     }
 
     async function mudarEmail() {
