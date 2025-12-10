@@ -2,115 +2,127 @@
 <html class="dark" lang="pt">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Login - Midnight Circuit</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "rgb(var(--primary) / <alpha-value>)",
-                        "background-dark": "var(--bg-dark)",
-                        "surface-dark": "var(--surface)"
-                    },
-                    fontFamily: {
-                        "display": ["Space Grotesk", "sans-serif"]
-                    }
-                }
-            }
-        }
-    </script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}</script>
+    <style>
+        /* Animação de vibração ao ligar o motor */
+        .engine-start { animation: rumble 0.5s infinite; border-color: #ef4444 !important; color: #ef4444 !important; background: black !important; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
+        @keyframes rumble { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        
+        /* Input Focado */
+        .input-race:focus { box-shadow: 0 0 15px rgba(255,255,255,0.1); border-color: rgb(var(--primary)); }
+    </style>
 </head>
-<body class="bg-background-dark h-screen flex items-center justify-center relative overflow-hidden font-display">
+<body class="bg-black text-white overflow-hidden font-body h-screen w-full flex items-center justify-center">
 
-    <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-black/70 z-10"></div>
-        <img src="https://images.unsplash.com/photo-1544614471-68f023758d88?q=80&w=2500" class="w-full h-full object-cover opacity-60 animate-fade-in">
+    <div class="absolute inset-0 z-0 overflow-hidden">
+        <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-60">
+            <source src="https://cdn.pixabay.com/video/2021/04/23/71987-540700881_large.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20"></div>
     </div>
 
-    <div class="relative z-20 w-full max-w-md p-8 bg-surface-dark/60 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl animate-slide-in">
+    <audio id="audio-engine" src="https://www.soundjay.com/transportation/sounds/car-ignition-1.mp3" preload="auto"></audio>
+
+    <div class="relative z-10 w-full max-w-md p-8 m-4">
         
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-2 tracking-tighter">MIDNIGHT</h1>
-            <p class="text-gray-400 text-sm">A tua garagem digital.</p>
+        <div class="text-center mb-10">
+            <span class="material-symbols-outlined text-6xl text-primary drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] mb-2">tire_repair</span>
+            <h1 class="text-5xl font-display font-bold italic tracking-tighter text-white drop-shadow-lg">MIDNIGHT</h1>
+            <p class="text-xs font-mono text-gray-400 uppercase tracking-[0.3em] mt-1">Street Racing Culture</p>
         </div>
 
-        <div class="space-y-4">
-            <div class="group">
-                <input type="email" id="email" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 pl-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder-gray-500" placeholder="Email">
-            </div>
-            
-            <div class="group">
-                <input type="password" id="senha" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 pl-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder-gray-500" placeholder="Senha">
-            </div>
+        <div class="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl animate-fade-in">
+            <form onsubmit="fazerLogin(event)" class="space-y-6">
+                
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1 tracking-widest">Email do Piloto</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3.5 text-gray-500 material-symbols-outlined text-lg">mail</span>
+                        <input type="email" id="email" class="input-race w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none transition-all font-medium" placeholder="nome@exemplo.com" required>
+                    </div>
+                </div>
 
-            <button onclick="fazerLogin()" id="btn-login" class="w-full bg-primary hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/20 transition-all transform active:scale-95 mt-2">
-                Entrar na Pista
-            </button>
-        </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1 tracking-widest">Chave de Acesso</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3.5 text-gray-500 material-symbols-outlined text-lg">key</span>
+                        <input type="password" id="senha" class="input-race w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none transition-all font-medium" placeholder="••••••••" required>
+                    </div>
+                </div>
 
-        <div class="mt-6 text-center text-sm text-gray-400">
-            Ainda sem carta? 
-            <a href="registro.html" class="text-white font-bold hover:text-primary transition-colors hover:underline">Registar agora</a>
+                <button type="submit" id="btn-login" class="w-full bg-white text-black font-black uppercase text-sm py-4 rounded-xl hover:bg-primary hover:text-white transition-all shadow-lg flex items-center justify-center gap-2 mt-4 group">
+                    <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">power_settings_new</span>
+                    <span id="btn-text">Ligar Motor</span>
+                </button>
+
+            </form>
+
+            <div class="mt-8 text-center pt-6 border-t border-white/5">
+                <p class="text-sm text-gray-400">Ainda não tens garagem?</p>
+                <a href="registro.html" class="text-primary font-bold uppercase text-xs tracking-widest hover:text-white transition-colors border-b border-primary hover:border-white pb-0.5 inline-block mt-2">Criar Registo</a>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Verifica se já tem login, se sim, manda para o feed direto
-        const sessao = localStorage.getItem('usuario_logado');
-        if (sessao) window.location.href = 'feed.html';
+<script>
+    async function fazerLogin(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-login');
+        const btnText = document.getElementById('btn-text');
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+        const audio = document.getElementById('audio-engine');
 
-        async function fazerLogin() {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
+        // Estado de Loading Visual
+        btnText.innerText = "A verificar...";
+        btn.classList.add('opacity-80', 'cursor-not-allowed');
 
-            if (!email || !senha) return showToast("Preenche todos os campos!", 'error');
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, senha })
+            });
 
-            setBtnLoading('btn-login', true);
+            if (res.ok) {
+                const user = await res.json();
+                localStorage.setItem('usuario_logado', JSON.stringify(user));
+                
+                // EFEITO CINEMATOGRÁFICO DE SUCESSO
+                btn.classList.add('engine-start');
+                btnText.innerText = "MOTOR LIGADO!";
+                audio.volume = 0.5;
+                audio.play();
 
-            try {
-                // Usa URL_SERVIDOR do utils.js
-                const res = await fetch(`${URL_SERVIDOR}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, senha })
-                });
+                // Espera o som do arranque antes de ir (2.5 segundos)
+                setTimeout(() => {
+                    window.location.href = 'feed.html';
+                }, 2500);
 
-                if (res.ok) {
-                    const usuario = await res.json();
-                    localStorage.setItem('usuario_logado', JSON.stringify(usuario));
-                    showToast("Login com sucesso! A entrar...", 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'feed.html';
-                    }, 1000);
-                } else {
-                    const erro = await res.text(); // Pode vir texto simples do servidor
-                    // Traduz erros comuns se necessário ou mostra direto
-                    let msg = "Email ou senha incorretos.";
-                    if (erro.toLowerCase().includes('senha')) msg = "Senha incorreta.";
-                    if (erro.toLowerCase().includes('não encontrado')) msg = "Email não registado.";
-                    
-                    showToast(msg, 'error');
-                }
-            } catch (e) {
-                console.error(e);
-                showToast("Erro de conexão com o servidor.", 'error');
-            } finally {
-                setBtnLoading('btn-login', false);
+            } else {
+                showToast("Falha na ignição. Dados errados.", "error");
+                btnText.innerText = "Ligar Motor";
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                
+                // Animação de erro (vibra o form)
+                const form = document.querySelector('form');
+                form.classList.add('animate-pulse');
+                setTimeout(() => form.classList.remove('animate-pulse'), 500);
             }
+        } catch (error) {
+            showToast("Erro de conexão.", "error");
+            btnText.innerText = "Ligar Motor";
+            btn.classList.remove('opacity-80', 'cursor-not-allowed');
         }
-        
-        // Permitir Enter para login
-        document.getElementById('senha').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') fazerLogin();
-        });
-    </script>
+    }
+</script>
+
 </body>
 </html>
