@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rivals - Midnight Circuit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="utils.js"></script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}</script>
+    <style>
+        /* EFEITOS DE BATALHA */
+        .rival-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+        .rival-card:hover {
+            transform: scale(1.02);
+            border-color: rgb(var(--primary));
+            box-shadow: 0 0 30px rgba(var(--primary), 0.3);
+        }
+        
+        /* Animação do "VS" */
+        .vs-badge {
+            animation: pulse-vs 1.5s infinite;
+        }
+        @keyframes pulse-vs {
+            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+            50% { transform: scale(1.1); text-shadow: 0 0 20px rgba(255,0,0,0.8), 0 0 40px red; }
+            100% { transform: scale(1); text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+        }
+
+        /* Efeitos de Voto */
+        .winner-anim { animation: winner-glow 0.5s forwards; }
+        .loser-anim { animation: loser-fade 0.5s forwards; }
+        
+        @keyframes winner-glow { 0% { transform: scale(1); } 50% { transform: scale(1.05); filter: brightness(1.5); } 100% { transform: scale(1); } }
+        @keyframes loser-fade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.9); filter: grayscale(1); } }
+    </style>
+</head>
+<body class="bg-[#050505] text-white overflow-hidden font-body h-screen flex flex-col">
+
+    <div class="h-16 flex items-center justify-between px-6 bg-[#0f0f0f] border-b border-[#222] z-40">
+        <a href="feed.html" class="flex items-center gap-2 group">
+            <span class="material-symbols-outlined text-white/50 group-hover:text-white">arrow_back</span>
+            <span class="font-display font-bold italic text-lg tracking-widest">RIVALS</span>
+        </a>
+        <div class="text-xs text-gray-500 font-mono uppercase">Vote no melhor</div>
+    </div>
+
+    <div class="flex-1 relative flex flex-col md:flex-row items-center justify-center gap-4 p-4 md:gap-10">
+        
+        <div id="card-1" class="rival-card w-full md:w-1/2 h-[40vh] md:h-[70vh] bg-black rounded-3xl relative group" onclick="votar(0)">
+            <img id="img-1" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full p-6">
+                <h2 id="nome-1" class="text-3xl font-display font-black italic uppercase text-white drop-shadow-lg">...</h2>
+                <p id="stats-1" class="text-primary font-mono text-sm font-bold mt-1">...</p>
+            </div>
+            <div class="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="text-4xl font-black italic uppercase tracking-widest text-white drop-shadow-md transform -rotate-6 border-4 border-white p-4">VOTE</span>
+            </div>
+        </div>
+
+        <div class="absolute z-20 md:static">
+            <div class="vs-badge bg-red-600 text-white font-black italic text-4xl rounded-full w-20 h-20 flex items-center justify-center border-4 border-[#050505] shadow-2xl">VS</div>
+        </div>
+
+        <div id="card-2" class="rival-card w-full md:w-1/2 h-[40vh] md:h-[70vh] bg-black rounded-3xl relative group" onclick="votar(1)">
+            <img id="img-2" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full p-6 text-right">
+                <h2 id="nome-2" class="text-3xl font-display font-black italic uppercase text-white drop-shadow-lg">...</h2>
+                <p id="stats-2" class="text-primary font-mono text-sm font-bold mt-1">...</p>
+            </div>
+            <div class="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="text-4xl font-black italic uppercase tracking-widest text-white drop-shadow-md transform rotate-6 border-4 border-white p-4">VOTE</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="loading" class="fixed inset-0 bg-black flex items-center justify-center z-50">
+        <div class="text-center">
+            <span class="material-symbols-outlined text-6xl text-primary animate-spin">tire_repair</span>
+            <p class="mt-4 font-display font-bold uppercase tracking-widest text-white">Searching Opponents...</p>
+        </div>
+    </div>
+
+<script>
+    let parAtual = [];
+    
+    async function carregarRivals() {
+        // Mostrar Loading
+        document.getElementById('loading').classList.remove('hidden');
+        
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/rivals/par`);
+            if (!res.ok) throw new Error();
+            parAtual = await res.json();
+            
+            // Preencher UI
+            renderizarCard(1, parAtual[0]);
+            renderizarCard(2, parAtual[1]);
+            
+            // Esconder Loading com delay para efeito
+            setTimeout(() => document.getElementById('loading').classList.add('hidden'), 500);
+            
+        } catch (e) {
+            document.querySelector('#loading p').innerText = "Garagem Vazia. Adiciona carros!";
+            setTimeout(() => window.location.href = 'feed.html', 2000);
+        }
+    }
+
+    function renderizarCard(num, carro) {
+        document.getElementById(`img-${num}`).src = carro.imagemUrl;
+        document.getElementById(`nome-${num}`).innerText = carro.modelo;
+        // Mostra Stats (HP e Votos)
+        const wins = carro.votos || 0;
+        const total = carro.batalhas || 0;
+        const rate = total > 0 ? Math.round((wins / total) * 100) : 0;
+        document.getElementById(`stats-${num}`).innerText = `${car.specs.hp} HP • ${rate}% WIN RATE`;
+        
+        // Reset animações
+        const card = document.getElementById(`card-${num}`);
+        card.classList.remove('winner-anim', 'loser-anim');
+    }
+
+    async function votar(indexVencedor) {
+        const vencedor = parAtual[indexVencedor];
+        const perdedor = parAtual[indexVencedor === 0 ? 1 : 0];
+        
+        // Animação Visual
+        const cardV = document.getElementById(`card-${indexVencedor + 1}`);
+        const cardL = document.getElementById(`card-${(indexVencedor === 0 ? 1 : 0) + 1}`);
+        
+        cardV.classList.add('winner-anim');
+        cardL.classList.add('loser-anim');
+        
+        // Enviar Voto
+        try {
+            await fetch(`${URL_SERVIDOR}/rivals/votar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    vencedorId: (vencedor._id || vencedor.id), 
+                    perdedorId: (perdedor._id || perdedor.id) 
+                })
+            });
+        } catch(e) {}
+
+        // Carregar Próximo Round
+        setTimeout(carregarRivals, 800);
+    }
+
+    carregarRivals();
+</script>
+
+</body>
+</html>
