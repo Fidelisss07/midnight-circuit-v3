@@ -36,6 +36,19 @@
         .carousel-thumb.active { border-color: rgb(var(--primary)); opacity: 1; }
         .carousel-thumb { opacity: 0.6; transition: all 0.3s; }
         .carousel-thumb:hover { opacity: 1; }
+        
+        /* Botão START ENGINE */
+        .btn-engine {
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
+            border: 2px solid #ffcccc;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0,0,0,0.5);
+            color: white; font-weight: 900; letter-spacing: 1px;
+            transition: all 0.1s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .btn-engine:active { transform: scale(0.95); box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+        .btn-engine.running { animation: engine-rumble 0.1s infinite; border-color: #ff9999; }
+        @keyframes engine-rumble { 0% { transform: translate(0, 0); } 25% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, 0); } 75% { transform: translate(0, -1px); } }
     </style>
 </head>
 <body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body selection:bg-primary selection:text-white">
@@ -103,7 +116,32 @@
         <input type="hidden" id="car-id"> <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Identidade</h3><div class="grid grid-cols-2 gap-3"><div class="col-span-2"><label class="text-[10px] text-gray-500 uppercase">Apelido</label><input type="text" id="car-apelido" placeholder="Ex: 'The Beast'" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white focus:border-primary font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Marca</label><input type="text" id="car-marca" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Modelo</label><input type="text" id="car-modelo" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Ano</label><input type="number" id="car-ano" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Cor</label><input type="text" id="car-cor" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div><label class="text-[10px] text-gray-500 uppercase">História</label><textarea id="car-desc" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div></div>
             <div class="space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Performance</h3><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] text-gray-500 uppercase">HP</label><input type="text" id="car-hp" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Torque</label><input type="text" id="car-torque" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">0-100</label><input type="text" id="car-zero" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div><label class="text-[10px] text-gray-500 uppercase">Max</label><input type="text" id="car-top" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div class="space-y-3 pt-2"><div><label class="text-[10px] text-gray-500 uppercase">Motor</label><input type="text" id="car-motor" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] text-gray-500 uppercase">Tração</label><select id="car-tracao" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"><option>RWD</option><option>FWD</option><option>AWD</option></select></div><div><label class="text-[10px] text-gray-500 uppercase">Câmbio</label><input type="text" id="car-cambio" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div><div><label class="text-[10px] text-gray-500 uppercase">Peso (kg)</label><input type="text" id="car-peso" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white font-mono"></div></div></div>
-            <div class="flex flex-col h-full space-y-4"><h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Visual</h3><div><label class="text-[10px] text-gray-500 uppercase">Mods (Separar por vírgula)</label><textarea id="car-mods" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div><div class="flex-1 flex flex-col"><label class="text-[10px] text-gray-500 uppercase mb-2">Fotos (Até 12)</label><label class="flex-1 border-2 border-dashed border-[#333] rounded flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-white/5 relative overflow-hidden group transition-all"><div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-[#111] z-10 p-2 grid grid-cols-3 gap-2 overflow-y-auto custom-scrollbar"></div><span class="material-symbols-outlined text-4xl text-gray-600 group-hover:text-primary">add_photo_alternate</span><p class="text-gray-500 text-xs mt-2 uppercase font-bold">Selecionar Fotos</p><input type="file" id="car-imagem" class="hidden" accept="image/*" multiple onchange="previewCarro(event)"></label></div></div>
+            
+            <div class="flex flex-col h-full space-y-4">
+                <h3 class="text-primary font-bold text-xs uppercase tracking-widest mb-2 font-display">Visual & Áudio</h3>
+                <div><label class="text-[10px] text-gray-500 uppercase">Mods (Separar por vírgula)</label><textarea id="car-mods" class="w-full bg-black/30 border border-[#333] rounded p-2 text-white h-20 resize-none font-mono"></textarea></div>
+                
+                <div class="flex-1 flex flex-col gap-4">
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase mb-2">Fotos (Até 12)</label>
+                        <label class="border-2 border-dashed border-[#333] rounded flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-white/5 relative overflow-hidden group transition-all h-24">
+                            <div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-[#111] z-10 p-2 grid grid-cols-3 gap-2 overflow-y-auto custom-scrollbar"></div>
+                            <span class="material-symbols-outlined text-2xl text-gray-600 group-hover:text-primary">add_photo_alternate</span>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold">Selecionar</p>
+                            <input type="file" id="car-imagem" class="hidden" accept="image/*" multiple onchange="previewCarro(event)">
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase mb-2">Exhaust Check 🔊</label>
+                        <label class="border-2 border-dashed border-[#333] rounded flex flex-col items-center justify-center cursor-pointer hover:border-red-500 hover:bg-red-900/10 transition-all h-24">
+                            <span class="material-symbols-outlined text-2xl text-gray-600">graphic_eq</span>
+                            <p class="text-gray-500 text-[10px] mt-1 uppercase font-bold text-center">Som do Motor<br><span class="text-[8px] text-gray-600 font-normal">Dica: Grava o arranque!</span></p>
+                            <input type="file" id="car-audio" class="hidden" accept="audio/*" onchange="showToast('Áudio selecionado!')">
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-[#222]">
             <button onclick="document.getElementById('modal-carro').classList.add('hidden')" class="px-6 py-3 text-gray-400 hover:text-white font-bold uppercase text-xs">Cancelar</button>
@@ -123,6 +161,14 @@
                 <div><div class="flex items-baseline gap-2"><h2 id="vc-marca" class="text-primary font-bold text-sm uppercase tracking-widest font-display">MARCA</h2><span id="vc-ano" class="text-gray-600 text-xs font-mono">• ANO</span></div><h1 id="vc-modelo" class="text-3xl font-bold text-white leading-tight font-display uppercase">MODELO</h1><h3 id="vc-apelido" class="text-xl text-gray-400 italic">"Apelido"</h3></div>
                 <button onclick="fecharModalVerCarro()" class="text-gray-400 hover:text-white p-2 bg-[#222] rounded-full hover:bg-red-500/20 transition-all"><span class="material-symbols-outlined">close</span></button>
             </div>
+            
+            <div id="area-audio" class="p-6 pb-0 hidden">
+                <button onclick="tocarMotor()" id="btn-start-engine" class="btn-engine w-full py-4 rounded-xl flex items-center justify-center gap-2 text-lg shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                    <span class="material-symbols-outlined">power_settings_new</span> START ENGINE
+                </button>
+                <audio id="audio-player" class="hidden"></audio>
+            </div>
+
             <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
                 <div><h4 class="text-xs text-primary uppercase tracking-widest font-bold mb-2">História</h4><p id="vc-desc" class="text-sm text-gray-400 font-mono leading-relaxed border-l-2 border-primary/30 pl-4">...</p></div>
                 <div><h4 class="text-xs text-primary uppercase tracking-widest font-bold mb-3 border-b border-[#222] pb-2">Specs</h4><div class="grid grid-cols-2 gap-4 font-mono text-sm"><div><p class="text-gray-600 text-[10px] uppercase">Motor</p><p id="vc-motor" class="text-white font-bold truncate">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Potência</p><p id="vc-hp" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Torque</p><p id="vc-torque" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">0-100</p><p id="vc-zero" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Top Speed</p><p id="vc-top" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Peso</p><p id="vc-peso" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Tração</p><p id="vc-tracao" class="text-white font-bold">N/A</p></div><div><p class="text-gray-600 text-[10px] uppercase">Câmbio</p><p id="vc-cambio" class="text-white font-bold">N/A</p></div></div></div>
@@ -204,6 +250,7 @@
     function rotateCard(e,card){const r=card.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,cx=r.width/2,cy=r.height/2,rx=((y-cy)/cy)*-4,ry=((x-cx)/cx)*4;card.style.setProperty('--mx',`${x}px`);card.style.setProperty('--my',`${y}px`);card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;}
     function resetCard(card){card.style.transform=`perspective(1000px) rotateX(0) rotateY(0)`;}
 
+    // --- MODAL SHOWROOM & ÁUDIO ---
     function abrirModalVerCarro(index) {
         const car = meusCarrosGlobal[index];
         if(!car) return;
@@ -224,12 +271,47 @@
         const modsContainer = document.getElementById('vc-mods');
         modsContainer.innerHTML = car.mods.map(m => `<span class="bg-[#222] text-gray-300 border border-[#333] px-3 py-1 rounded text-xs font-mono">${m.trim()}</span>`).join('') || '<span class="text-gray-500 text-xs">Stock</span>';
 
+        // Carrossel
         carroAtualImagens = (car.imagens && car.imagens.length > 0) ? car.imagens : [car.imagemUrl];
         imagemIndex = 0;
         atualizarCarrossel();
+
+        // Áudio
+        const areaAudio = document.getElementById('area-audio');
+        const audioPlayer = document.getElementById('audio-player');
+        if (car.audioUrl) {
+            areaAudio.classList.remove('hidden');
+            audioPlayer.src = car.audioUrl;
+        } else {
+            areaAudio.classList.add('hidden');
+        }
+
         document.getElementById('modal-ver-carro').classList.remove('hidden');
     }
-    function fecharModalVerCarro() { document.getElementById('modal-ver-carro').classList.add('hidden'); }
+    
+    function tocarMotor() {
+        const audio = document.getElementById('audio-player');
+        const btn = document.getElementById('btn-start-engine');
+        if (audio.paused) {
+            audio.play();
+            btn.classList.add('running');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">settings</span> RUNNING...';
+        } else {
+            audio.pause();
+            audio.currentTime = 0;
+            btn.classList.remove('running');
+            btn.innerHTML = '<span class="material-symbols-outlined">power_settings_new</span> START ENGINE';
+        }
+    }
+
+    function fecharModalVerCarro() { 
+        document.getElementById('modal-ver-carro').classList.add('hidden'); 
+        const audio = document.getElementById('audio-player');
+        audio.pause(); 
+        audio.currentTime = 0;
+        document.getElementById('btn-start-engine').classList.remove('running');
+    }
+
     function atualizarCarrossel() {
         const main = document.getElementById('carousel-main-img');
         const thumbs = document.getElementById('carousel-thumbnails');
@@ -242,21 +324,15 @@
     function selecionarImagem(i) { imagemIndex = i; atualizarCarrossel(); }
 
     function abrirModalCarro(carro = null) {
-        // Limpar ou Preencher para Edição
         if (carro) {
             document.getElementById('modal-carro-titulo').innerText = "Editar Máquina";
             document.getElementById('car-id').value = carro._id || carro.id;
             ['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(id => {
                 let key = id;
                 if(id==='desc') key='descricao'; else if(id==='zero') key='zero_cem'; else if(id==='top') key='top_speed'; else if(id==='hp') key='potencia';
-                // Para specs
-                if(['hp','torque','zero','top','motor','cambio','tracao','peso','cor','ano'].includes(id)) {
-                    document.getElementById(`car-${id}`).value = carro.specs[key] || '';
-                } else if (id === 'mods') {
-                    document.getElementById(`car-${id}`).value = carro.mods.join(', ');
-                } else {
-                    document.getElementById(`car-${id}`).value = carro[key] || '';
-                }
+                if(['hp','torque','zero','top','motor','cambio','tracao','peso','cor','ano'].includes(id)) { document.getElementById(`car-${id}`).value = carro.specs[key] || ''; } 
+                else if (id === 'mods') { document.getElementById(`car-${id}`).value = carro.mods.join(', '); } 
+                else { document.getElementById(`car-${id}`).value = carro[key] || ''; }
             });
         } else {
             document.getElementById('modal-carro-titulo').innerText = "Nova Máquina";
@@ -268,10 +344,7 @@
         document.getElementById('modal-carro').classList.remove('hidden');
     }
 
-    function editarCarro(index) {
-        const car = meusCarrosGlobal[index];
-        if(car) abrirModalCarro(car);
-    }
+    function editarCarro(index) { const car = meusCarrosGlobal[index]; if(car) abrirModalCarro(car); }
 
     function previewCarro(e){const f=e.target.files;const c=document.getElementById('preview-container');c.innerHTML='';if(f.length>0){c.classList.remove('hidden');Array.from(f).slice(0,12).forEach(file=>{const r=new FileReader();r.onload=ev=>{c.innerHTML+=`<img src="${ev.target.result}" class="w-full h-24 object-cover rounded border border-[#333]">`;};r.readAsDataURL(file);});}else{c.classList.add('hidden');}}
 
@@ -286,6 +359,8 @@
         ['marca','modelo','apelido','ano','cor','desc','hp','torque','zero','top','motor','cambio','tracao','peso','mods'].forEach(k=>f.append(k==='desc'?'descricao':(k==='zero'?'zero_cem':(k==='top'?'top_speed':(k==='hp'?'potencia':k))),document.getElementById(`car-${k}`).value));
         const imgs = document.getElementById('car-imagem');
         if(imgs.files.length>0) Array.from(imgs.files).slice(0,12).forEach(file=>f.append('imagens',file));
+        const audio = document.getElementById('car-audio');
+        if(audio.files[0]) f.append('audio', audio.files[0]);
 
         try {
             const url = id ? `${URL_SERVIDOR}/carros/${id}` : `${URL_SERVIDOR}/carros`;
@@ -300,7 +375,6 @@
 
     async function removerCarro(id){if(confirm('Apagar esta máquina?')){await fetch(`${URL_SERVIDOR}/carros/${id}`,{method:'DELETE'});carregarPerfil();}}
     
-    // (RESTO IGUAL)
     function abrirModalPerfil(){document.getElementById('edit-nome').value=USUARIO_ATUAL.nome;document.getElementById('edit-bio').value=USUARIO_ATUAL.bio;document.getElementById('modal-perfil').classList.remove('hidden');}
     async function salvarPerfil(){const f=new FormData();f.append('emailOriginal',USUARIO_ATUAL.email);f.append('nome',document.getElementById('edit-nome').value);f.append('bio',document.getElementById('edit-bio').value);if(document.getElementById('edit-avatar').files[0])f.append('avatar',document.getElementById('edit-avatar').files[0]);if(document.getElementById('edit-capa').files[0])f.append('capa',document.getElementById('edit-capa').files[0]);try{const r=await fetch(`${URL_SERVIDOR}/perfil/atualizar`,{method:'POST',body:f});if(r.ok){const u=await r.json();localStorage.setItem('usuario_logado',JSON.stringify(u));window.location.reload();}else showToast('Erro','error');}catch(e){showToast('Erro','error');}}
     function trocarAba(a){const tc=document.getElementById('tab-carros');const tp=document.getElementById('tab-posts');const bc=document.getElementById('btn-tab-carros');const bp=document.getElementById('btn-tab-posts');if(a==='carros'){tc.classList.remove('hidden');tp.classList.add('hidden');bc.className="px-6 py-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-xs tracking-widest bg-white/5 whitespace-nowrap";bp.className="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-xs tracking-widest whitespace-nowrap";}else{tc.classList.add('hidden');tp.classList.remove('hidden');bp.className="px-6 py-3 border-b-2 border-primary text-white font-bold flex items-center gap-2 transition-all uppercase text-xs tracking-widest bg-white/5 whitespace-nowrap";bc.className="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-white font-medium flex items-center gap-2 transition-all uppercase text-xs tracking-widest whitespace-nowrap";}}
