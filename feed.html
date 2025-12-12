@@ -3,192 +3,258 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Feed - CORSA SOCIAL</title>
+    <title>Feed Corsa Social</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
     <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "rgb(var(--primary) / <alpha-value>)", 
-                        "background-dark": "#0a0a0a",
-                        "surface-dark": "#111111"
-                    },
-                    fontFamily: {
-                        "display": ["Chakra Petch", "sans-serif"],
-                        "body": ["Inter", "sans-serif"]
-                    }
-                }
-            }
-        }
+        tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", card:"var(--bg-card)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}
     </script>
 </head>
-
-<body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body selection:bg-primary selection:text-black">
+<body class="bg-[#050505] text-gray-200 overflow-hidden font-body selection:bg-primary selection:text-white">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
+    <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-card/95 border-b border-white/5 backdrop-blur-md shadow-lg">
+        <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined text-2xl animate-pulse">speed</span>
+            <h1 class="font-bold text-lg tracking-widest text-white italic font-display">MIDNIGHT</h1>
+        </div>
+        <div class="flex gap-4">
+            <a href="chat.html" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">chat_bubble</span></a>
+            <a href="notificacoes.html" class="text-gray-400 hover:text-white relative"><span class="material-symbols-outlined">notifications</span><span class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full animate-ping"></span></a>
+        </div>
+    </div>
 
-    <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20 shadow-2xl">
+    <aside class="hidden md:flex flex-col w-64 h-full bg-card border-r border-white/5 py-8 z-20 shadow-2xl">
         <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
-            <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
-            <span class="font-bold text-2xl italic tracking-tighter font-display">CORSA</span>
+            <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-700">tire_repair</span>
+            <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
         </a>
         <nav class="flex flex-col w-full px-4 gap-2">
-            <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 bg-[#1a1a1a] text-white border-l-4 border-gray-500 transition-all"><span class="material-symbols-outlined">home</span> Feed</a>
-            <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">search</span> Explorar</a>
-            <a href="sprints.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">bolt</span> Sprints</a>
-            <a href="comunidades-hub.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">groups</span> Clubes</a>
-            <a href="chat.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">chat_bubble</span> Chat</a>
-            <a href="perfil.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">person</span> Minha Garagem</a>
-            <a href="ranking.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">emoji_events</span> Ranking</a>
-            <a href="rivals.html" class="nav-btn flex items-center gap-4 p-3 cursor-pointer text-red-500 hover:text-white"><span class="material-symbols-outlined">swords</span><span class="font-medium text-sm font-display italic">RIVALS</span></a>
-        </nav>
-        <div class="mt-auto px-4 w-full"><button onclick="logout()" class="w-full py-2 rounded bg-red-500/10 text-red-500 font-bold text-xs uppercase hover:bg-red-500/20">Sair</button></div>
+    <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">home</span> Feed
+    </a>
+
+    <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">search</span> Explorar
+    </a>
+
+    <a href="sprints.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">bolt</span> Sprints
+    </a>
+
+    <a href="comunidades-hub.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">groups</span> Clubes
+    </a>
+
+    <a href="chat.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">chat_bubble</span> Chat
+    </a>
+
+    <a href="notificacoes.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">notifications</span> notificações
+    </a>
+
+    <a href="perfil.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">person</span> Garagem
+    </a>
+
+    <a href="ranking.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">emoji_events</span> Ranking
+    </a>
+
+    <a href="configuracoes.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
+        <span class="material-symbols-outlined">settings</span> Configurações
+    </a>
+
+            <a href="rivals.html" class="nav-btn flex items-center gap-4 p-3 cursor-pointer text-red-500 hover:text-white">
+    <span class="material-symbols-outlined">swords</span>
+    <span class="font-medium text-sm font-display italic">RIVALS</span>
+</a>
+</nav>
+        <div class="mt-auto px-4 w-full flex flex-col gap-3">
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-black/30 border border-white/5 cursor-pointer hover:border-primary/50 transition-all" onclick="window.location.href='perfil.html'">
+                <div id="sidebar-avatar" class="w-10 h-10 rounded-full bg-cover bg-center border border-white/10"></div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-bold text-white truncate" id="header-nome">...</p><p class="text-[10px] text-green-500 font-mono">ONLINE</p></div>
+            </div>
+            <button onclick="logout()" class="w-full py-2 rounded bg-red-500/10 text-red-500 font-bold text-xs uppercase hover:bg-red-500/20 transition-colors border border-red-500/20">Sair</button>
+        </div>
     </aside>
 
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-14 md:pt-0 bg-[#0a0a0a]">
-        <div class="max-w-2xl mx-auto px-4 py-8">
-            
-            <div class="bg-[#111] border border-[#222] rounded-xl p-4 mb-8 flex items-center gap-4 shadow-lg cursor-pointer hover:border-primary/50 transition-colors" onclick="window.location.href='novo-post.html'">
-                <img id="my-avatar-mini" class="w-10 h-10 rounded-full bg-[#222] object-cover" src="https://i.pravatar.cc/150">
-                <div class="flex-1 bg-[#0a0a0a] h-10 rounded-full flex items-center px-4 text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                    Partilha a tua máquina...
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-20 pb-24 md:pt-0 md:pb-0">
+        <div class="max-w-4xl mx-auto p-4 md:p-8">
+            <header class="hidden md:flex justify-between items-end mb-8">
+                <div><h1 class="text-3xl font-display font-bold text-white italic">PADDOCK</h1><p class="text-gray-500 text-sm">Bem-vindo, <span class="text-primary font-bold" id="header-nome-mob">...</span></p></div>
+                <div class="flex bg-card border border-white/5 p-1 rounded-lg shadow-lg">
+                    <button onclick="mudarAba('feed')" id="tab-feed" class="px-6 py-1 rounded bg-white/10 text-white font-bold text-sm uppercase">Feed</button>
+                    <button onclick="mudarAba('news')" id="tab-news" class="px-6 py-1 rounded text-gray-500 font-bold text-sm uppercase hover:text-white transition-colors">News</button>
                 </div>
-                <button class="text-primary hover:text-white transition-colors"><span class="material-symbols-outlined">add_a_photo</span></button>
+            </header>
+
+            <div id="area-feed">
+                <section class="mb-10 overflow-x-auto pb-4 no-scrollbar px-1"><div class="flex gap-5 min-w-max items-center" id="stories-container"><div onclick="document.getElementById('inputStory').click()" class="flex flex-col items-center gap-1 cursor-pointer group"><div class="story-ring border-2 border-dashed border-gray-600 group-hover:border-primary"><div id="story-avatar-me" class="story-img bg-cover bg-center flex items-center justify-center bg-[#222]"><span class="material-symbols-outlined text-primary group-hover:text-white transition-colors">add</span></div></div><span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider group-hover:text-white transition-colors">Novo</span><input type="file" id="inputStory" class="hidden" accept="image/*,video/*" onchange="uploadStory(event)"></div><div id="outros-stories" class="flex gap-5"></div></div></section>
+                <div class="hidden md:block mb-10 corsa-card p-6 shadow-xl"><div class="flex gap-4"><div id="input-avatar" class="w-12 h-12 rounded bg-cover bg-center border border-[#333]"></div><div class="flex-1"><textarea id="conteudo" placeholder="O que estás a modificar hoje?" class="w-full bg-transparent border-none text-white focus:ring-0 resize-none h-12 text-lg placeholder-gray-600 font-medium"></textarea><div id="preview" class="hidden mt-3 h-56 bg-black flex items-center justify-center overflow-hidden border border-[#333] rounded-lg"></div><div class="flex justify-between mt-4 border-t border-[#222] pt-4 items-center"><label class="cursor-pointer text-gray-400 hover:text-white text-xs font-bold uppercase flex items-center gap-2 hover:bg-white/5 px-2 py-1 rounded transition-colors"><span class="material-symbols-outlined text-lg">add_a_photo</span> Mídia<input type="file" id="imgInp" class="hidden" accept="image/*,video/*" onchange="verImg(event)"></label><button onclick="postar()" id="btn-pub" class="btn-race px-8 py-2 text-sm uppercase italic shadow-lg shadow-primary/20">Arrancar</button></div></div></div></div>
+                <div id="lista" class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-32"><div class="skeleton h-80 w-full rounded-xl"></div></div>
             </div>
 
-            <div id="feed-container" class="space-y-8 pb-20">
-                <div class="text-center py-20">
-                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-                    <p class="mt-4 text-gray-500 text-sm">A carregar o grid...</p>
-                </div>
-            </div>
+            <div id="area-news" class="hidden pb-32"><h2 class="text-xl font-display font-bold text-white mb-6 border-l-4 border-primary pl-3">Últimas do Circuito</h2><div id="lista-news" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
         </div>
     </main>
 
+    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
+    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+        <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+        <div class="grid grid-cols-3 gap-6 p-6 pt-0">
+            <div onclick="abrirModalMobilePost(); toggleMenu()" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white group-active:border-primary transition-all shadow-md"><span class="material-symbols-outlined">add</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Postar</span></div>
+            <a href="ranking.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-yellow-500 group-active:border-yellow-500 transition-all shadow-md"><span class="material-symbols-outlined">emoji_events</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Rank</span></a>
+            <a href="comunidades-hub.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-blue-500 group-active:border-blue-500 transition-all shadow-md"><span class="material-symbols-outlined">groups</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Clubes</span></a>
+            <a href="configuracoes.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400 group-active:border-white transition-all shadow-md"><span class="material-symbols-outlined">settings</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Setup</span></a>
+            <div onclick="document.getElementById('mobile-temas').classList.toggle('hidden')" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-purple-500 group-active:border-purple-500 transition-all shadow-md"><span class="material-symbols-outlined">palette</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Cor</span></div>
+            <div onclick="logout()" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-red-900/20"><div class="w-12 h-12 bg-red-900/10 border border-red-900/30 rounded-xl flex items-center justify-center text-red-500 group-active:bg-red-900/30 transition-all shadow-md"><span class="material-symbols-outlined">power_settings_new</span></div><span class="text-[10px] uppercase font-bold text-red-500">Sair</span></div>
+        </div>
+        <div id="mobile-temas" class="hidden grid grid-cols-4 gap-4 px-8 pb-4 animate-fade-in"><button onclick="mudar('theme-red')" class="h-8 rounded bg-red-500 border-2 border-transparent focus:border-white shadow-[0_0_10px_red]"></button><button onclick="mudar('theme-purple')" class="h-8 rounded bg-purple-500 border-2 border-transparent focus:border-white shadow-[0_0_10px_purple]"></button><button onclick="mudar('theme-blue')" class="h-8 rounded bg-blue-500 border-2 border-transparent focus:border-white shadow-[0_0_10px_blue]"></button><button onclick="mudar('theme-light')" class="h-8 rounded bg-white border-2 border-transparent focus:border-black shadow-[0_0_10px_white]"></button></div>
+    </div>
+
     <nav class="md:hidden fixed bottom-6 left-4 right-4 h-16 bg-[#111]/90 backdrop-blur-md border border-[#333] rounded-2xl z-50 flex justify-between items-center px-6 shadow-2xl">
-        <a href="feed.html" class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]"><span class="material-symbols-outlined text-2xl">home</span></a>
+        <a href="feed.html" class="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"><span class="material-symbols-outlined text-2xl">home</span></a>
         <a href="explorar.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">search</span></a>
         <button onclick="toggleMenu()" class="w-14 h-14 bg-background-dark border-2 border-primary rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(var(--primary),0.4)] relative -top-6 active:scale-95 transition-transform"><span class="material-symbols-outlined text-3xl transition-transform duration-300" id="menu-icon">apps</span></button>
         <a href="sprints.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">bolt</span></a>
         <a href="perfil.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">person</span></a>
     </nav>
-    
-    <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
-    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl transform translate-y-full transition-transform duration-300">
-        <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
-        <div class="grid grid-cols-3 gap-6 p-6 pt-0">
-             <div onclick="window.location.href='novo-post.html'" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white group-active:border-primary transition-all shadow-md"><span class="material-symbols-outlined">add_a_photo</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Post</span></div>
-             <a href="ranking.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-yellow-500 group-active:border-yellow-500 transition-all shadow-md"><span class="material-symbols-outlined">emoji_events</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Rank</span></a>
-             <a href="comunidades-hub.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-blue-500 group-active:border-blue-500 transition-all shadow-md"><span class="material-symbols-outlined">groups</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Clubes</span></a>
-             <div onclick="logout()" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-red-900/20"><div class="w-12 h-12 bg-red-900/10 border border-red-900/30 rounded-xl flex items-center justify-center text-red-500 group-active:bg-red-900/30 transition-all shadow-md"><span class="material-symbols-outlined">power_settings_new</span></div><span class="text-[10px] uppercase font-bold text-red-500">Sair</span></div>
-        </div>
-    </div>
-
 </div>
 
-<div id="modal" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md">
-    <div class="relative max-w-4xl w-full h-[80vh] flex justify-center items-center">
-        <button onclick="document.getElementById('modal').classList.add('hidden')" class="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-primary hover:text-black transition-colors z-50">
-            <span class="material-symbols-outlined">close</span>
-        </button>
-        <img id="m-img" class="max-h-full max-w-full rounded object-contain shadow-2xl border border-[#222]">
-    </div>
-</div>
+<div id="modal-mobile-post" class="hidden fixed inset-0 z-[80] bg-black/95 flex flex-col p-6 animate-fade-in"><div class="flex justify-between items-center mb-6"><button onclick="document.getElementById('modal-mobile-post').classList.add('hidden')" class="text-gray-400 font-bold text-xs uppercase">Cancelar</button><h2 class="text-white font-display font-bold text-lg">NOVO POST</h2><button onclick="postarMobile()" id="btn-pub-mobile" class="text-primary font-bold text-xs uppercase">Publicar</button></div><div class="flex-1 flex flex-col gap-4"><textarea id="conteudo-mobile" class="w-full bg-transparent text-white text-xl border-none focus:ring-0 h-40 placeholder-gray-600 font-medium" placeholder="Escreve aqui..."></textarea><div id="preview-mobile" class="w-full h-64 bg-[#111] rounded flex items-center justify-center overflow-hidden border border-dashed border-[#333] relative"><span class="material-symbols-outlined text-3xl text-gray-700">add_a_photo</span><input type="file" id="imgInp-mobile" class="absolute inset-0 opacity-0 w-full h-full" accept="image/*,video/*" onchange="verImgMobile(event)"></div></div></div>
+
+<div id="story-viewer" class="hidden fixed inset-0 z-[90] bg-black flex flex-col"><div class="h-1 w-full flex gap-1 p-2 absolute top-0 z-20" id="story-bars"></div><div class="flex justify-between items-center p-6 absolute top-2 w-full z-10"><div class="flex items-center gap-3"><img id="viewer-avatar" class="w-10 h-10 rounded border border-white"><span id="viewer-nome" class="font-bold text-white shadow-black drop-shadow-md text-lg font-display">User</span></div><button onclick="fecharStory()" class="text-white drop-shadow-md"><span class="material-symbols-outlined text-3xl">close</span></button></div><div class="flex-1 flex items-center justify-center bg-black" id="viewer-content"></div></div>
+
+<div id="modal" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center p-0 md:p-6 backdrop-blur-sm"><div class="bg-panel w-full h-full md:max-w-6xl md:h-[85vh] rounded-none md:rounded border border-white/10 flex flex-col md:flex-row relative overflow-hidden shadow-2xl"><button onclick="fechar()" class="absolute top-4 right-4 text-white z-50 bg-black/50 rounded-full p-2 hover:bg-primary transition-colors"><span class="material-symbols-outlined">close</span></button><div class="w-full md:w-[60%] bg-black flex items-center justify-center h-[40%] md:h-full" id="m-content"></div><div class="w-full md:w-[40%] h-[60%] md:h-full flex flex-col bg-[#0f0f0f] border-l border-white/10"><div class="p-6 border-b border-white/10 flex gap-4 items-center cursor-pointer hover:bg-[#1a1a1a] transition-colors" id="modal-user-link"><img id="m-av" class="w-12 h-12 rounded border border-primary object-cover shadow-lg"><div><h3 id="m-nome" class="text-white font-bold text-lg font-display uppercase"></h3><p class="text-[10px] text-gray-500 uppercase tracking-widest">Piloto</p></div></div><div class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar"><div class="bg-[#1a1a1a] p-4 rounded border-l-4 border-primary shadow-inner"><p class="text-white text-sm leading-relaxed" id="m-legenda"></p></div><div id="m-coms" class="space-y-4"></div></div><div class="p-4 border-t border-white/10 bg-black/20"><div class="flex gap-6 text-white mb-3"><button onclick="likeModal()" class="hover:text-primary transition-colors group flex items-center gap-1"><span id="btn-like-icon" class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">favorite</span> <span id="m-likes" class="text-sm font-bold">0</span></button><button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-2xl">chat_bubble</span></button><button onclick="sharePost()" class="hover:text-white ml-auto transition-colors"><span class="material-symbols-outlined text-2xl">share</span></button></div><div class="flex gap-2"><input id="m-inp" type="text" class="bg-black/40 border border-white/10 rounded px-3 py-2 text-white w-full text-sm focus:border-primary outline-none font-medium" placeholder="Comentar..."><button onclick="comentar()" class="text-primary font-bold text-sm px-2 hover:text-white transition-colors uppercase">Enviar</button></div></div></div></div></div>
 
 <script>
-    // --- LÓGICA DO FEED ---
-    
-    // Configuração do Servidor
-    const URL_SERVIDOR = 'https://corsa.up.railway.app';
-    
-    // Verificar Login e carregar avatar
-    const usuario = (typeof verificarLogin === 'function') ? verificarLogin() : { avatar: null };
-    const avatarMini = document.getElementById('my-avatar-mini');
-    if (avatarMini) avatarMini.src = usuario.avatar || "https://i.pravatar.cc/150";
+    const USUARIO_ATUAL=verificarLogin(); let pid=null;
 
-    function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('translate-y-full')){d.classList.remove('translate-y-full');o.classList.remove('opacity-0','pointer-events-none');o.classList.add('opacity-100','pointer-events-auto');i.innerText='close';i.style.transform='rotate(90deg)';}else{d.classList.add('translate-y-full');o.classList.remove('opacity-100','pointer-events-auto');o.classList.add('opacity-0','pointer-events-none');i.innerText='apps';i.style.transform='rotate(0deg)';}}
+    function toggleMenu(){
+        const d = document.getElementById('mobile-drawer'), o = document.getElementById('mobile-drawer-overlay'), i = document.getElementById('menu-icon');
+        if (d.classList.contains('open')) { d.classList.remove('open'); o.classList.remove('open'); i.innerText='apps'; i.style.transform='rotate(0deg)'; } 
+        else { d.classList.add('open'); o.classList.add('open'); i.innerText='close'; i.style.transform='rotate(90deg)'; }
+    }
 
-    async function carregarFeed() {
+    if(document.getElementById('header-nome')) {
+        document.getElementById('header-nome').innerText = USUARIO_ATUAL.nome;
+        // Se houver um header mobile
+        if(document.getElementById('header-nome-mob')) document.getElementById('header-nome-mob').innerText = USUARIO_ATUAL.nome;
+    }
+    document.getElementById('sidebar-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
+    if(document.getElementById('input-avatar')) document.getElementById('input-avatar').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
+    document.getElementById('story-avatar-me').style.backgroundImage = `url('${USUARIO_ATUAL.avatar}')`;
+
+    function mudar(t){localStorage.setItem('midnight_tema',t);location.reload();}
+    function mudarAba(aba) {
+        const f=document.getElementById('area-feed'), n=document.getElementById('area-news'), bf=document.getElementById('tab-feed'), bn=document.getElementById('tab-news');
+        if (aba === 'feed') { f.classList.remove('hidden'); n.classList.add('hidden'); bf.className="px-6 py-1 rounded text-sm font-bold uppercase tracking-wider bg-primary text-black transition-all"; bn.className="px-6 py-1 rounded text-sm font-bold uppercase tracking-wider text-gray-500 hover:text-white transition-all"; } 
+        else { f.classList.add('hidden'); n.classList.remove('hidden'); bn.className="px-6 py-1 rounded text-sm font-bold uppercase tracking-wider bg-primary text-black transition-all"; bf.className="px-6 py-1 rounded text-sm font-bold uppercase tracking-wider text-gray-500 hover:text-white transition-all"; carregarNews(); }
+    }
+
+    // --- VIDEO INTELIGENTE ---
+    // Pausa videos fora da tela
+    function observarVideos() {
+        const videos = document.querySelectorAll('video');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) { entry.target.pause(); } 
+                else if (entry.isIntersecting && !entry.target.paused) { entry.target.play(); }
+            });
+        }, { threshold: 0.5 });
+        videos.forEach(v => observer.observe(v));
+    }
+
+    async function load(){
         try {
-            const res = await fetch(`${URL_SERVIDOR}/posts`);
-            if(!res.ok) throw new Error("Falha ao carregar feed");
-            
-            const posts = await res.json();
-            const container = document.getElementById('feed-container');
-            container.innerHTML = '';
-            
-            if (posts.length === 0) {
-                container.innerHTML = '<div class="text-center py-20 text-gray-500"><p>A pista está vazia. Sê o primeiro a acelerar!</p></div>';
-                return;
-            }
+            const r = await fetch(`${URL_SERVIDOR}/posts`); const p = await r.json();
+            document.getElementById('lista').innerHTML = p.reverse().map(x => {
+                const isVideo = x.tipo === 'video' || (x.midiaUrl && x.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
+                const mediaHtml = isVideo 
+                    ? `<video src="${x.midiaUrl}" class="w-full h-full object-cover" muted loop onmouseover="this.play()" onmouseout="this.pause()" playsinline></video>`
+                    : `<div class="w-full h-full bg-cover bg-center" style="background-image: url('${x.midiaUrl || x.imagemUrl}')"></div>`;
 
-            // Inverter para mostrar os mais novos primeiro
-            posts.reverse().forEach(post => {
-                
-                // LÓGICA CRÍTICA DE LINK DE PERFIL
-                // Garante que usa o emailDono se existir, senão usa o email, senão não quebra
-                let emailAlvo = post.emailDono || post.email;
-                let linkPerfil = emailAlvo ? `perfil-visitante.html?email=${emailAlvo}` : '#';
+                // Formatação de Tempo e Números
+                const tempo = typeof timeAgo === 'function' ? timeAgo(x.timestamp) : 'Recent';
+                const likes = typeof formatNumber === 'function' ? formatNumber(x.likes) : x.likes;
 
-                container.innerHTML += `
-                <div class="bg-[#111] border border-[#222] rounded-2xl overflow-hidden shadow-2xl mb-6">
-                    <div class="p-4 flex items-center justify-between border-b border-[#222]">
-                        <div class="flex items-center gap-3 cursor-pointer group" onclick="${emailAlvo ? `window.location.href='${linkPerfil}'` : ''}">
-                            <img src="${post.avatar || 'https://i.pravatar.cc/150'}" class="w-10 h-10 rounded-full border border-[#333] group-hover:border-primary transition-colors object-cover" onerror="this.src='https://i.pravatar.cc/150'">
-                            <div>
-                                <h3 class="font-bold text-white text-sm group-hover:text-primary transition-colors font-display tracking-wide uppercase">${post.nome || 'Piloto'}</h3>
-                                <p class="text-xs text-gray-500 font-mono">Piloto</p>
-                            </div>
+                return `
+                <div class="corsa-card group cursor-pointer relative" onclick="abrir('${x._id || x.id}')" ondblclick="animarLike('${x._id || x.id}', this)">
+                    <div class="flex items-center gap-3 p-4 border-b border-[#222]">
+                        <div onclick="event.stopPropagation(); verPerfil('${x.emailAutor}')" class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+                            <img src="${x.avatar}" class="w-8 h-8 rounded object-cover border border-[#444]">
+                            <p class="text-white text-sm font-bold uppercase tracking-wide">${x.nome}</p>
                         </div>
-                        <button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined">more_horiz</span></button>
+                        <span class="text-gray-500 text-[10px] ml-auto font-mono">${tempo}</span>
                     </div>
-
-                    <div class="w-full bg-black cursor-pointer relative group" onclick="verPost('${post.midiaUrl || post.imagemUrl}')">
-                         <img src="${post.midiaUrl || post.imagemUrl}" class="w-full max-h-[500px] object-cover mx-auto" loading="lazy" onerror="this.src='https://via.placeholder.com/500x500?text=Imagem+Indisponivel'">
-                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                    <div class="h-80 w-full bg-black relative overflow-hidden">
+                        ${mediaHtml}
+                        <span class="material-symbols-outlined like-animation hidden">favorite</span>
                     </div>
-
                     <div class="p-4">
-                        <div class="flex gap-6 mb-4">
-                            <button onclick="curtir('${post._id}')" class="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors group">
-                                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span>
-                                <span class="text-xs font-bold">${post.curtidas || 0}</span>
-                            </button>
-                            <button class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
-                                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">chat_bubble</span>
-                                <span class="text-xs font-bold">0</span>
-                            </button>
-                            <button class="ml-auto text-gray-400 hover:text-white transition-colors"><span class="material-symbols-outlined">share</span></button>
+                        <div class="flex gap-5 mb-3">
+                            <button class="text-white hover:text-primary transition-colors flex items-center gap-1" id="btn-like-${x._id || x.id}"><span class="material-symbols-outlined text-2xl">favorite</span> <span class="text-sm font-bold">${likes}</span></button>
+                            <button class="text-white hover:text-blue-400 transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-2xl">chat_bubble</span> <span class="text-sm font-bold">${x.comentarios?x.comentarios.length:0}</span></button>
                         </div>
-
-                        <div class="space-y-1">
-                            <p class="text-sm text-gray-300 font-mono">
-                                <span class="font-bold text-white font-display uppercase tracking-wide mr-2 cursor-pointer hover:text-primary" onclick="${emailAlvo ? `window.location.href='${linkPerfil}'` : ''}">${post.nome}</span>
-                                ${post.legenda || ''}
-                            </p>
-                            <p class="text-[10px] text-gray-600 uppercase mt-2">${new Date(post.createdAt || Date.now()).toLocaleDateString()}</p>
-                        </div>
+                        <p class="text-sm text-gray-400 line-clamp-2"><span class="font-bold text-white mr-1 uppercase text-xs">${x.nome}</span> ${x.conteudo}</p>
                     </div>
                 </div>`;
-            });
+            }).join('');
+            observarVideos();
+        } catch(e) {}
+    }
 
-        } catch(e) {
-            console.error(e);
-            document.getElementById('feed-container').innerHTML = '<div class="text-center py-20 text-red-500"><p>Erro de conexão com o servidor.</p></div>';
+    function animarLike(id, card) {
+        const heart = card.querySelector('.like-animation');
+        const btn = card.querySelector(`#btn-like-${id}`);
+        heart.classList.remove('hidden');
+        setTimeout(() => heart.classList.add('hidden'), 800);
+        likeModalGeneric(id, btn); // Chama like sem abrir modal
+    }
+
+    async function likeModalGeneric(id, btn) {
+        // Função like genérica que serve para feed e modal
+        await fetch(`${URL_SERVIDOR}/posts/like/${id}`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({quemDeuLikeNome:USUARIO_ATUAL.nome, quemDeuLikeEmail:USUARIO_ATUAL.email, quemDeuLikeAvatar:USUARIO_ATUAL.avatar}) });
+        // Atualiza visualmente se houver contador
+        if(btn) {
+            const c = btn.querySelector('span:last-child');
+            if(c) c.innerText = parseInt(c.innerText || 0) + 1;
+            const i = btn.querySelector('span:first-child');
+            if(i) { i.classList.add('text-primary', 'font-variation-settings-[FILL:1]'); }
         }
     }
 
-    function verPost(url) { document.getElementById('m-img').src = url; document.getElementById('modal').classList.remove('hidden'); }
-    async function curtir(id) { await fetch(`${URL_SERVIDOR}/posts/${id}/curtir`, { method: 'POST' }); carregarFeed(); }
+    // Share Post
+    function sharePost() {
+        copyToClipboard(window.location.href);
+    }
 
-    carregarFeed();
+    // ... (Manter restantes funções: uploadStory, abrir, fechar, comentar, etc. do código anterior) ...
+    async function likeModal(){if(!pid)return;const b=document.getElementById('btn-like-icon').parentElement;likeModalGeneric(pid,b);}
+    async function comentar(){const t=document.getElementById('m-inp').value;if(!t)return;const res=await fetch(`${URL_SERVIDOR}/posts/comentar/${pid}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({autor:USUARIO_ATUAL.nome,avatar:USUARIO_ATUAL.avatar,texto:t})});if(res.ok){document.getElementById('m-coms').innerHTML+=`<div class="flex gap-3 mb-3"><img src="${USUARIO_ATUAL.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO_ATUAL.nome}</span>${t}</p></div></div>`;document.getElementById('m-inp').value='';}}
+    async function carregarNews(){const l=document.getElementById('lista-news');l.innerHTML='<div class="skeleton h-64 col-span-full"></div>';try{const r=await fetch(`${URL_SERVIDOR}/news`);const n=await r.json();l.innerHTML='';n.forEach(x=>{l.innerHTML+=`<div class="corsa-card group"><div class="h-48 w-full bg-cover bg-center relative" style="background-image:url('${x.imagem}')"><div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded border border-white/20">${x.categoria}</div></div><div class="p-5"><p class="text-gray-500 text-xs mb-2 uppercase tracking-wide font-bold">${x.data}</p><h3 class="text-lg font-bold text-white mb-2 leading-tight group-hover:text-primary transition-colors uppercase">${x.titulo}</h3><p class="text-gray-400 text-sm line-clamp-3">${x.texto}</p></div></div>`;});}catch(e){}}
+    function verImg(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview');c.classList.remove('hidden');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
+    function verImgMobile(e){const f=e.target.files[0];if(f){const c=document.getElementById('preview-mobile');c.innerHTML=f.type.startsWith('video')?`<video src="${URL.createObjectURL(f)}" class="w-full h-full object-cover" autoplay muted loop></video>`:`<img src="${URL.createObjectURL(f)}" class="w-full h-full object-cover">`;}}
+    function limparImagem(){document.getElementById('imgInp').value='';document.getElementById('preview').classList.add('hidden');}
+    function abrirModalMobilePost(){document.getElementById('modal-mobile-post').classList.remove('hidden');}
+    async function postarGenerico(cId,fId,bId){const c=document.getElementById(cId).value;const i=document.getElementById(fId).files[0];if(!i&&!c)return showToast('Escreve algo!','error');setBtnLoading(bId,true);const f=new FormData();f.append('nome',USUARIO_ATUAL.nome);f.append('avatar',USUARIO_ATUAL.avatar);f.append('emailAutor',USUARIO_ATUAL.email);f.append('conteudo',c);if(i)f.append('midia',i);try{await fetch(`${URL_SERVIDOR}/posts`,{method:'POST',body:f});location.reload();}catch(e){showToast("Erro",'error');}setBtnLoading(bId,false);}
+    async function postar(){postarGenerico('conteudo','imgInp','btn-pub');}
+    async function postarMobile(){postarGenerico('conteudo-mobile','imgInp-mobile','btn-pub-mobile');}
+    async function abrir(id){pid=id;const res=await fetch(`${URL_SERVIDOR}/posts`);const ps=await res.json();const p=ps.find(x=>(x._id||x.id)==id);const mCont=document.getElementById('m-content');mCont.innerHTML='';const isVideo=p.tipo==='video'||(p.midiaUrl&&p.midiaUrl.match(/\.(mp4|webm|ogg)$/i));if(isVideo)mCont.innerHTML=`<video src="${p.midiaUrl}" class="max-w-full max-h-full" controls autoplay></video>`;else mCont.innerHTML=`<img src="${p.midiaUrl||p.imagemUrl}" class="max-w-full max-h-full object-contain">`;document.getElementById('m-av').src=p.avatar;document.getElementById('m-nome').innerText=p.nome;document.getElementById('m-legenda').innerText=p.conteudo;document.getElementById('m-likes').innerText=`${p.likes} likes`;document.getElementById('btn-like-icon').classList.remove('text-primary');document.getElementById('btn-like-icon').style.fontVariationSettings="'FILL' 0";document.getElementById('modal-user-link').onclick=()=>verPerfil(p.emailAutor);const divC=document.getElementById('m-coms');divC.innerHTML='';if(p.comentarios)p.comentarios.forEach(c=>divC.innerHTML+=`<div class="flex gap-3 mb-3"><img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover" onclick="verPerfil('${c.emailAutor}')"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary cursor-pointer" onclick="verPerfil('${c.emailAutor}')">${c.autor}</span>${c.texto}</p></div></div>`);document.getElementById('modal').classList.remove('hidden');}
+    function fechar(){document.getElementById('modal').classList.add('hidden');pid=null;load();}
+    async function uploadStory(e){if(e.target.files[0]){const f=new FormData();f.append('emailAutor',USUARIO_ATUAL.email);f.append('nome',USUARIO_ATUAL.nome);f.append('avatar',USUARIO_ATUAL.avatar);f.append('midia',e.target.files[0]);await fetch(`${URL_SERVIDOR}/stories`,{method:'POST',body:f});location.reload();}}
+    async function carregarStories(){try{const r=await fetch(`${URL_SERVIDOR}/stories`);const s=await r.json();const c=document.getElementById('outros-stories');c.innerHTML='';const g={};s.forEach(x=>{if(!g[x.emailAutor])g[x.emailAutor]={nome:x.nome,avatar:x.avatar,posts:[]};g[x.emailAutor].posts.push(x)});const meus=g[USUARIO_ATUAL.email];if(meus){const me=document.getElementById('story-avatar-me');me.innerHTML='';me.style.backgroundImage=`url('${meus.posts[0].tipo==='imagem'?meus.posts[0].midiaUrl:meus.posts[0].avatar}')`;me.parentElement.classList.replace('story-ring', 'story-ring');me.parentElement.style.border='2px solid white';me.parentElement.parentElement.onclick=()=>abrirS(encodeURIComponent(JSON.stringify(meus.posts)));}Object.values(g).forEach(gr=>{if(gr.posts[0].emailAutor===USUARIO_ATUAL.email)return;c.innerHTML+=`<div onclick="abrirS('${encodeURIComponent(JSON.stringify(gr.posts))}')" class="flex flex-col items-center gap-1 cursor-pointer group min-w-[70px]"><div class="story-ring"><img src="${gr.avatar}" class="story-img bg-black"></div><span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider group-hover:text-white transition-colors">${gr.nome}</span></div>`;});}catch(e){}}
+    function abrirS(d){storiesAtuais=JSON.parse(decodeURIComponent(d));storyIndex=0;showS();document.getElementById('story-viewer').classList.remove('hidden');}
+    function showS(){if(storyIndex>=storiesAtuais.length){fecharStory();return;}const s=storiesAtuais[storyIndex];const vCont=document.getElementById('viewer-content');vCont.innerHTML='';const isVideo=s.tipo==='video'||s.midiaUrl.match(/\.(mp4|webm|ogg)$/i);if(isVideo)vCont.innerHTML=`<video src="${s.midiaUrl}" class="max-h-full max-w-full" autoplay muted onended="proxStory()"></video>`;else{vCont.innerHTML=`<img src="${s.midiaUrl}" class="max-h-full max-w-full object-contain">`;if(window.storyTimer)clearTimeout(window.storyTimer);window.storyTimer=setTimeout(proxStory,5000);}document.getElementById('viewer-avatar').src=s.avatar;document.getElementById('viewer-nome').innerText=s.nome;const b=document.getElementById('story-bars');b.innerHTML='';storiesAtuais.forEach((_,i)=>{b.innerHTML+=`<div class="flex-1 h-full rounded-full ${i<=storyIndex?'bg-white':'bg-white/30'}"></div>`});}
+    function proxStory(){storyIndex++;showS();}
+    function fecharStory(){document.getElementById('story-viewer').classList.add('hidden');if(window.storyTimer)clearTimeout(window.storyTimer);}
+
+    carregarStories(); load();
 </script>
-
 </body>
 </html>
