@@ -1,102 +1,50 @@
-// utils.js - Ferramentas Profissionais
+// --- CONFIGURAÇÃO GLOBAL ---
+// Conecta ao teu servidor no Railway
+const URL_SERVIDOR = "https://corsa.up.railway.app";
 
-// ⚠️ No Railway: Deixa vazio ''. No PC: 'http://localhost:3000'
-const URL_SERVIDOR = window.location.hostname.includes('localhost') 
-    ? 'http://localhost:3000' 
-    : ''; 
+// --- FUNÇÕES DE SEGURANÇA E UTILIDADE ---
 
-// 1. Sistema de Notificações (Toasts)
-function showToast(msg, tipo = 'success') {
-    let c = document.getElementById('toast-container');
-    if (!c) {
-        c = document.createElement('div');
-        c.id = 'toast-container';
-        document.body.appendChild(c);
-    }
-    const t = document.createElement('div');
-    const cl = tipo === 'success' ? 'text-green-500' : 'text-red-500';
-    const ic = tipo === 'success' ? 'check_circle' : 'error';
-    
-    t.className = `toast toast-${tipo}`;
-    t.innerHTML = `<span class="material-symbols-outlined ${cl}">${ic}</span><span class="text-sm font-bold text-white">${msg}</span>`;
-    c.appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
-}
-
-// 2. Formatador de Números (Ex: 1200 -> 1.2k)
-function formatNumber(num) {
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
-    return num;
-}
-
-// 3. Copiar Link (Share)
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        showToast("Link copiado!", "success");
-    }).catch(() => {
-        showToast("Erro ao copiar", "error");
-    });
-}
-
-// 4. Feedback Botões
-function setBtnLoading(id, load) {
-    const btn = document.getElementById(id);
-    if (btn) {
-        if (load) {
-            btn.dataset.originalText = btn.innerText;
-            btn.classList.add('btn-loading');
-            btn.innerText = "";
-        } else {
-            btn.classList.remove('btn-loading');
-            btn.innerText = btn.dataset.originalText || "Enviar";
-        }
-    }
-}
-
-// 5. Segurança Login
+// Verifica se o usuário está logado
 function verificarLogin() {
-    const dados = localStorage.getItem('usuario_logado');
-    if (!dados && !window.location.href.includes('login') && !window.location.href.includes('registro')) {
-        window.location.href = 'login.html';
+    const userJson = localStorage.getItem('usuario_logado');
+    if (!userJson) {
+        // Se não estiver logado, manda para o login (exceto se já estiver lá)
+        if (!window.location.href.includes('index.html') && !window.location.href.includes('cadastro.html')) {
+            window.location.href = 'index.html';
+        }
+        return { email: null };
     }
-    return JSON.parse(dados || '{}');
+    return JSON.parse(userJson);
 }
 
+// Função para Sair
 function logout() {
     localStorage.removeItem('usuario_logado');
-    window.location.href = 'login.html';
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
 }
 
-// 6. Navegação Perfil
-function verPerfil(emailAlvo) {
-    if (!emailAlvo) return;
-    const usuarioLogado = verificarLogin();
-    if (emailAlvo === usuarioLogado.email) window.location.href = 'perfil.html';
-    else window.location.href = `perfil-visitante.html?email=${emailAlvo}`;
+// Função visual para botões de carregamento
+function setBtnLoading(btnId, isLoading) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    if (isLoading) {
+        btn.dataset.originalText = btn.innerText;
+        btn.innerText = "...";
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+    } else {
+        btn.innerText = btn.dataset.originalText || "OK";
+        btn.disabled = false;
+        btn.style.opacity = "1";
+    }
 }
 
-// 7. Time Ago
-function timeAgo(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now - date) / 1000);
-    let interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) return `há ${interval} anos`;
-    interval = Math.floor(seconds / 2592000);
-    if (interval >= 1) return `há ${interval} meses`;
-    interval = Math.floor(seconds / 86400);
-    if (interval >= 1) return `há ${interval} dias`;
-    interval = Math.floor(seconds / 3600);
-    if (interval >= 1) return `há ${interval} h`;
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1) return `há ${interval} min`;
-    return "agora mesmo";
+// Pequenos alertas (Toast)
+function showToast(msg, type = 'success') {
+    const div = document.createElement('div');
+    div.className = `fixed top-4 right-4 px-6 py-3 rounded shadow-xl text-white font-bold z-[100] animate-bounce ${type === 'error' ? 'bg-red-600' : 'bg-green-600'}`;
+    div.innerText = msg;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 3000);
 }
-
-// 8. Temas
-(function aplicarTema() {
-    const tema = localStorage.getItem('midnight_tema') || 'theme-red';
-    if(document.body) document.body.classList.add(tema);
-    else window.addEventListener('DOMContentLoaded', () => document.body.classList.add(tema));
-})();
