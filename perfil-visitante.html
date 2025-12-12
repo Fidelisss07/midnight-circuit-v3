@@ -50,6 +50,12 @@
         .card-3d:hover { box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(var(--primary), 0.15); border-color: rgba(var(--primary), 0.5); }
         .card-content-3d { transform: translateZ(30px); pointer-events: none; }
         .card-img-3d { transform: translateZ(10px); pointer-events: none; }
+        
+        .carousel-thumb.active { border-color: rgb(var(--primary)); opacity: 1; }
+        .carousel-thumb { opacity: 0.6; transition: all 0.3s; }
+        .carousel-thumb:hover { opacity: 1; }
+
+        /* Botão Engine */
         .btn-engine {
             background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
             border: 2px solid #ffcccc;
@@ -61,15 +67,18 @@
         .btn-engine:active { transform: scale(0.95); box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
         .btn-engine.running { animation: engine-rumble 0.1s infinite; border-color: #ff9999; }
         @keyframes engine-rumble { 0% { transform: translate(0, 0); } 25% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, 0); } 75% { transform: translate(0, -1px); } }
-        .carousel-thumb.active { border-color: rgb(var(--primary)); opacity: 1; }
-        .carousel-thumb { opacity: 0.6; transition: all 0.3s; }
-        .carousel-thumb:hover { opacity: 1; }
     </style>
 </head>
 
 <body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body selection:bg-primary selection:text-black">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
+
+    <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-[#0f0f0f]/95 border-b border-[#222] backdrop-blur-md">
+        <span class="material-symbols-outlined text-primary text-2xl">person_search</span>
+        <h1 class="font-bold text-lg tracking-widest text-white italic font-display">VISITANTE</h1>
+        <div onclick="logout()" class="text-gray-400"><span class="material-symbols-outlined">logout</span></div>
+    </div>
 
     <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20 shadow-2xl">
         <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
@@ -82,16 +91,17 @@
             <a href="sprints.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">bolt</span> Sprints</a>
             <a href="comunidades-hub.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">groups</span> Clubes</a>
             <a href="chat.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">chat_bubble</span> Chat</a>
+            <a href="notificacoes.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">notifications</span> Alertas</a>
             <a href="perfil.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">person</span> Minha Garagem</a>
             <a href="ranking.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">emoji_events</span> Ranking</a>
-            <a href="rivals.html" class="nav-btn flex items-center gap-4 p-3 cursor-pointer text-red-500 hover:text-white"><span class="material-symbols-outlined">swords</span><span class="font-medium text-sm font-display italic">RIVALS</span></a>
+            <a href="rivals.html" class="flex items-center gap-4 p-3 rounded text-red-500 hover:bg-red-900/10 hover:text-white transition-all"><span class="material-symbols-outlined">swords</span> <span class="font-display italic">RIVALS</span></a>
         </nav>
         <div class="mt-auto px-4 w-full"><button onclick="logout()" class="w-full py-2 rounded bg-red-500/10 text-red-500 font-bold text-xs uppercase hover:bg-red-500/20">Sair</button></div>
     </aside>
 
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-14 md:pt-0">
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-20 pb-24 md:pt-0 md:pb-0 bg-[#0a0a0a]">
         
-        <div class="h-64 w-full bg-cover bg-fixed bg-center relative" id="visit-capa">
+        <div class="h-64 w-full bg-cover bg-fixed bg-center relative group" id="visit-capa">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent"></div>
             <a href="javascript:history.back()" class="absolute top-4 left-4 bg-black/50 hover:bg-white text-white hover:text-black px-4 py-2 rounded-full backdrop-blur-sm flex items-center gap-2 transition-all z-10 text-xs font-bold uppercase border border-white/10">
                 <span class="material-symbols-outlined text-sm">arrow_back</span> Voltar
@@ -103,7 +113,7 @@
             <div class="relative -top-20 flex flex-col md:flex-row items-end md:items-start gap-8">
                 <div class="relative group">
                     <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <img id="visit-avatar" class="w-36 h-36 md:w-48 md:h-48 rounded-2xl border-4 border-[#0a0a0a] object-cover shadow-2xl bg-[#222] relative z-10 transform group-hover:scale-105 transition-transform duration-300">
+                    <img id="visit-avatar" class="w-36 h-36 md:w-48 md:h-48 rounded-2xl border-4 border-[#0a0a0a] object-cover shadow-2xl bg-[#222] relative z-10">
                 </div>
 
                 <div class="flex-1 mt-4 md:mt-24 text-center md:text-left w-full">
@@ -157,13 +167,11 @@
             <div id="tab-carros" class="space-y-12 animate-fade-in garage-3d-container">
                 <div class="text-center py-20 opacity-50"><p>A carregar a garagem...</p></div>
             </div>
-
-            <div id="tab-posts" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-20">
-                </div>
+            <div id="tab-posts" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-20"></div>
 
         </div>
     </main>
-    
+
     <nav class="md:hidden fixed bottom-6 left-4 right-4 h-16 bg-[#111]/90 backdrop-blur-md border border-[#333] rounded-2xl z-50 flex justify-between items-center px-6 shadow-2xl">
         <a href="feed.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">home</span></a>
         <a href="explorar.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">search</span></a>
@@ -171,7 +179,7 @@
         <a href="sprints.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">bolt</span></a>
         <a href="perfil.html" class="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"><span class="material-symbols-outlined text-2xl">person</span></a>
     </nav>
-    
+
     <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
     <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl transform translate-y-full transition-transform duration-300">
         <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
@@ -183,6 +191,15 @@
         </div>
     </div>
 
+</div>
+
+<div id="modal" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md">
+    <div class="relative max-w-4xl w-full h-[80vh] flex justify-center items-center">
+        <button onclick="document.getElementById('modal').classList.add('hidden')" class="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-primary hover:text-black transition-colors z-50">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <img id="m-img" class="max-h-full max-w-full rounded object-contain shadow-2xl border border-[#222]">
+    </div>
 </div>
 
 <div id="modal-ver-carro" class="hidden fixed inset-0 z-[90] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
@@ -221,16 +238,8 @@
     </div>
 </div>
 
-<div id="modal" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md">
-    <div class="relative max-w-4xl w-full h-[80vh] flex justify-center items-center">
-        <button onclick="document.getElementById('modal').classList.add('hidden')" class="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-primary hover:text-black transition-colors z-50">
-            <span class="material-symbols-outlined">close</span>
-        </button>
-        <img id="m-img" class="max-h-full max-w-full rounded object-contain shadow-2xl border border-[#222]">
-    </div>
-</div>
-
 <script>
+    const URL_SERVIDOR = 'https://corsa.up.railway.app'; 
     const USUARIO_LOGADO = (typeof verificarLogin === 'function') ? verificarLogin() : { email: null };
 
     // 1. PEGAR EMAIL DA URL
@@ -243,7 +252,7 @@
     }
 
     let usuarioAlvo = {};
-    let meusCarrosGlobal = []; // Aqui serão os carros do VISITADO
+    let meusCarrosGlobal = [];
     let carroAtualImagens = [];
     let imagemIndex = 0;
 
@@ -334,7 +343,6 @@
                 const mods = car.mods.map(x => `<span class="bg-primary/10 text-primary border border-primary/20 px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider">${x.trim()}</span>`).join('');
                 const displayImage = (car.imagens && car.imagens.length > 0) ? car.imagens[0] : car.imagemUrl;
                 
-                // Nota: Removidos os botões de EDITAR e DELETAR do card
                 ct.innerHTML += `
                 <div class="card-3d flex flex-col lg:flex-row rounded-3xl overflow-hidden shadow-2xl mb-8 group" onmousemove="rotateCard(event, this)" onmouseleave="resetCard(this)" onclick="abrirModalVerCarro('${index}')">
                     <div class="card-glare"></div>
