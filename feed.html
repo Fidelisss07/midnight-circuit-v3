@@ -55,7 +55,7 @@
         <div class="max-w-2xl mx-auto px-4 py-8">
             
             <div class="bg-[#111] border border-[#222] rounded-xl p-4 mb-8 flex items-center gap-4 shadow-lg cursor-pointer hover:border-primary/50 transition-colors" onclick="window.location.href='novo-post.html'">
-                <img id="my-avatar-mini" class="w-10 h-10 rounded-full bg-[#222] object-cover">
+                <img id="my-avatar-mini" class="w-10 h-10 rounded-full bg-[#222] object-cover" src="https://i.pravatar.cc/150">
                 <div class="flex-1 bg-[#0a0a0a] h-10 rounded-full flex items-center px-4 text-gray-500 text-sm hover:text-gray-300 transition-colors">
                     Partilha a tua máquina...
                 </div>
@@ -65,7 +65,7 @@
             <div id="feed-container" class="space-y-8 pb-20">
                 <div class="text-center py-20">
                     <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-                    <p class="mt-4 text-gray-500 text-sm">A aquecer motores...</p>
+                    <p class="mt-4 text-gray-500 text-sm">A carregar o grid...</p>
                 </div>
             </div>
         </div>
@@ -102,8 +102,15 @@
 </div>
 
 <script>
-    const usuario = verificarLogin();
-    document.getElementById('my-avatar-mini').src = usuario.avatar || "https://i.pravatar.cc/150";
+    // --- LÓGICA DO FEED ---
+    
+    // Configuração do Servidor
+    const URL_SERVIDOR = 'https://corsa.up.railway.app';
+    
+    // Verificar Login e carregar avatar
+    const usuario = (typeof verificarLogin === 'function') ? verificarLogin() : { avatar: null };
+    const avatarMini = document.getElementById('my-avatar-mini');
+    if (avatarMini) avatarMini.src = usuario.avatar || "https://i.pravatar.cc/150";
 
     function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('translate-y-full')){d.classList.remove('translate-y-full');o.classList.remove('opacity-0','pointer-events-none');o.classList.add('opacity-100','pointer-events-auto');i.innerText='close';i.style.transform='rotate(90deg)';}else{d.classList.add('translate-y-full');o.classList.remove('opacity-100','pointer-events-auto');o.classList.add('opacity-0','pointer-events-none');i.innerText='apps';i.style.transform='rotate(0deg)';}}
 
@@ -121,19 +128,21 @@
                 return;
             }
 
+            // Inverter para mostrar os mais novos primeiro
             posts.reverse().forEach(post => {
-                // CORREÇÃO AQUI: Aponta para perfil-visitante.html
-                const linkPerfil = post.emailDono ? 
-                    `perfil-visitante.html?email=${post.emailDono}` : 
-                    `perfil-visitante.html?email=${post.email}`; 
+                
+                // LÓGICA CRÍTICA DE LINK DE PERFIL
+                // Garante que usa o emailDono se existir, senão usa o email, senão não quebra
+                let emailAlvo = post.emailDono || post.email;
+                let linkPerfil = emailAlvo ? `perfil-visitante.html?email=${emailAlvo}` : '#';
 
                 container.innerHTML += `
                 <div class="bg-[#111] border border-[#222] rounded-2xl overflow-hidden shadow-2xl mb-6">
                     <div class="p-4 flex items-center justify-between border-b border-[#222]">
-                        <div class="flex items-center gap-3 cursor-pointer group" onclick="window.location.href='${linkPerfil}'">
-                            <img src="${post.avatar || 'https://i.pravatar.cc/150'}" class="w-10 h-10 rounded-full border border-[#333] group-hover:border-primary transition-colors object-cover">
+                        <div class="flex items-center gap-3 cursor-pointer group" onclick="${emailAlvo ? `window.location.href='${linkPerfil}'` : ''}">
+                            <img src="${post.avatar || 'https://i.pravatar.cc/150'}" class="w-10 h-10 rounded-full border border-[#333] group-hover:border-primary transition-colors object-cover" onerror="this.src='https://i.pravatar.cc/150'">
                             <div>
-                                <h3 class="font-bold text-white text-sm group-hover:text-primary transition-colors font-display tracking-wide uppercase">${post.nome}</h3>
+                                <h3 class="font-bold text-white text-sm group-hover:text-primary transition-colors font-display tracking-wide uppercase">${post.nome || 'Piloto'}</h3>
                                 <p class="text-xs text-gray-500 font-mono">Piloto</p>
                             </div>
                         </div>
@@ -141,7 +150,7 @@
                     </div>
 
                     <div class="w-full bg-black cursor-pointer relative group" onclick="verPost('${post.midiaUrl || post.imagemUrl}')">
-                         <img src="${post.midiaUrl || post.imagemUrl}" class="w-full max-h-[500px] object-cover mx-auto" loading="lazy">
+                         <img src="${post.midiaUrl || post.imagemUrl}" class="w-full max-h-[500px] object-cover mx-auto" loading="lazy" onerror="this.src='https://via.placeholder.com/500x500?text=Imagem+Indisponivel'">
                          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
                     </div>
 
@@ -159,7 +168,10 @@
                         </div>
 
                         <div class="space-y-1">
-                            <p class="text-sm text-gray-300 font-mono"><span class="font-bold text-white font-display uppercase tracking-wide mr-2 cursor-pointer hover:text-primary" onclick="window.location.href='${linkPerfil}'">${post.nome}</span>${post.legenda}</p>
+                            <p class="text-sm text-gray-300 font-mono">
+                                <span class="font-bold text-white font-display uppercase tracking-wide mr-2 cursor-pointer hover:text-primary" onclick="${emailAlvo ? `window.location.href='${linkPerfil}'` : ''}">${post.nome}</span>
+                                ${post.legenda || ''}
+                            </p>
                             <p class="text-[10px] text-gray-600 uppercase mt-2">${new Date(post.createdAt || Date.now()).toLocaleDateString()}</p>
                         </div>
                     </div>
@@ -168,7 +180,7 @@
 
         } catch(e) {
             console.error(e);
-            document.getElementById('feed-container').innerHTML = '<div class="text-center py-20 text-red-500"><p>Erro na conexão com as boxes.</p></div>';
+            document.getElementById('feed-container').innerHTML = '<div class="text-center py-20 text-red-500"><p>Erro de conexão com o servidor.</p></div>';
         }
     }
 
