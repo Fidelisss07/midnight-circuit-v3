@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Perfil - Corsa</title>
+    <title>Perfil - CORSA SOCIAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
@@ -50,7 +50,6 @@
         .card-3d:hover { box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(var(--primary), 0.15); border-color: rgba(var(--primary), 0.5); }
         .card-content-3d { transform: translateZ(30px); pointer-events: none; }
         .card-img-3d { transform: translateZ(10px); pointer-events: none; }
-        /* Botão START ENGINE */
         .btn-engine {
             background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
             border: 2px solid #ffcccc;
@@ -232,7 +231,6 @@
 </div>
 
 <script>
-    const URL_SERVIDOR = 'https://corsa.up.railway.app'; 
     const USUARIO_LOGADO = (typeof verificarLogin === 'function') ? verificarLogin() : { email: null };
 
     // 1. PEGAR EMAIL DA URL
