@@ -3,25 +3,39 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Alertas - Midnight Circuit</title>
+    <title>Alertas - CORSA SOCIAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css"/>
     <script src="utils.js"></script>
-    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)"},fontFamily:{"display":["Chakra Petch","sans-serif"], "body":["Inter","sans-serif"]}}}}</script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "rgb(var(--primary) / <alpha-value>)", 
+                        "background-dark": "#0a0a0a",
+                        "surface-dark": "#111111"
+                    },
+                    fontFamily: {
+                        "display": ["Chakra Petch", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         /* CSS ESPECÍFICO PARA NOTIFICAÇÕES */
-        
-        /* Card Base */
         .notif-card {
             border: 1px solid #222;
             transition: all 0.2s ease-in-out;
             position: relative;
             overflow: hidden;
         }
-
-        /* ESTADO: NÃO LIDA (Destaque Agressivo) */
+        /* NÃO LIDA */
         .notif-unread {
             background: linear-gradient(90deg, rgba(var(--primary), 0.15) 0%, #0a0a0a 100%);
             border-left: 4px solid rgb(var(--primary));
@@ -29,8 +43,8 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
         .notif-unread h4 { color: white; text-shadow: 0 0 10px rgba(var(--primary), 0.5); }
-        
-        /* ESTADO: LIDA (Apagada) */
+
+        /* LIDA */
         .notif-read {
             background: #050505;
             border-left: 4px solid #222;
@@ -42,8 +56,7 @@
             filter: grayscale(0);
             background: #0f0f0f;
         }
-
-        /* Badge "NOVO" */
+        /* Badge NOVO */
         .badge-new {
             background: rgb(var(--primary));
             color: black;
@@ -57,10 +70,10 @@
         }
     </style>
 </head>
-<body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body">
+<body class="bg-[#0a0a0a] text-gray-200 overflow-hidden font-body selection:bg-primary selection:text-black">
 
 <div class="relative flex h-screen w-full flex-col md:flex-row">
-    
+
     <div class="md:hidden fixed top-0 w-full h-16 z-40 flex items-center justify-between px-5 bg-[#0f0f0f]/95 border-b border-[#222] backdrop-blur-md">
         <span class="material-symbols-outlined text-primary text-2xl animate-pulse">satellite_alt</span>
         <h1 class="font-bold text-lg tracking-widest text-white italic font-display">ALERTAS</h1>
@@ -70,85 +83,61 @@
     <aside class="hidden md:flex flex-col w-64 h-full bg-[#0f0f0f] border-r border-[#222] py-8 z-20 shadow-2xl">
         <a class="flex items-center gap-3 px-8 mb-10 text-white group" href="feed.html">
             <span class="material-symbols-outlined text-4xl text-primary group-hover:rotate-180 transition-transform duration-500">tire_repair</span>
-            <span class="font-bold text-2xl italic tracking-tighter font-display">MIDNIGHT</span>
+            <span class="font-bold text-2xl italic tracking-tighter font-display">CORSA</span>
         </a>
-         <nav class="flex flex-col w-full px-4 gap-2">
-    <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">home</span> Feed
-    </a>
-
-    <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">search</span> Explorar
-    </a>
-
-    <a href="sprints.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">bolt</span> Sprints
-    </a>
-
-    <a href="comunidades-hub.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">groups</span> Clubes
-    </a>
-
-    <a href="chat.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">chat_bubble</span> Chat
-    </a>
-
-    <a href="notificacoes.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">notifications</span> notificações
-    </a>
-
-    <a href="perfil.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">person</span> Garagem
-    </a>
-
-    <a href="ranking.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">emoji_events</span> Ranking
-    </a>
-
-    <a href="configuracoes.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all">
-        <span class="material-symbols-outlined">settings</span> Configurações
-    </a>
-
-            <a href="rivals.html" class="nav-btn flex items-center gap-4 p-3 cursor-pointer text-red-500 hover:text-white">
-    <span class="material-symbols-outlined">swords</span>
-    <span class="font-medium text-sm font-display italic">RIVALS</span>
-</a>
-</nav>
+        <nav class="flex flex-col w-full px-4 gap-2">
+            <a href="feed.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">home</span> Feed</a>
+            <a href="explorar.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">search</span> Explorar</a>
+            <a href="sprints.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">bolt</span> Sprints</a>
+            <a href="comunidades-hub.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">groups</span> Clubes</a>
+            <a href="chat.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">chat_bubble</span> Chat</a>
+            
+            <a href="notificacoes.html" class="flex items-center gap-4 p-3 rounded bg-[#1a1a1a] border-l-4 border-primary text-white font-bold transition-all shadow-lg"><span class="material-symbols-outlined">notifications</span> Alertas</a>
+            
+            <a href="perfil.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">person</span> Minha Garagem</a>
+            <a href="ranking.html" class="flex items-center gap-4 p-3 rounded text-gray-400 hover:bg-[#1a1a1a] hover:text-white hover:border-l-4 hover:border-gray-500 border-l-4 border-transparent transition-all"><span class="material-symbols-outlined">emoji_events</span> Ranking</a>
+            <a href="rivals.html" class="flex items-center gap-4 p-3 rounded text-red-500 hover:bg-red-900/10 hover:text-white transition-all"><span class="material-symbols-outlined">swords</span> <span class="font-display italic">RIVALS</span></a>
+        </nav>
         <div class="mt-auto px-4 w-full"><button onclick="logout()" class="w-full py-2 rounded bg-red-500/10 text-red-500 font-bold text-xs uppercase hover:bg-red-500/20">Sair</button></div>
     </aside>
 
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-20 pb-24 md:pt-0 md:pb-0 p-4 md:p-8">
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar pt-20 pb-24 md:pt-0 md:pb-0 p-4 md:p-8 bg-[#0a0a0a]">
         <div class="max-w-3xl mx-auto">
-            
+
             <div class="flex justify-between items-end mb-8">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-display font-bold text-white italic uppercase">Centro de Comando</h1>
                     <p class="text-gray-500 text-xs font-mono uppercase tracking-widest mt-1">Transmissões Recentes</p>
                 </div>
-                <button onclick="marcarLidas()" class="btn-race px-5 py-2 rounded text-xs uppercase flex items-center gap-2 shadow-lg hover:shadow-primary/40 transition-all">
+                <button onclick="marcarLidas()" class="btn-race px-5 py-2 rounded text-xs uppercase flex items-center gap-2 shadow-lg hover:shadow-primary/40 transition-all bg-[#111] border border-[#333] hover:bg-[#222] text-white">
                     <span class="material-symbols-outlined text-base">done_all</span> Marcar Lidas
                 </button>
             </div>
 
             <div id="lista-notificacoes" class="space-y-3 pb-20">
-                <div class="skeleton h-20 w-full rounded-xl"></div>
-                <div class="skeleton h-20 w-full rounded-xl"></div>
+                <div class="animate-pulse flex items-center p-4 rounded-xl border border-[#222] bg-[#111]">
+                    <div class="w-12 h-12 bg-[#222] rounded-full mr-4"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-[#222] rounded w-1/4"></div>
+                        <div class="h-3 bg-[#222] rounded w-3/4"></div>
+                    </div>
+                </div>
             </div>
 
         </div>
     </main>
 
     <div id="mobile-drawer-overlay" onclick="toggleMenu()" class="md:hidden fixed inset-0 bg-black/80 z-[60] opacity-0 pointer-events-none backdrop-blur-sm transition-opacity"></div>
-    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl shadow-2xl">
+    <div id="mobile-drawer" class="md:hidden fixed bottom-0 left-0 w-full bg-[#111] border-t border-white/10 z-[70] pb-8 pt-4 rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300">
         <div class="w-16 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
         <div class="grid grid-cols-3 gap-6 p-6 pt-0">
-             <div onclick="window.location.href='feed.html'" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white group-active:border-primary transition-all shadow-md"><span class="material-symbols-outlined">add</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Post</span></div>
+             <div onclick="window.location.href='novo-post.html'" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white group-active:border-primary transition-all shadow-md"><span class="material-symbols-outlined">add_a_photo</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Post</span></div>
              <a href="ranking.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-yellow-500 group-active:border-yellow-500 transition-all shadow-md"><span class="material-symbols-outlined">emoji_events</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Rank</span></a>
              <a href="comunidades-hub.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-blue-500 group-active:border-blue-500 transition-all shadow-md"><span class="material-symbols-outlined">groups</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Clubes</span></a>
-             <a href="configuracoes.html" class="flex flex-col items-center gap-2 group p-2 rounded-xl active:bg-white/5"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400 group-active:border-white transition-all shadow-md"><span class="material-symbols-outlined">settings</span></div><span class="text-[10px] uppercase font-bold text-gray-400 group-active:text-white">Setup</span></a>
              <div onclick="logout()" class="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-xl active:bg-red-900/20"><div class="w-12 h-12 bg-red-900/10 border border-red-900/30 rounded-xl flex items-center justify-center text-red-500 group-active:bg-red-900/30 transition-all shadow-md"><span class="material-symbols-outlined">power_settings_new</span></div><span class="text-[10px] uppercase font-bold text-red-500">Sair</span></div>
         </div>
     </div>
+
     <nav class="md:hidden fixed bottom-6 left-4 right-4 h-16 bg-[#111]/90 backdrop-blur-md border border-[#333] rounded-2xl z-50 flex justify-between items-center px-6 shadow-2xl">
         <a href="feed.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">home</span></a>
         <a href="explorar.html" class="text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-2xl">search</span></a>
@@ -164,12 +153,12 @@
     let todosUsuarios = [];
     let intervalPolling = null;
 
-    function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('open')){d.classList.remove('open');o.classList.remove('open');i.innerText='apps';i.style.transform='rotate(0deg)';}else{d.classList.add('open');o.classList.add('open');i.innerText='close';i.style.transform='rotate(90deg)';}}
+    function toggleMenu(){const d=document.getElementById('mobile-drawer'),o=document.getElementById('mobile-drawer-overlay'),i=document.getElementById('menu-icon');if(d.classList.contains('translate-y-full')){d.classList.remove('translate-y-full');o.classList.remove('opacity-0','pointer-events-none');o.classList.add('opacity-100','pointer-events-auto');i.innerText='close';i.style.transform='rotate(90deg)';}else{d.classList.add('translate-y-full');o.classList.remove('opacity-100','pointer-events-auto');o.classList.add('opacity-0','pointer-events-none');i.innerText='apps';i.style.transform='rotate(0deg)';}}
 
     async function carregarUsuarios() {
         try {
             const res = await fetch(`${URL_SERVIDOR}/usuarios`);
-            todosUsuarios = await res.json();
+            if(res.ok) todosUsuarios = await res.json();
             carregarNotificacoes();
             // Polling para Auto-Refresh (a cada 5s)
             if(!intervalPolling) intervalPolling = setInterval(carregarNotificacoes, 5000);
@@ -181,8 +170,7 @@
             const res = await fetch(`${URL_SERVIDOR}/notificacoes?user=${USUARIO.email}`);
             const notificacoes = await res.json();
             const container = document.getElementById('lista-notificacoes');
-            
-            // Verifica se mudou algo antes de limpar (Opcional, mas aqui limpamos para garantir atualização visual)
+
             container.innerHTML = '';
 
             if (notificacoes.length === 0) {
@@ -194,13 +182,9 @@
                 return;
             }
 
-            // CORREÇÃO CRÍTICA: Não usar .reverse() se o servidor já manda ordenado (timestamp -1)
-            // Se usarmos reverse(), as mais novas vão para baixo. Queremos em cima.
-            // O servidor manda: [Nova, Média, Velha]. O forEach imprime Nova (Topo), Média, Velha (Fundo).
-            
             notificacoes.forEach(notif => {
                 let icon='', color='', bgIcon='';
-                
+
                 if(notif.tipo === 'like') { 
                     icon = 'favorite'; color = 'text-red-500'; bgIcon = 'bg-red-500/10 border-red-500/20'; 
                 } else if(notif.tipo === 'comentario') { 
@@ -211,15 +195,16 @@
                     icon = 'info'; color = 'text-gray-400'; bgIcon = 'bg-gray-500/10 border-gray-500/20'; 
                 }
 
-                // Destaque visual forte para Não Lidas
                 const statusClass = notif.lida ? 'notif-read' : 'notif-unread';
                 const badgeNew = !notif.lida ? '<span class="badge-new ml-2">NOVO</span>' : '';
-                
+
                 const preview = notif.imgPreview ? `<div class="w-14 h-14 rounded bg-cover bg-center border border-[#333] ml-4 flex-shrink-0" style="background-image: url('${notif.imgPreview}')"></div>` : '';
                 const avatarUrl = notif.avatar || "https://i.pravatar.cc/150";
-                const tempo = typeof timeAgo === 'function' ? timeAgo(notif.timestamp) : 'Recente';
+                
+                // Usando tempoAtras do utils.js
+                const tempo = (typeof tempoAtras === 'function') ? tempoAtras(notif.timestamp) : 'Recente';
 
-                // Tenta encontrar o email pelo nome para linkar o perfil
+                // Tenta encontrar o email pelo nome
                 const userEncontrado = todosUsuarios.find(u => u.nome === notif.de);
                 const emailLink = userEncontrado ? userEncontrado.email : '';
 
@@ -245,6 +230,13 @@
                     </div>`;
             });
         } catch (e) { console.error(e); }
+    }
+
+    // Função de Redirecionamento (Estava faltando)
+    function verPerfil(email) {
+        if (email) {
+            window.location.href = `perfil-visitante.html?email=${email}`;
+        }
     }
 
     async function marcarLidas() {
