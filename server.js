@@ -144,6 +144,44 @@ app.post('/rivals/votar', async (req, res) => {
     } catch (e) { res.status(500).send("Erro"); }
 });
 
+// ... (teus imports: express, mongoose, cors, etc)
+
+// Habilitar CORS para aceitar pedidos de qualquer lugar
+app.use(cors());
+app.use(express.json());
+
+// --- ROTA CRÍTICA: BUSCAR DADOS DO PERFIL ---
+app.get('/perfil/dados', async (req, res) => {
+    // 1. Tenta pegar o email da URL (?email=...)
+    let emailAlvo = req.query.email;
+
+    // 2. Se não vier na URL, tenta pegar do corpo (fallback raro)
+    if (!emailAlvo) {
+        emailAlvo = req.body.email;
+    }
+
+    if (!emailAlvo) {
+        return res.status(400).json({ erro: "Email é obrigatório para carregar o perfil." });
+    }
+
+    try {
+        // Busca no banco de dados (ajuste 'Usuario' para o nome do teu Schema)
+        const usuario = await Usuario.findOne({ email: emailAlvo });
+
+        if (!usuario) {
+            return res.status(404).json({ erro: "Usuário não encontrado." });
+        }
+
+        // Retorna os dados
+        res.json(usuario);
+    } catch (error) {
+        console.error("Erro ao buscar perfil:", error);
+        res.status(500).json({ erro: "Erro interno do servidor." });
+    }
+});
+
+// ... (resto das tuas rotas: login, cadastro, carros, posts)
+
 
 // (MANTÉM AS OUTRAS ROTAS PADRÃO AQUI - LOGIN, REGISTRO, ETC)
 // ... [Copiar as rotas anteriores de Auth, Perfil, Uploads, etc aqui] ...
